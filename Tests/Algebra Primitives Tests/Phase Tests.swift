@@ -1,4 +1,4 @@
-import Test_Support_Primitives
+import Test_Primitives
 import Testing
 
 @testable import Algebra_Primitives
@@ -20,7 +20,7 @@ struct `Phase - Static Functions` {
 
     @Test(arguments: Phase.allCases)
     func `rotated is 90 degree counterclockwise`(phase: Phase) {
-        let next = Phase.next(of: phase)
+        let _ = Phase.next(of: phase)
         #expect(Phase.next(of: Phase.next(of: Phase.next(of: Phase.next(of: phase)))) == phase)
     }
 
