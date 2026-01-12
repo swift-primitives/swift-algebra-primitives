@@ -18,8 +18,8 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../swift-dimension-primitives"),
-        .package(path: "../swift-test-primitives"),
+        .package(url: "https://github.com/swift-primitives/swift-dimension-primitives.git", from: "0.0.1"),
+        .package(url: "https://github.com/swift-primitives/swift-test-primitives.git", from: "0.0.1"),
     ],
     targets: [
         .target(
