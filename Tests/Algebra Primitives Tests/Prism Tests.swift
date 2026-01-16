@@ -204,6 +204,53 @@ struct `Optional - Prism` {
     }
 }
 
+// MARK: - Pattern Matching Tests
+
+@Suite
+struct `Prism - Pattern Matching` {
+    @Test
+    func `pattern matching with prism returns true for matching case`() {
+        let prism = TestEnum.intCasePrism
+        let value = TestEnum.intCase(42)
+
+        #expect(prism ~= value)
+    }
+
+    @Test
+    func `pattern matching with prism returns false for non-matching case`() {
+        let prism = TestEnum.intCasePrism
+        let value = TestEnum.stringCase("hello")
+
+        #expect(!(prism ~= value))
+    }
+
+    @Test
+    func `pattern matching works in switch statement`() {
+        let prism = TestEnum.intCasePrism
+        let value = TestEnum.intCase(42)
+
+        var matched = false
+        switch value {
+        case prism:
+            matched = true
+        default:
+            break
+        }
+
+        #expect(matched)
+    }
+
+    @Test
+    func `pattern matching distinguishes between cases`() {
+        let intPrism = TestEnum.intCasePrism
+        let stringPrism = TestEnum.stringCasePrism
+        let value = TestEnum.stringCase("hello")
+
+        #expect(!(intPrism ~= value))
+        #expect(stringPrism ~= value)
+    }
+}
+
 // MARK: - Result Prism Tests
 
 enum TestError: Error, Hashable, Sendable {

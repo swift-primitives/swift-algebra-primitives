@@ -30,6 +30,7 @@
 /// let value = prism.extract(optional) // Optional(42)
 /// let none = prism.extract(nil)       // nil
 /// ```
+@dynamicMemberLookup
 public struct Prism<Whole, Part>: Sendable where Whole: Sendable, Part: Sendable {
     /// Unconditionally constructs `Whole` from `Part`.
     public let embed: @Sendable (Part) -> Whole
@@ -120,5 +121,91 @@ extension Prism {
     public func modify(_ whole: Whole, _ transform: (Part) -> Part) -> Whole {
         guard let part = extract(whole) else { return whole }
         return embed(transform(part))
+    }
+}
+
+// MARK: - Accessible Protocol (Hoisted)
+
+/// Hoisted protocol for `Prism.Accessible`. Prefer using `Prism.Accessible` in all contexts.
+/// This exists because Swift doesn't yet support protocols nested in generic types.
+public protocol __PrismAccessible: Sendable {
+    associatedtype Prisms: Sendable
+    static var prisms: Prisms { get }
+}
+
+extension Prism {
+    /// Marker protocol for types that provide prism-based case access.
+    ///
+    /// Types conforming to this protocol have a nested `Prisms` struct and a static
+    /// `prisms` property, enabling ergonomic composition via `@dynamicMemberLookup`.
+    ///
+    /// The `@Witness` macro automatically generates this conformance for enums.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// @Witness
+    /// enum Outer: Prism.Accessible {
+    ///     case inner(Inner)
+    /// }
+    ///
+    /// @Witness
+    /// enum Inner: Prism.Accessible {
+    ///     case value(Int)
+    /// }
+    ///
+    /// // Composed prism via dynamicMemberLookup:
+    /// let prism = Outer.prisms.inner.value  // Prism<Outer, Int>
+    /// ```
+    public typealias Accessible = __PrismAccessible
+}
+
+// MARK: - Dynamic Member Lookup for Composition
+
+extension Prism where Part: Prism.Accessible {
+    /// Enables ergonomic prism composition via dot syntax.
+    ///
+    /// When the `Part` type conforms to `Prism.Accessible`, you can chain
+    /// prism access through nested types:
+    ///
+    /// ```swift
+    /// // Instead of:
+    /// Outer.prisms.inner.appending(Inner.prisms.value)
+    ///
+    /// // Write:
+    /// Outer.prisms.inner.value
+    /// ```
+    ///
+    /// - Parameter keyPath: A key path to a prism on the `Part` type's `Prisms`.
+    /// - Returns: A composed prism from `Whole` to `Next`.
+    @inlinable
+    public subscript<Next: Sendable>(
+        dynamicMember keyPath: KeyPath<Part.Prisms, Prism<Part, Next>>
+    ) -> Prism<Whole, Next> {
+        appending(Part.prisms[keyPath: keyPath])
+    }
+}
+
+// MARK: - Pattern Matching
+
+extension Prism {
+    /// Enables pattern matching syntax in switch statements.
+    ///
+    /// ## Example
+    ///
+    /// ```swift
+    /// let prism = Optional<Int>.some
+    /// let value: Int? = 42
+    ///
+    /// switch value {
+    /// case prism:
+    ///     print("Has a value")
+    /// default:
+    ///     print("Is nil")
+    /// }
+    /// ```
+    @inlinable
+    public static func ~= (pattern: Prism<Whole, Part>, value: Whole) -> Bool {
+        pattern.matches(value)
     }
 }
