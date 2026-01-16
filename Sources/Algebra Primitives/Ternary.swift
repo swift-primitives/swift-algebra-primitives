@@ -1,5 +1,4 @@
 // Ternary.swift
-public import Dimension_Primitives
 
 /// Balanced ternary digit: -1, 0, or +1.
 ///
@@ -91,6 +90,30 @@ extension Ternary {
 extension Ternary {
     /// A value paired with a ternary digit.
     public typealias Value<Payload> = Pair<Ternary, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Ternary: Enumerable {
+    /// Number of ternary values.
+    @inlinable
+    public static var caseCount: Int { 3 }
+
+    /// Index of this value (0: negative, 1: zero, 2: positive).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .negative: 0
+        case .zero: 1
+        case .positive: 2
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.negative, .zero, .positive][caseIndex]
+    }
 }
 
 // MARK: - Codable

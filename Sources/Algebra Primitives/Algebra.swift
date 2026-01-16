@@ -1,9 +1,6 @@
 // Algebra.swift
 // Algebraic structures and protocols.
 
-// Re-export Dimension (Tagged, Enumerable, etc.)
-import Dimension_Primitives
-
 /// Namespace for algebraic structures and type-safe primitives.
 ///
 /// This module provides well-typed alternatives to raw numeric and boolean types,

@@ -1,5 +1,4 @@
 // Polarity.swift
-public import Dimension_Primitives
 
 /// Polarity: positive, negative, or neutral.
 ///
@@ -76,6 +75,30 @@ extension Polarity {
 extension Polarity {
     /// A value paired with its polarity.
     public typealias Value<Payload> = Pair<Polarity, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Polarity: Enumerable {
+    /// Number of polarity values.
+    @inlinable
+    public static var caseCount: Int { 3 }
+
+    /// Index of this value (0: positive, 1: negative, 2: neutral).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .positive: 0
+        case .negative: 1
+        case .neutral: 2
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.positive, .negative, .neutral][caseIndex]
+    }
 }
 
 // MARK: - Codable

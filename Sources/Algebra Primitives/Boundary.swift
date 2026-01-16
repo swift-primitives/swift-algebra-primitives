@@ -1,5 +1,4 @@
 // Boundary.swift
-public import Dimension_Primitives
 
 /// Inclusivity of an interval endpoint: open or closed.
 ///
@@ -68,6 +67,29 @@ extension Boundary {
 extension Boundary {
     /// A value paired with its boundary type.
     public typealias Value<Payload> = Pair<Boundary, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Boundary: Enumerable {
+    /// Number of boundary values.
+    @inlinable
+    public static var caseCount: Int { 2 }
+
+    /// Index of this value (0: closed, 1: open).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .closed: 0
+        case .open: 1
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.closed, .open][caseIndex]
+    }
 }
 
 // MARK: - Codable

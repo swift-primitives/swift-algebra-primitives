@@ -18,15 +18,12 @@ let package = Package(
         ),
     ],
     dependencies: [
-        .package(path: "../swift-dimension-primitives"),
         .package(path: "../swift-test-primitives"),
     ],
     targets: [
         .target(
             name: "Algebra Primitives",
-            dependencies: [
-                .product(name: "Dimension Primitives", package: "swift-dimension-primitives"),
-            ]
+            dependencies: []
         ),
         .testTarget(
             name: "Algebra Primitives Tests",

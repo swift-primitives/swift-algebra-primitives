@@ -1,5 +1,4 @@
 // Sign.swift
-public import Dimension_Primitives
 
 /// Three-valued sign: positive, negative, or zero.
 ///
@@ -93,6 +92,30 @@ extension Sign {
 extension Sign {
     /// A value paired with its sign.
     public typealias Value<Payload> = Pair<Sign, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Sign: Enumerable {
+    /// Number of sign values.
+    @inlinable
+    public static var caseCount: Int { 3 }
+
+    /// Index of this value (0: positive, 1: negative, 2: zero).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .positive: 0
+        case .negative: 1
+        case .zero: 2
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.positive, .negative, .zero][caseIndex]
+    }
 }
 
 // MARK: - Codable

@@ -1,5 +1,4 @@
 // Comparison.swift
-public import Dimension_Primitives
 
 /// Result of three-way comparison: less, equal, or greater.
 ///
@@ -97,6 +96,30 @@ extension Comparison {
 extension Comparison {
     /// A value paired with a comparison result.
     public typealias Value<Payload> = Pair<Comparison, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Comparison: Enumerable {
+    /// Number of comparison values.
+    @inlinable
+    public static var caseCount: Int { 3 }
+
+    /// Index of this value (0: less, 1: equal, 2: greater).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .less: 0
+        case .equal: 1
+        case .greater: 2
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.less, .equal, .greater][caseIndex]
+    }
 }
 
 // MARK: - Codable

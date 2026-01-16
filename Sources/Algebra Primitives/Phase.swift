@@ -1,5 +1,4 @@
 // Phase.swift
-public import Dimension_Primitives
 
 /// Discrete rotational phases: 0°, 90°, 180°, 270°.
 ///
@@ -127,6 +126,24 @@ extension Phase {
 extension Phase {
     /// A value paired with a phase.
     public typealias Value<Payload> = Pair<Phase, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Phase: Enumerable {
+    /// Number of phase values.
+    @inlinable
+    public static var caseCount: Int { 4 }
+
+    /// Index of this value (0: zero, 1: quarter, 2: half, 3: threeQuarter).
+    @inlinable
+    public var caseIndex: Int { rawValue }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = Phase(rawValue: caseIndex)!
+    }
 }
 
 // MARK: - Codable

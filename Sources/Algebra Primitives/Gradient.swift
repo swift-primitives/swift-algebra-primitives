@@ -1,5 +1,4 @@
 // Gradient.swift
-public import Dimension_Primitives
 
 /// Direction of change: ascending or descending.
 ///
@@ -68,6 +67,29 @@ extension Gradient {
 extension Gradient {
     /// A value paired with its gradient direction.
     public typealias Value<Payload> = Pair<Gradient, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Gradient: Enumerable {
+    /// Number of gradient values.
+    @inlinable
+    public static var caseCount: Int { 2 }
+
+    /// Index of this value (0: ascending, 1: descending).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .ascending: 0
+        case .descending: 1
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.ascending, .descending][caseIndex]
+    }
 }
 
 // MARK: - Codable

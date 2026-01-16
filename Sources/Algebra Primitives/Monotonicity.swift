@@ -1,5 +1,4 @@
 // Monotonicity.swift
-public import Dimension_Primitives
 
 /// Monotonic behavior: increasing, decreasing, or constant.
 ///
@@ -100,6 +99,30 @@ extension Monotonicity {
 extension Monotonicity {
     /// A value paired with its monotonicity.
     public typealias Value<Payload> = Pair<Monotonicity, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Monotonicity: Enumerable {
+    /// Number of monotonicity values.
+    @inlinable
+    public static var caseCount: Int { 3 }
+
+    /// Index of this value (0: increasing, 1: decreasing, 2: constant).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .increasing: 0
+        case .decreasing: 1
+        case .constant: 2
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.increasing, .decreasing, .constant][caseIndex]
+    }
 }
 
 // MARK: - Codable

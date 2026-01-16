@@ -1,5 +1,4 @@
 // Endpoint.swift
-public import Dimension_Primitives
 
 /// Position in a sequence: start or end.
 ///
@@ -68,6 +67,29 @@ extension Endpoint {
 extension Endpoint {
     /// A value paired with its endpoint position.
     public typealias Value<Payload> = Pair<Endpoint, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Endpoint: Enumerable {
+    /// Number of endpoint values.
+    @inlinable
+    public static var caseCount: Int { 2 }
+
+    /// Index of this value (0: start, 1: end).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .start: 0
+        case .end: 1
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.start, .end][caseIndex]
+    }
 }
 
 // MARK: - Codable

@@ -1,5 +1,4 @@
 // Bound.swift
-public import Dimension_Primitives
 
 /// Position of an interval endpoint: lower or upper.
 ///
@@ -67,6 +66,29 @@ extension Bound {
 extension Bound {
     /// A value paired with its bound position.
     public typealias Value<Payload> = Pair<Bound, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Bound: Enumerable {
+    /// Number of bound values.
+    @inlinable
+    public static var caseCount: Int { 2 }
+
+    /// Index of this value (0: lower, 1: upper).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .lower: 0
+        case .upper: 1
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.lower, .upper][caseIndex]
+    }
 }
 
 // MARK: - Codable

@@ -1,5 +1,4 @@
 // Parity.swift
-public import Dimension_Primitives
 
 /// Classification of integers as even or odd.
 ///
@@ -97,6 +96,29 @@ extension Parity {
 extension Parity {
     /// A value paired with its parity.
     public typealias Value<Payload> = Pair<Parity, Payload>
+}
+
+// MARK: - Enumerable
+
+extension Parity: Enumerable {
+    /// Number of parity values.
+    @inlinable
+    public static var caseCount: Int { 2 }
+
+    /// Index of this value (0: even, 1: odd).
+    @inlinable
+    public var caseIndex: Int {
+        switch self {
+        case .even: 0
+        case .odd: 1
+        }
+    }
+
+    /// Creates a value from its index.
+    @inlinable
+    public init(caseIndex: Int) {
+        self = [.even, .odd][caseIndex]
+    }
 }
 
 // MARK: - Codable
