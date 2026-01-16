@@ -1,0 +1,257 @@
+// Prism Tests.swift
+
+import Testing
+
+@testable import Algebra_Primitives
+
+// MARK: - Test Helpers
+
+enum TestEnum: Hashable, Sendable {
+    case intCase(Int)
+    case stringCase(String)
+    case voidCase
+}
+
+extension TestEnum {
+    static var intCasePrism: Prism<TestEnum, Int> {
+        Prism(
+            embed: { .intCase($0) },
+            extract: { if case .intCase(let v) = $0 { return v } else { return nil } }
+        )
+    }
+
+    static var stringCasePrism: Prism<TestEnum, String> {
+        Prism(
+            embed: { .stringCase($0) },
+            extract: { if case .stringCase(let v) = $0 { return v } else { return nil } }
+        )
+    }
+
+    static var voidCasePrism: Prism<TestEnum, Void> {
+        Prism(
+            embed: { .voidCase },
+            extract: { if case .voidCase = $0 { return () } else { return nil } }
+        )
+    }
+}
+
+// MARK: - Prism Basic Tests
+
+@Suite
+struct `Prism - Basic Operations` {
+    @Test
+    func `embed creates correct value`() {
+        let prism = TestEnum.intCasePrism
+        let result = prism.embed(42)
+        #expect(result == .intCase(42))
+    }
+
+    @Test
+    func `extract returns value for matching case`() {
+        let prism = TestEnum.intCasePrism
+        let result = prism.extract(.intCase(42))
+        #expect(result == 42)
+    }
+
+    @Test
+    func `extract returns nil for non-matching case`() {
+        let prism = TestEnum.intCasePrism
+        let result = prism.extract(.stringCase("hello"))
+        #expect(result == nil)
+    }
+
+    @Test
+    func `roundtrip preserves value`() {
+        let prism = TestEnum.intCasePrism
+        let original = 42
+        let embedded = prism.embed(original)
+        let extracted = prism.extract(embedded)
+        #expect(extracted == original)
+    }
+}
+
+// MARK: - Prism Convenience Tests
+
+@Suite
+struct `Prism - Convenience Methods` {
+    @Test
+    func `matches returns true for matching case`() {
+        let prism = TestEnum.intCasePrism
+        #expect(prism.matches(.intCase(42)))
+    }
+
+    @Test
+    func `matches returns false for non-matching case`() {
+        let prism = TestEnum.intCasePrism
+        #expect(!prism.matches(.stringCase("hello")))
+    }
+
+    @Test
+    func `modify transforms matching case`() {
+        let prism = TestEnum.intCasePrism
+        let result = prism.modify(.intCase(10)) { $0 * 2 }
+        #expect(result == .intCase(20))
+    }
+
+    @Test
+    func `modify returns original for non-matching case`() {
+        let prism = TestEnum.intCasePrism
+        let original = TestEnum.stringCase("hello")
+        let result = prism.modify(original) { $0 * 2 }
+        #expect(result == original)
+    }
+}
+
+// MARK: - Prism Identity Tests
+
+@Suite
+struct `Prism - Identity` {
+    @Test
+    func `identity embed returns same value`() {
+        let prism = Prism<Int, Int>.identity
+        #expect(prism.embed(42) == 42)
+    }
+
+    @Test
+    func `identity extract returns same value`() {
+        let prism = Prism<Int, Int>.identity
+        #expect(prism.extract(42) == 42)
+    }
+}
+
+// MARK: - Prism Composition Tests
+
+@Suite
+struct `Prism - Composition` {
+    @Test
+    func `composing two prisms embeds correctly`() {
+        // Compose Optional<Result<Int, Error>> prisms
+        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
+        let resultPrism = Result<Int, TestError>.successPrism
+
+        let composed = Prism.composing(optionalPrism, resultPrism)
+        let result = composed.embed(42)
+        #expect(result == .some(.success(42)))
+    }
+
+    @Test
+    func `composing two prisms extracts correctly`() {
+        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
+        let resultPrism = Result<Int, TestError>.successPrism
+
+        let composed = Prism.composing(optionalPrism, resultPrism)
+        let result = composed.extract(.some(.success(42)))
+        #expect(result == 42)
+    }
+
+    @Test
+    func `composing two prisms returns nil when outer fails`() {
+        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
+        let resultPrism = Result<Int, TestError>.successPrism
+
+        let composed = Prism.composing(optionalPrism, resultPrism)
+        let result = composed.extract(nil)
+        #expect(result == nil)
+    }
+
+    @Test
+    func `composing two prisms returns nil when inner fails`() {
+        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
+        let resultPrism = Result<Int, TestError>.successPrism
+
+        let composed = Prism.composing(optionalPrism, resultPrism)
+        let result = composed.extract(.some(.failure(.test)))
+        #expect(result == nil)
+    }
+
+    @Test
+    func `appending is equivalent to composing`() {
+        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
+        let resultPrism = Result<Int, TestError>.successPrism
+
+        let composed = Prism.composing(optionalPrism, resultPrism)
+        let appended = optionalPrism.appending(resultPrism)
+
+        let testValue: Optional<Result<Int, TestError>> = .some(.success(42))
+        #expect(composed.extract(testValue) == appended.extract(testValue))
+        #expect(composed.embed(42) == appended.embed(42))
+    }
+}
+
+// MARK: - Optional Prism Tests
+
+@Suite
+struct `Optional - Prism` {
+    @Test
+    func `somePrism embed creates optional`() {
+        let prism = Optional<Int>.somePrism
+        let result = prism.embed(42)
+        #expect(result == .some(42))
+    }
+
+    @Test
+    func `somePrism extract returns value from some`() {
+        let prism = Optional<Int>.somePrism
+        let result = prism.extract(.some(42))
+        #expect(result == 42)
+    }
+
+    @Test
+    func `somePrism extract returns nil from none`() {
+        let prism = Optional<Int>.somePrism
+        let result = prism.extract(nil)
+        #expect(result == nil)
+    }
+}
+
+// MARK: - Result Prism Tests
+
+enum TestError: Error, Hashable, Sendable {
+    case test
+    case other
+}
+
+@Suite
+struct `Result - Prism` {
+    @Test
+    func `successPrism embed creates success result`() {
+        let prism = Result<Int, TestError>.successPrism
+        let result = prism.embed(42)
+        #expect(result == .success(42))
+    }
+
+    @Test
+    func `successPrism extract returns value from success`() {
+        let prism = Result<Int, TestError>.successPrism
+        let result = prism.extract(.success(42))
+        #expect(result == 42)
+    }
+
+    @Test
+    func `successPrism extract returns nil from failure`() {
+        let prism = Result<Int, TestError>.successPrism
+        let result = prism.extract(.failure(.test))
+        #expect(result == nil)
+    }
+
+    @Test
+    func `failurePrism embed creates failure result`() {
+        let prism = Result<Int, TestError>.failurePrism
+        let result = prism.embed(.test)
+        #expect(result == .failure(.test))
+    }
+
+    @Test
+    func `failurePrism extract returns error from failure`() {
+        let prism = Result<Int, TestError>.failurePrism
+        let result = prism.extract(.failure(.test))
+        #expect(result == .test)
+    }
+
+    @Test
+    func `failurePrism extract returns nil from success`() {
+        let prism = Result<Int, TestError>.failurePrism
+        let result = prism.extract(.success(42))
+        #expect(result == nil)
+    }
+}

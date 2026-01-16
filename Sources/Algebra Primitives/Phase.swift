@@ -128,9 +128,9 @@ extension Phase {
     public typealias Value<Payload> = Pair<Phase, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Phase: Enumerable {
+extension Phase: Finite.Enumerable {
     /// Number of phase values.
     @inlinable
     public static var caseCount: Int { 4 }

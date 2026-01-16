@@ -98,9 +98,9 @@ extension Parity {
     public typealias Value<Payload> = Pair<Parity, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Parity: Enumerable {
+extension Parity: Finite.Enumerable {
     /// Number of parity values.
     @inlinable
     public static var caseCount: Int { 2 }

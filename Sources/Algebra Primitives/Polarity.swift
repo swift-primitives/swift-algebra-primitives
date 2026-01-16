@@ -77,9 +77,9 @@ extension Polarity {
     public typealias Value<Payload> = Pair<Polarity, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Polarity: Enumerable {
+extension Polarity: Finite.Enumerable {
     /// Number of polarity values.
     @inlinable
     public static var caseCount: Int { 3 }

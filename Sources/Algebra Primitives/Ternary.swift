@@ -92,9 +92,9 @@ extension Ternary {
     public typealias Value<Payload> = Pair<Ternary, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Ternary: Enumerable {
+extension Ternary: Finite.Enumerable {
     /// Number of ternary values.
     @inlinable
     public static var caseCount: Int { 3 }

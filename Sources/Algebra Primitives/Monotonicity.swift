@@ -101,9 +101,9 @@ extension Monotonicity {
     public typealias Value<Payload> = Pair<Monotonicity, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Monotonicity: Enumerable {
+extension Monotonicity: Finite.Enumerable {
     /// Number of monotonicity values.
     @inlinable
     public static var caseCount: Int { 3 }

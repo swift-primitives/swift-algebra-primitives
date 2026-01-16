@@ -1,2 +1,4 @@
 // exports.swift
-// No external dependencies to re-export - algebra-primitives is now self-contained
+// Re-export Finite so consumers get Finite.Enumerable, Finite.Ordinal, etc.
+
+@_exported import Finite_Primitives

@@ -94,9 +94,9 @@ extension Sign {
     public typealias Value<Payload> = Pair<Sign, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Sign: Enumerable {
+extension Sign: Finite.Enumerable {
     /// Number of sign values.
     @inlinable
     public static var caseCount: Int { 3 }

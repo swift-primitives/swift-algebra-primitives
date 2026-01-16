@@ -69,9 +69,9 @@ extension Endpoint {
     public typealias Value<Payload> = Pair<Endpoint, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Endpoint: Enumerable {
+extension Endpoint: Finite.Enumerable {
     /// Number of endpoint values.
     @inlinable
     public static var caseCount: Int { 2 }

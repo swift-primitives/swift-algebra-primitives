@@ -98,9 +98,9 @@ extension Comparison {
     public typealias Value<Payload> = Pair<Comparison, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Comparison: Enumerable {
+extension Comparison: Finite.Enumerable {
     /// Number of comparison values.
     @inlinable
     public static var caseCount: Int { 3 }

@@ -69,9 +69,9 @@ extension Boundary {
     public typealias Value<Payload> = Pair<Boundary, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Boundary: Enumerable {
+extension Boundary: Finite.Enumerable {
     /// Number of boundary values.
     @inlinable
     public static var caseCount: Int { 2 }

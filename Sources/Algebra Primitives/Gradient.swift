@@ -69,9 +69,9 @@ extension Gradient {
     public typealias Value<Payload> = Pair<Gradient, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Gradient: Enumerable {
+extension Gradient: Finite.Enumerable {
     /// Number of gradient values.
     @inlinable
     public static var caseCount: Int { 2 }

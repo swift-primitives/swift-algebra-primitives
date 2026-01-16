@@ -68,9 +68,9 @@ extension Bound {
     public typealias Value<Payload> = Pair<Bound, Payload>
 }
 
-// MARK: - Enumerable
+// MARK: - Finite.Enumerable
 
-extension Bound: Enumerable {
+extension Bound: Finite.Enumerable {
     /// Number of bound values.
     @inlinable
     public static var caseCount: Int { 2 }
