@@ -19,6 +19,7 @@ let package = Package(
     ],
     dependencies: [
         .package(path: "../swift-finite-primitives"),
+        .package(path: "../swift-optic-primitives"),
         .package(path: "../swift-test-primitives"),
     ],
     targets: [
@@ -26,6 +27,7 @@ let package = Package(
             name: "Algebra Primitives",
             dependencies: [
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
+                .product(name: "Optic Primitives", package: "swift-optic-primitives"),
             ]
         ),
         .testTarget(
@@ -39,11 +41,12 @@ let package = Package(
     swiftLanguageModes: [.v6]
 )
 
-for target in package.targets where ![.system, .binary, .plugin].contains(target.type) {
+for target in package.targets where ![.system, .binary, .plugin, .macro].contains(target.type) {
     let settings: [SwiftSetting] = [
         .enableUpcomingFeature("ExistentialAny"),
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
+        .enableExperimentalFeature("Lifetimes"),
         .strictMemorySafety(),
     ]
     target.swiftSettings = (target.swiftSettings ?? []) + settings
