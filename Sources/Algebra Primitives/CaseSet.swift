@@ -119,7 +119,7 @@ extension CaseSet {
     /// - Parameter prism: The prism to match against.
     /// - Returns: `true` if any element matches the prism.
     @inlinable
-    public func contains<Part: Sendable>(matching prism: Prism<Element, Part>) -> Bool {
+    public func contains<Part: Sendable>(matching prism: Optic.Prism<Element, Part>) -> Bool {
         storage.contains { prism.extract($0) != nil }
     }
 
@@ -128,7 +128,7 @@ extension CaseSet {
     /// - Parameter prism: The prism to extract with.
     /// - Returns: A set of all extracted values.
     @inlinable
-    public func values<Part: Hashable & Sendable>(for prism: Prism<Element, Part>) -> Set<Part> {
+    public func values<Part: Hashable & Sendable>(for prism: Optic.Prism<Element, Part>) -> Set<Part> {
         Set(storage.compactMap { prism.extract($0) })
     }
 
@@ -137,7 +137,7 @@ extension CaseSet {
     /// - Parameter prism: The prism to match against.
     /// - Returns: An array of matching elements.
     @inlinable
-    public func elements<Part: Sendable>(matching prism: Prism<Element, Part>) -> [Element] {
+    public func elements<Part: Sendable>(matching prism: Optic.Prism<Element, Part>) -> [Element] {
         storage.filter { prism.extract($0) != nil }
     }
 
@@ -147,7 +147,7 @@ extension CaseSet {
     /// - Returns: The number of elements removed.
     @inlinable
     @discardableResult
-    public mutating func removeAll<Part: Sendable>(matching prism: Prism<Element, Part>) -> Int {
+    public mutating func removeAll<Part: Sendable>(matching prism: Optic.Prism<Element, Part>) -> Int {
         let originalCount = storage.count
         storage.removeAll { prism.extract($0) != nil }
         return originalCount - storage.count
@@ -158,7 +158,7 @@ extension CaseSet {
     /// - Parameter prism: The prism to match against.
     /// - Returns: The number of matching elements.
     @inlinable
-    public func count<Part: Sendable>(matching prism: Prism<Element, Part>) -> Int {
+    public func count<Part: Sendable>(matching prism: Optic.Prism<Element, Part>) -> Int {
         storage.count { prism.extract($0) != nil }
     }
 }

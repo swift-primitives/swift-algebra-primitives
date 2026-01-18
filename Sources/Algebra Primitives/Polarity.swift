@@ -82,11 +82,11 @@ extension Polarity {
 extension Polarity: Finite.Enumerable {
     /// Number of polarity values.
     @inlinable
-    public static var caseCount: Int { 3 }
+    public static var count: Int { 3 }
 
-    /// Index of this value (0: positive, 1: negative, 2: neutral).
+    /// Ordinal of this value (0: positive, 1: negative, 2: neutral).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .positive: 0
         case .negative: 1
@@ -94,10 +94,10 @@ extension Polarity: Finite.Enumerable {
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.positive, .negative, .neutral][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.positive, .negative, .neutral][ordinal]
     }
 }
 

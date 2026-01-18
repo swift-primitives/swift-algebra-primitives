@@ -103,11 +103,11 @@ extension Comparison {
 extension Comparison: Finite.Enumerable {
     /// Number of comparison values.
     @inlinable
-    public static var caseCount: Int { 3 }
+    public static var count: Int { 3 }
 
-    /// Index of this value (0: less, 1: equal, 2: greater).
+    /// Ordinal of this value (0: less, 1: equal, 2: greater).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .less: 0
         case .equal: 1
@@ -115,10 +115,10 @@ extension Comparison: Finite.Enumerable {
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.less, .equal, .greater][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.less, .equal, .greater][ordinal]
     }
 }
 

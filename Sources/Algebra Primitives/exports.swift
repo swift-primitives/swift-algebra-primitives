@@ -1,4 +1,5 @@
 // exports.swift
-// Re-export Finite so consumers get Finite.Enumerable, Finite.Ordinal, etc.
+// Re-export dependencies so consumers get full access.
 
 @_exported import Finite_Primitives
+@_exported import Optic_Primitives

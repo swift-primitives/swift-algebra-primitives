@@ -103,21 +103,21 @@ extension Parity {
 extension Parity: Finite.Enumerable {
     /// Number of parity values.
     @inlinable
-    public static var caseCount: Int { 2 }
+    public static var count: Int { 2 }
 
-    /// Index of this value (0: even, 1: odd).
+    /// Ordinal of this value (0: even, 1: odd).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .even: 0
         case .odd: 1
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.even, .odd][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.even, .odd][ordinal]
     }
 }
 

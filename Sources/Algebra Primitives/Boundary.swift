@@ -74,21 +74,21 @@ extension Boundary {
 extension Boundary: Finite.Enumerable {
     /// Number of boundary values.
     @inlinable
-    public static var caseCount: Int { 2 }
+    public static var count: Int { 2 }
 
-    /// Index of this value (0: closed, 1: open).
+    /// Ordinal of this value (0: closed, 1: open).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .closed: 0
         case .open: 1
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.closed, .open][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.closed, .open][ordinal]
     }
 }
 

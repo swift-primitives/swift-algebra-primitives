@@ -99,11 +99,11 @@ extension Sign {
 extension Sign: Finite.Enumerable {
     /// Number of sign values.
     @inlinable
-    public static var caseCount: Int { 3 }
+    public static var count: Int { 3 }
 
-    /// Index of this value (0: positive, 1: negative, 2: zero).
+    /// Ordinal of this value (0: positive, 1: negative, 2: zero).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .positive: 0
         case .negative: 1
@@ -111,10 +111,10 @@ extension Sign: Finite.Enumerable {
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.positive, .negative, .zero][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.positive, .negative, .zero][ordinal]
     }
 }
 

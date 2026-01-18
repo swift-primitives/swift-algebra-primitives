@@ -74,21 +74,21 @@ extension Endpoint {
 extension Endpoint: Finite.Enumerable {
     /// Number of endpoint values.
     @inlinable
-    public static var caseCount: Int { 2 }
+    public static var count: Int { 2 }
 
-    /// Index of this value (0: start, 1: end).
+    /// Ordinal of this value (0: start, 1: end).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .start: 0
         case .end: 1
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.start, .end][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.start, .end][ordinal]
     }
 }
 

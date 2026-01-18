@@ -97,11 +97,11 @@ extension Ternary {
 extension Ternary: Finite.Enumerable {
     /// Number of ternary values.
     @inlinable
-    public static var caseCount: Int { 3 }
+    public static var count: Int { 3 }
 
-    /// Index of this value (0: negative, 1: zero, 2: positive).
+    /// Ordinal of this value (0: negative, 1: zero, 2: positive).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .negative: 0
         case .zero: 1
@@ -109,10 +109,10 @@ extension Ternary: Finite.Enumerable {
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.negative, .zero, .positive][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.negative, .zero, .positive][ordinal]
     }
 }
 

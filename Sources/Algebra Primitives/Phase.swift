@@ -133,16 +133,16 @@ extension Phase {
 extension Phase: Finite.Enumerable {
     /// Number of phase values.
     @inlinable
-    public static var caseCount: Int { 4 }
+    public static var count: Int { 4 }
 
-    /// Index of this value (0: zero, 1: quarter, 2: half, 3: threeQuarter).
+    /// Ordinal of this value (0: zero, 1: quarter, 2: half, 3: threeQuarter).
     @inlinable
-    public var caseIndex: Int { rawValue }
+    public var ordinal: Int { rawValue }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = Phase(rawValue: caseIndex)!
+    public init(__unchecked: Void, ordinal: Int) {
+        self = Phase(rawValue: ordinal)!
     }
 }
 

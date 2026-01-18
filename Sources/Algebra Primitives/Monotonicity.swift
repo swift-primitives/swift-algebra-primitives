@@ -106,11 +106,11 @@ extension Monotonicity {
 extension Monotonicity: Finite.Enumerable {
     /// Number of monotonicity values.
     @inlinable
-    public static var caseCount: Int { 3 }
+    public static var count: Int { 3 }
 
-    /// Index of this value (0: increasing, 1: decreasing, 2: constant).
+    /// Ordinal of this value (0: increasing, 1: decreasing, 2: constant).
     @inlinable
-    public var caseIndex: Int {
+    public var ordinal: Int {
         switch self {
         case .increasing: 0
         case .decreasing: 1
@@ -118,10 +118,10 @@ extension Monotonicity: Finite.Enumerable {
         }
     }
 
-    /// Creates a value from its index.
+    /// Creates a value from its ordinal.
     @inlinable
-    public init(caseIndex: Int) {
-        self = [.increasing, .decreasing, .constant][caseIndex]
+    public init(__unchecked: Void, ordinal: Int) {
+        self = [.increasing, .decreasing, .constant][ordinal]
     }
 }
 

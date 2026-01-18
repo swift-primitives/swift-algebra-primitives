@@ -13,22 +13,22 @@ enum Event: Hashable, Sendable {
 }
 
 extension Event {
-    static var login: Prism<Event, Int> {
-        Prism(
+    static var login: Optic.Prism<Event, Int> {
+        Optic.Prism(
             embed: { .login(userId: $0) },
             extract: { if case .login(let id) = $0 { return id } else { return nil } }
         )
     }
 
-    static var logout: Prism<Event, Int> {
-        Prism(
+    static var logout: Optic.Prism<Event, Int> {
+        Optic.Prism(
             embed: { .logout(userId: $0) },
             extract: { if case .logout(let id) = $0 { return id } else { return nil } }
         )
     }
 
-    static var purchase: Prism<Event, String> {
-        Prism(
+    static var purchase: Optic.Prism<Event, String> {
+        Optic.Prism(
             embed: { .purchase(itemId: $0) },
             extract: { if case .purchase(let id) = $0 { return id } else { return nil } }
         )
