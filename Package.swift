@@ -9,34 +9,26 @@ let package = Package(
         .iOS(.v26),
         .tvOS(.v26),
         .watchOS(.v26),
-        .visionOS(.v26),
+        .visionOS(.v26)
     ],
     products: [
         .library(
             name: "Algebra Primitives",
             targets: ["Algebra Primitives"]
-        ),
+        )
     ],
     dependencies: [
         .package(path: "../swift-finite-primitives"),
-        .package(path: "../swift-optic-primitives"),
-        .package(path: "../swift-test-primitives"),
+        .package(path: "../swift-optic-primitives")
     ],
     targets: [
         .target(
             name: "Algebra Primitives",
             dependencies: [
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
-                .product(name: "Optic Primitives", package: "swift-optic-primitives"),
+                .product(name: "Optic Primitives", package: "swift-optic-primitives")
             ]
-        ),
-        .testTarget(
-            name: "Algebra Primitives Tests",
-            dependencies: [
-                "Algebra Primitives",
-                .product(name: "Test Primitives", package: "swift-test-primitives"),
-            ]
-        ),
+        )
     ],
     swiftLanguageModes: [.v6]
 )
@@ -47,7 +39,7 @@ for target in package.targets where ![.system, .binary, .plugin, .macro].contain
         .enableUpcomingFeature("InternalImportsByDefault"),
         .enableUpcomingFeature("MemberImportVisibility"),
         .enableExperimentalFeature("Lifetimes"),
-        .strictMemorySafety(),
+        .strictMemorySafety()
     ]
     target.swiftSettings = (target.swiftSettings ?? []) + settings
 }

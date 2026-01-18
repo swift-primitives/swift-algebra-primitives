@@ -153,8 +153,8 @@ struct `Prism - Composition` {
     @Test
     func `composing two prisms embeds correctly`() {
         // Compose Optional<Result<Int, Error>> prisms
-        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
-        let resultPrism = Result<Int, TestError>.successPrism
+        let optionalPrism = Optional<Result<Int, TestError>>.prisms.some
+        let resultPrism = Result<Int, TestError>.prisms.success
 
         let composed = Optic.Prism.composing(optionalPrism, resultPrism)
         let result = composed.embed(42)
@@ -163,8 +163,8 @@ struct `Prism - Composition` {
 
     @Test
     func `composing two prisms extracts correctly`() {
-        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
-        let resultPrism = Result<Int, TestError>.successPrism
+        let optionalPrism = Optional<Result<Int, TestError>>.prisms.some
+        let resultPrism = Result<Int, TestError>.prisms.success
 
         let composed = Optic.Prism.composing(optionalPrism, resultPrism)
         let result = composed.extract(.some(.success(42)))
@@ -173,8 +173,8 @@ struct `Prism - Composition` {
 
     @Test
     func `composing two prisms returns nil when outer fails`() {
-        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
-        let resultPrism = Result<Int, TestError>.successPrism
+        let optionalPrism = Optional<Result<Int, TestError>>.prisms.some
+        let resultPrism = Result<Int, TestError>.prisms.success
 
         let composed = Optic.Prism.composing(optionalPrism, resultPrism)
         let result = composed.extract(nil)
@@ -183,8 +183,8 @@ struct `Prism - Composition` {
 
     @Test
     func `composing two prisms returns nil when inner fails`() {
-        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
-        let resultPrism = Result<Int, TestError>.successPrism
+        let optionalPrism = Optional<Result<Int, TestError>>.prisms.some
+        let resultPrism = Result<Int, TestError>.prisms.success
 
         let composed = Optic.Prism.composing(optionalPrism, resultPrism)
         let result = composed.extract(.some(.failure(.test)))
@@ -193,8 +193,8 @@ struct `Prism - Composition` {
 
     @Test
     func `appending is equivalent to composing`() {
-        let optionalPrism = Optional<Result<Int, TestError>>.somePrism
-        let resultPrism = Result<Int, TestError>.successPrism
+        let optionalPrism = Optional<Result<Int, TestError>>.prisms.some
+        let resultPrism = Result<Int, TestError>.prisms.success
 
         let composed = Optic.Prism.composing(optionalPrism, resultPrism)
         let appended = optionalPrism.appending(resultPrism)
@@ -211,21 +211,21 @@ struct `Prism - Composition` {
 struct `Optional - Prism` {
     @Test
     func `somePrism embed creates optional`() {
-        let prism = Optional<Int>.somePrism
+        let prism = Optional<Int>.prisms.some
         let result = prism.embed(42)
         #expect(result == .some(42))
     }
 
     @Test
     func `somePrism extract returns value from some`() {
-        let prism = Optional<Int>.somePrism
+        let prism = Optional<Int>.prisms.some
         let result = prism.extract(.some(42))
         #expect(result == 42)
     }
 
     @Test
     func `somePrism extract returns nil from none`() {
-        let prism = Optional<Int>.somePrism
+        let prism = Optional<Int>.prisms.some
         let result = prism.extract(nil)
         #expect(result == nil)
     }
@@ -289,42 +289,42 @@ enum TestError: Error, Hashable, Sendable {
 struct `Result - Prism` {
     @Test
     func `successPrism embed creates success result`() {
-        let prism = Result<Int, TestError>.successPrism
+        let prism = Result<Int, TestError>.prisms.success
         let result = prism.embed(42)
         #expect(result == .success(42))
     }
 
     @Test
     func `successPrism extract returns value from success`() {
-        let prism = Result<Int, TestError>.successPrism
+        let prism = Result<Int, TestError>.prisms.success
         let result = prism.extract(.success(42))
         #expect(result == 42)
     }
 
     @Test
     func `successPrism extract returns nil from failure`() {
-        let prism = Result<Int, TestError>.successPrism
+        let prism = Result<Int, TestError>.prisms.success
         let result = prism.extract(.failure(.test))
         #expect(result == nil)
     }
 
     @Test
     func `failurePrism embed creates failure result`() {
-        let prism = Result<Int, TestError>.failurePrism
+        let prism = Result<Int, TestError>.prisms.failure
         let result = prism.embed(.test)
         #expect(result == .failure(.test))
     }
 
     @Test
     func `failurePrism extract returns error from failure`() {
-        let prism = Result<Int, TestError>.failurePrism
+        let prism = Result<Int, TestError>.prisms.failure
         let result = prism.extract(.failure(.test))
         #expect(result == .test)
     }
 
     @Test
     func `failurePrism extract returns nil from success`() {
-        let prism = Result<Int, TestError>.failurePrism
+        let prism = Result<Int, TestError>.prisms.failure
         let result = prism.extract(.success(42))
         #expect(result == nil)
     }
