@@ -81,6 +81,29 @@ extension Parity {
     }
 }
 
+// MARK: - Algebraic Identities
+
+extension Parity {
+    /// Algebraic identity elements for parity operations.
+    public enum identity {
+        /// Additive identity: even + x = x.
+        @inlinable
+        public static var additive: Parity { .even }
+
+        /// Multiplicative identity: odd × x = x.
+        @inlinable
+        public static var multiplicative: Parity { .odd }
+    }
+}
+
+// MARK: - Inverse
+
+extension Parity {
+    /// Additive inverse (self, since p + p = even in Z₂).
+    @inlinable
+    public var inverse: Parity { self }
+}
+
 // MARK: - Integer Detection
 
 extension Parity {
