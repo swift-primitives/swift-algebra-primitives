@@ -18,6 +18,7 @@ let package = Package(
         )
     ],
     dependencies: [
+        .package(path: "../swift-comparison-primitives"),
         .package(path: "../swift-finite-primitives"),
         .package(path: "../swift-optic-primitives")
     ],
@@ -25,6 +26,7 @@ let package = Package(
         .target(
             name: "Algebra Primitives",
             dependencies: [
+                .product(name: "Comparison Primitives", package: "swift-comparison-primitives"),
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
                 .product(name: "Optic Primitives", package: "swift-optic-primitives")
             ]
