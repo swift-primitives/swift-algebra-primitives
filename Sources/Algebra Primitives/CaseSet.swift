@@ -47,7 +47,7 @@ public struct CaseSet<Element: Hashable & Sendable>: Sendable {
     ///
     /// - Parameter elements: The elements to include.
     @inlinable
-    public init<S: Sequence>(_ elements: S) where S.Element == Element {
+    public init<S: Swift.Sequence>(_ elements: S) where S.Element == Element {
         self.storage = Array(elements)
     }
 }
@@ -165,7 +165,7 @@ extension CaseSet {
 
 // MARK: - Sequence
 
-extension CaseSet: Sequence {
+extension CaseSet: Swift.Sequence {
     @inlinable
     public func makeIterator() -> IndexingIterator<[Element]> {
         storage.makeIterator()
@@ -174,7 +174,7 @@ extension CaseSet: Sequence {
 
 // MARK: - Collection
 
-extension CaseSet: Collection {
+extension CaseSet: Swift.Collection {
     public typealias Index = Int
 
     @inlinable
