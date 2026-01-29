@@ -13,11 +13,11 @@ extension Comparison {
 extension Comparison: @retroactive Finite.Enumerable {
     /// Number of comparison values.
     @inlinable
-    public static var count: Int { 3 }
+    public static var count: Cardinal { 3 }
 
     /// Ordinal of this value (0: less, 1: equal, 2: greater).
     @inlinable
-    public var ordinal: Int {
+    public var ordinal: Ordinal {
         switch self {
         case .less: 0
         case .equal: 1
@@ -27,7 +27,7 @@ extension Comparison: @retroactive Finite.Enumerable {
 
     /// Creates a value from its ordinal.
     @inlinable
-    public init(__unchecked: Void, ordinal: Int) {
+    public init(__unchecked: Void, ordinal: Ordinal) {
         self = [.less, .equal, .greater][ordinal]
     }
 }
