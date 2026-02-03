@@ -29,12 +29,24 @@ let package = Package(
             targets: ["Algebra Group Primitives"]
         ),
         .library(
+            name: "Algebra Semiring Primitives",
+            targets: ["Algebra Semiring Primitives"]
+        ),
+        .library(
             name: "Algebra Ring Primitives",
             targets: ["Algebra Ring Primitives"]
         ),
         .library(
             name: "Algebra Field Primitives",
             targets: ["Algebra Field Primitives"]
+        ),
+        .library(
+            name: "Algebra Law Primitives",
+            targets: ["Algebra Law Primitives"]
+        ),
+        .library(
+            name: "Algebra Module Primitives",
+            targets: ["Algebra Module Primitives"]
         ),
         .library(
             name: "Algebra Primitives",
@@ -72,9 +84,16 @@ let package = Package(
             ]
         ),
         .target(
+            name: "Algebra Semiring Primitives",
+            dependencies: [
+                "Algebra Monoid Primitives",
+            ]
+        ),
+        .target(
             name: "Algebra Ring Primitives",
             dependencies: [
                 "Algebra Group Primitives",
+                "Algebra Semiring Primitives",
             ]
         ),
         .target(
@@ -84,9 +103,24 @@ let package = Package(
             ]
         ),
         .target(
+            name: "Algebra Law Primitives",
+            dependencies: [
+                "Algebra Field Primitives",
+                "Algebra Module Primitives",
+            ]
+        ),
+        .target(
+            name: "Algebra Module Primitives",
+            dependencies: [
+                "Algebra Field Primitives",
+            ]
+        ),
+        .target(
             name: "Algebra Primitives",
             dependencies: [
                 "Algebra Field Primitives",
+                "Algebra Law Primitives",
+                "Algebra Module Primitives",
                 .product(name: "Comparison Primitives", package: "swift-comparison-primitives"),
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
                 .product(name: "Optic Primitives", package: "swift-optic-primitives"),
@@ -111,6 +145,12 @@ let package = Package(
             ]
         ),
         .testTarget(
+            name: "Algebra Semiring Primitives Tests",
+            dependencies: [
+                "Algebra Semiring Primitives",
+            ]
+        ),
+        .testTarget(
             name: "Algebra Ring Primitives Tests",
             dependencies: [
                 "Algebra Ring Primitives",
@@ -120,6 +160,18 @@ let package = Package(
             name: "Algebra Field Primitives Tests",
             dependencies: [
                 "Algebra Field Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Law Primitives Tests",
+            dependencies: [
+                "Algebra Law Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Module Primitives Tests",
+            dependencies: [
+                "Algebra Primitives",
             ]
         ),
         .testTarget(

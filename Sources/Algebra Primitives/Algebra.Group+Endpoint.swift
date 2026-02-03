@@ -11,10 +11,9 @@ extension Algebra.Group where Element == Endpoint {
     /// The Z₂ group over endpoint position.
     @inlinable
     public static var z2: Self {
-        .init(
-            identity: .start,
-            combining: { lhs, rhs in lhs == rhs ? .start : .end },
-            inverting: { $0 }
-        )
+        .z2(via: .init(
+            forward: { $0 == .start ? .even : .odd },
+            backward: { $0 == .even ? .start : .end }
+        ))
     }
 }

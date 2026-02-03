@@ -11,10 +11,9 @@ extension Algebra.Group where Element == Boundary {
     /// The Z₂ group over boundary inclusivity.
     @inlinable
     public static var z2: Self {
-        .init(
-            identity: .closed,
-            combining: { lhs, rhs in lhs == rhs ? .closed : .open },
-            inverting: { $0 }
-        )
+        .z2(via: .init(
+            forward: { $0 == .closed ? .even : .odd },
+            backward: { $0 == .even ? .closed : .open }
+        ))
     }
 }

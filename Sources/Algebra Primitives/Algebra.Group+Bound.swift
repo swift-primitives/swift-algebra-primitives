@@ -11,10 +11,9 @@ extension Algebra.Group where Element == Bound {
     /// The Z₂ group over bound position.
     @inlinable
     public static var z2: Self {
-        .init(
-            identity: .lower,
-            combining: { lhs, rhs in lhs == rhs ? .lower : .upper },
-            inverting: { $0 }
-        )
+        .z2(via: .init(
+            forward: { $0 == .lower ? .even : .odd },
+            backward: { $0 == .even ? .lower : .upper }
+        ))
     }
 }

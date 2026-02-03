@@ -11,10 +11,9 @@ extension Algebra.Group where Element == Gradient {
     /// The Z₂ group over gradient direction.
     @inlinable
     public static var z2: Self {
-        .init(
-            identity: .ascending,
-            combining: { lhs, rhs in lhs == rhs ? .ascending : .descending },
-            inverting: { $0 }
-        )
+        .z2(via: .init(
+            forward: { $0 == .ascending ? .even : .odd },
+            backward: { $0 == .even ? .ascending : .descending }
+        ))
     }
 }
