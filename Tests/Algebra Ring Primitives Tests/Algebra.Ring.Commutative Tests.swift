@@ -68,9 +68,10 @@ extension AlgebraRingCommutativeTests.Unit {
     }
 
     @Test
-    func `multiplicativeMonoid returns commutative monoid`() {
+    func `multiplicative monoid accessible via ring`() {
         let commutative = Self.intCommutativeRing
-        #expect(commutative.multiplicativeMonoid.identity == 1)
+        let monoid = Algebra.Monoid<Int>.Commutative(commutative)
+        #expect(monoid.identity == 1)
     }
 }
 

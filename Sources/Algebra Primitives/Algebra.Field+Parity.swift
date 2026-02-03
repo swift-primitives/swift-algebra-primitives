@@ -8,6 +8,7 @@
 /// - Additive identity: even
 /// - Multiplicative identity: odd
 /// - Every element is its own additive inverse
+/// - Reciprocal of odd is odd; even has no reciprocal (zero element)
 extension Algebra.Field where Element == Parity {
     /// The Z₂ field over parity.
     @inlinable
@@ -18,11 +19,14 @@ extension Algebra.Field where Element == Parity {
                 combining: Parity.adding,
                 inverting: { $0 }
             )),
-            multiplicative: .init(group: .init(
+            multiplicative: .init(monoid: .init(
                 identity: .odd,
-                combining: Parity.multiplying,
-                inverting: { $0 }
-            ))
+                combining: Parity.multiplying
+            )),
+            reciprocal: { (element) throws(Error) in
+                guard element == .odd else { throw .nonInvertible }
+                return element
+            }
         )
     }
 }

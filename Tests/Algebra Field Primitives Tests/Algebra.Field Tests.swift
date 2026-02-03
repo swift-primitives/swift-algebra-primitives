@@ -20,11 +20,14 @@ extension AlgebraFieldTests.Unit {
                 combining: { $0 != $1 },  // XOR
                 inverting: { $0 }          // self-inverse
             )),
-            multiplicative: .init(group: .init(
+            multiplicative: .init(monoid: .init(
                 identity: true,
-                combining: { $0 && $1 },   // AND
-                inverting: { $0 }           // self-inverse (only true is nonzero)
-            ))
+                combining: { $0 && $1 }    // AND
+            )),
+            reciprocal: { (element) throws(Algebra.Field<Bool>.Error) in
+                guard element == true else { throw .nonInvertible }
+                return element
+            }
         )
     }
 
@@ -62,16 +65,79 @@ extension AlgebraFieldTests.Unit {
     }
 
     @Test
-    func `multiplying delegates to multiplicative group`() {
+    func `multiplying delegates to multiplicative monoid`() {
         let field = Self.boolField
         #expect(field.multiplying(true, true) == true) // AND
         #expect(field.multiplying(true, false) == false)
     }
 
     @Test
-    func `reciprocal delegates to multiplicative inverse`() {
+    func `reciprocal succeeds for invertible element`() throws {
         let field = Self.boolField
-        #expect(field.reciprocal(true) == true) // self-inverse in Z₂
+        #expect(try field.reciprocal(true) == true) // self-inverse in Z₂
+    }
+
+    @Test
+    func `reciprocal throws for non-invertible element`() {
+        let field = Self.boolField
+        #expect(throws: Algebra.Field<Bool>.Error.nonInvertible) {
+            try field.reciprocal(false)
+        }
+    }
+
+    @Test
+    func `dividing succeeds for invertible divisor`() throws {
+        let field = Self.boolField
+        #expect(try field.dividing(true, true) == true)
+    }
+
+    @Test
+    func `dividing throws for non-invertible divisor`() {
+        let field = Self.boolField
+        #expect(throws: Algebra.Field<Bool>.Error.nonInvertible) {
+            try field.dividing(true, false)
+        }
+    }
+
+    @Test
+    func `subtracting computes additive difference`() {
+        let field = Self.boolField
+        #expect(field.subtracting(true, true) == false) // XOR
+        #expect(field.subtracting(true, false) == true)
+    }
+
+    @Test
+    func `unit method succeeds for invertible element`() throws {
+        let field = Self.boolField
+        let u = try field.unit(true)
+        #expect(u.element == true)
+        #expect(u.inverse == true)
+    }
+
+    @Test
+    func `unit method throws for non-invertible element`() {
+        let field = Self.boolField
+        #expect(throws: Algebra.Field<Bool>.Error.nonInvertible) {
+            try field.unit(false)
+        }
+    }
+
+    @Test
+    func `unit group identity is one`() {
+        let field = Self.boolField
+        let group = field.unit
+        #expect(group.identity.element == true)
+        #expect(group.identity.inverse == true)
+    }
+
+    @Test
+    func `unit group inverting swaps element and inverse`() throws {
+        let field = Self.boolField
+        let group = field.unit
+        let u = try field.unit(true)
+        let inv = group.inverting(u)
+        #expect(inv.element == true)  // true is self-inverse in Z₂
+        #expect(inv.inverse == true)
     }
 
     @Test

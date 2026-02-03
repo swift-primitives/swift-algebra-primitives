@@ -5,7 +5,9 @@ import Algebra_Monoid_Primitives
 extension Algebra.Monoid {
     /// Creates a monoid from an abelian group by forgetting inverse and commutativity.
     @inlinable
-    public init(_ abelian: Algebra.Group<Element>.Abelian) {
+    public init(
+        _ abelian: Algebra.Group<Element>.Abelian
+    ) {
         self.init(identity: abelian.group.identity, combining: abelian.group.combining)
     }
 }
@@ -13,7 +15,9 @@ extension Algebra.Monoid {
 extension Algebra.Monoid.Commutative {
     /// Creates a commutative monoid from an abelian group by forgetting inverses.
     @inlinable
-    public init(_ abelian: Algebra.Group<Element>.Abelian) {
+    public init(
+        _ abelian: Algebra.Group<Element>.Abelian
+    ) {
         self.init(monoid: .init(abelian))
     }
 }

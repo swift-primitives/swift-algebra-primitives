@@ -28,6 +28,12 @@ extension Algebra.Ring {
     public func multiplying(_ lhs: Element, _ rhs: Element) -> Element {
         multiplicative.combining(lhs, rhs)
     }
+
+    /// Ring subtraction.
+    @inlinable
+    public func subtracting(_ lhs: Element, _ rhs: Element) -> Element {
+        additive.combining(lhs, additive.inverting(rhs))
+    }
 }
 
 extension Algebra.Ring.Commutative {
@@ -55,5 +61,11 @@ extension Algebra.Ring.Commutative {
     @inlinable
     public func multiplying(_ lhs: Element, _ rhs: Element) -> Element {
         ring.multiplying(lhs, rhs)
+    }
+
+    /// Ring subtraction.
+    @inlinable
+    public func subtracting(_ lhs: Element, _ rhs: Element) -> Element {
+        ring.subtracting(lhs, rhs)
     }
 }

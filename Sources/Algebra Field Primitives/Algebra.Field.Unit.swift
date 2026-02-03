@@ -1,0 +1,26 @@
+// Algebra.Field.Unit.swift
+
+import Algebra_Ring_Primitives
+
+/// An element proven to be multiplicatively invertible.
+///
+/// `Unit` values can only be constructed through `Field.unit(_:)`,
+/// which verifies invertibility by calling `reciprocal`. Both the
+/// element and its precomputed inverse are stored, making all
+/// group operations on units total.
+extension Algebra.Field {
+    @frozen
+    public struct Unit: Sendable {
+        /// The element value.
+        public var element: Element
+
+        /// The precomputed multiplicative inverse.
+        public var inverse: Element
+
+        @usableFromInline
+        internal init(element: Element, inverse: Element) {
+            self.element = element
+            self.inverse = inverse
+        }
+    }
+}

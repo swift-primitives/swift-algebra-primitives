@@ -9,9 +9,3 @@ extension Algebra.Monoid.Commutative {
         self.init(monoid: commutativeRing.ring.multiplicative)
     }
 }
-
-extension Algebra.Ring.Commutative {
-    /// The multiplicative commutative monoid.
-    @inlinable
-    public var multiplicativeMonoid: Algebra.Monoid<Element>.Commutative { .init(self) }
-}

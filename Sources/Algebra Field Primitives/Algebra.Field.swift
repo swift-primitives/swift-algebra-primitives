@@ -3,23 +3,29 @@
 import Algebra_Ring_Primitives
 public import Witness_Primitives
 
-/// Witness for a field: additive and multiplicative abelian groups with distributivity.
+/// Witness for a field: additive abelian group, multiplicative commutative
+/// monoid, and partial reciprocal.
 ///
 /// A field (F, +, ·) satisfies:
 /// - (F, +) is an abelian group with identity 0
-/// - (F \ {0}, ·) is an abelian group with identity 1
+/// - (F, ·) is a commutative monoid with identity 1
+/// - Every nonzero element has a multiplicative inverse (reciprocal)
 /// - Multiplication distributes over addition
 ///
-/// The multiplicative group operates on nonzero elements only.
+/// The multiplicative structure is stored as a commutative monoid on all
+/// elements. The reciprocal operation throws for non-invertible elements
+/// (typically zero), making the domain restriction explicit in the type.
+///
 /// Distributivity is a documented invariant, not enforced at compile time.
 ///
 /// ## Example
 ///
 /// ```swift
-/// // Z₂ field: addition is XOR, multiplication is AND
-/// let z2 = Algebra.Field<Bit>.z2
-/// z2.additive.combining(.one, .one)       // .zero
-/// z2.multiplicative.combining(.one, .one) // .one
+/// let z2 = Algebra.Field<Parity>.z2
+/// z2.adding(.odd, .odd)           // .even
+/// z2.multiplying(.odd, .odd)      // .odd
+/// try z2.reciprocal(.odd)         // .odd
+/// try z2.reciprocal(.even)        // throws .nonInvertible
 /// ```
 extension Algebra {
     @frozen
@@ -27,16 +33,29 @@ extension Algebra {
         /// Additive structure: abelian group with identity (zero).
         public var additive: Algebra.Group<Element>.Abelian
 
-        /// Multiplicative structure: abelian group on nonzero elements with identity (one).
-        public var multiplicative: Algebra.Group<Element>.Abelian
+        /// Multiplicative structure: commutative monoid on all elements.
+        public var multiplicative: Algebra.Monoid<Element>.Commutative
+
+        /// Multiplicative inverse, throwing for non-invertible elements.
+        public var reciprocal: @Sendable (Element) throws(Error) -> Element
 
         @inlinable
         public init(
             additive: Algebra.Group<Element>.Abelian,
-            multiplicative: Algebra.Group<Element>.Abelian
+            multiplicative: Algebra.Monoid<Element>.Commutative,
+            reciprocal: @escaping @Sendable (Element) throws(Error) -> Element
         ) {
             self.additive = additive
             self.multiplicative = multiplicative
+            self.reciprocal = reciprocal
         }
+    }
+}
+
+extension Algebra.Field {
+    /// Errors from field operations with domain restrictions.
+    public enum Error: Swift.Error, Sendable {
+        /// The element has no multiplicative inverse (e.g., zero in a field).
+        case nonInvertible
     }
 }

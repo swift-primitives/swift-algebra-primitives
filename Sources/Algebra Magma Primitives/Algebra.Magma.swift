@@ -26,5 +26,11 @@ extension Algebra {
         ) {
             self.combining = combining
         }
+
+        /// Applies the binary operation.
+        @inlinable
+        public func callAsFunction(_ lhs: Element, _ rhs: Element) -> Element {
+            combining(lhs, rhs)
+        }
     }
 }

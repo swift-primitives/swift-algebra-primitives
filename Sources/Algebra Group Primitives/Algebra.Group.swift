@@ -40,5 +40,11 @@ extension Algebra {
             self.combining = combining
             self.inverting = inverting
         }
+
+        /// Applies the associative binary operation.
+        @inlinable
+        public func callAsFunction(_ lhs: Element, _ rhs: Element) -> Element {
+            combining(lhs, rhs)
+        }
     }
 }
