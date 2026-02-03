@@ -2,9 +2,9 @@
 
 <!--
 ---
-version: 1.0.0
+version: 2.0.0
 last_updated: 2026-02-03
-status: DEFERRED
+status: DECISION
 ---
 -->
 
@@ -12,7 +12,7 @@ status: DEFERRED
 
 During the algebra-primitives correctness round (2026-01–02), we redesigned the algebraic witness hierarchy: Field gained typed throws, `Algebra.Field.Unit` was introduced for the multiplicative group of units, Ring projections were added, and CaseSet was deleted. The implementation converged across multiple rounds of research and planning.
 
-This document records all work that was explicitly identified during that process but intentionally excluded from the current patch set. Every item below is additive, non-breaking, and can be introduced incrementally without revisiting the Field design.
+This document records all work that was explicitly identified during that process but intentionally excluded from the current patch set. Items 1–6 have since been implemented. Item 7 remains deferred.
 
 ## Question
 
@@ -22,129 +22,102 @@ What future work was identified but deferred during the algebra-primitives corre
 
 ### 1. `Algebra.Z.Modulo<let n: Int>`
 
-**Status**: Design locked, implementation deferred.
+**Status**: Implemented.
 
-Canonical modular integer carrier parameterized by modulus. Always provides:
+Canonical modular integer carrier parameterized by modulus. Provides:
 
-- Additive abelian group (mod n)
-- Multiplicative commutative monoid (mod n)
-- Commutative ring
+- Checked init (`throws(Error)`), wrapping init, and unchecked init
+- Overflow-safe arithmetic: `+`, `-` (total for valid residues), `*` (`throws(Error)` for overflow)
+- `Finite.Enumerable` conformance via `count`, `ordinal`, `init(__unchecked:ordinal:)`
+- `static var ring: Algebra.Ring<Self>.Commutative?` — returns nil if `(n-1)²` overflows `Int`
+- `static func field() -> Algebra.Field<Self>?` — returns nil when n is not prime (trial division primality, extended Euclidean inverse)
 
-Field availability is conditional on primality:
-
-```swift
-extension Algebra.Z.Modulo {
-    static func field() -> Algebra.Field<Self>?
-    // Returns nil when n is not prime.
-}
-```
-
-Integrates with the existing typed-throwing `reciprocal` and `Field.Unit` group of units.
-
-**Reason deferred**: Large addition. Not required for current correctness fixes.
-
-**Dependencies**: None (self-contained). Enables items 2, 4, and 6.
+**Implementation**: `Algebra.Z.swift`, `Algebra.Z.Modulo.swift`, `Algebra.Z.Modulo.Error.swift`, `Algebra.Z.Modulo+Arithmetic.swift`, `Algebra.Z.Modulo+Finite.swift`, `Algebra.Z.Modulo+Ring.swift`, `Algebra.Z.Modulo+Semiring.swift`, `Algebra.Z.Modulo+Field.swift`, `Algebra.Z.Modulo+Primality.swift`
 
 ---
 
 ### 2. Z₂ Witness Consolidation via Isomorphism
 
-**Status**: Deferred (non-critical ergonomics).
+**Status**: Implemented.
 
-Five semantic 2-case carriers currently duplicate identical XOR-style group definitions:
+Z₂ group witnesses for Bound, Boundary, Endpoint, and Gradient are now derived via Parity isomorphism transport rather than hand-written XOR-style combining logic.
 
-| Carrier | Identity | File |
-|---------|----------|------|
-| `Parity` | `.even` | `Algebra.Group+Parity.swift` |
-| `Bound` | `.lower` | `Algebra.Group+Bound.swift` |
-| `Boundary` | `.closed` | `Algebra.Group+Boundary.swift` |
-| `Endpoint` | `.start` | `Algebra.Group+Endpoint.swift` |
-| `Gradient` | `.ascending` | `Algebra.Group+Gradient.swift` |
+Transport functions:
+- `Algebra.Group.z2(via: Optic.Iso<Element, Parity>)` — transports Parity's additive group
+- `Algebra.Group.Abelian.z2(via:)` — wraps `Group.z2`
+- `Algebra.Field.z2(via:)` — transports Parity's Z₂ field
 
-All five use the same combining logic: `lhs == rhs ? .identity : .other`. The semantic carriers should be kept (they carry distinct domain meaning), but their algebraic witnesses could be derived via isomorphism to `Z.Modulo<2>` once that type exists.
+Parity remains the canonical Z₂ representative. The four carriers now use `.z2(via:)` with forward/backward mappings.
 
-Likely implementation: a small internal helper that transports group/field witnesses across an isomorphism.
-
-**Reason deferred**: Non-critical ergonomics. The current hand-written witnesses are correct.
-
-**Dependencies**: Requires `Algebra.Z.Modulo<2>` (item 1).
+**Implementation**: `Algebra.Group+Z2.swift`, `Algebra.Group.Abelian+Z2.swift`, `Algebra.Field+Z2.swift`. Modified: `Algebra.Group+Bound.swift`, `Algebra.Group+Boundary.swift`, `Algebra.Group+Endpoint.swift`, `Algebra.Group+Gradient.swift`.
 
 ---
 
 ### 3. Semiring Witnesses
 
-**Status**: Explicitly deferred.
+**Status**: Implemented.
 
-Introduce `Algebra.Semiring` (and possibly `Algebra.Semiring.Commutative`) as a new node in the witness ladder below Ring.
+`Algebra.Semiring<Element>` stores additive `Monoid<Element>.Commutative` + multiplicative `Monoid<Element>`. `Algebra.Semiring<Element>.Commutative` wraps a semiring and documents multiplicative commutativity.
 
-Motivating examples:
+Ring→Semiring projection added via `Algebra.Ring+Semiring.swift` in the Ring Primitives module.
 
-- Boolean algebra (`||`, `&&`)
-- Tropical semirings (min-plus, max-plus)
-- Path-finding and dynamic programming structures
-
-**Reason deferred**: Not required for current correctness fixes. Requires careful placement in the algebra ladder — a semiring has additive commutative monoid (not group) and multiplicative monoid, so it sits below Ring but is not simply "Ring minus inverses."
-
-**Dependencies**: None, but should be placed before Module/VectorSpace work (item 5).
+**Implementation**: `Algebra Semiring Primitives` module with `Algebra.Semiring.swift`, `Algebra.Semiring.Commutative.swift`, `Algebra.Semiring+Convenience.swift`, `Algebra.Semiring+Monoid.swift`, `exports.swift`. Ring Primitives gains `Algebra.Ring+Semiring.swift`.
 
 ---
 
 ### 4. Law Test Harnesses (Finite Carriers)
 
-**Status**: Deferred, recommended follow-up.
+**Status**: Implemented.
 
-Property/law checking utilities that leverage `Finite_Primitives` to exhaustively verify algebraic laws over small carriers.
+`Algebra Law Primitives` module provides total pure-function harnesses returning `Violation?`. No `#expect`, no traps. Test code wraps with `#expect(violation == nil)`.
 
-Example laws to verify:
+Harnesses implemented:
 
-- Group associativity: `a ∗ (b ∗ c) = (a ∗ b) ∗ c`
-- Identity: `e ∗ a = a = a ∗ e`
-- Inverse: `a ∗ a⁻¹ = e`
-- Distributivity: `a · (b + c) = a·b + a·c`
-- Commutativity: `a ∗ b = b ∗ a`
+| Law | Namespace | Members |
+|-----|-----------|---------|
+| Associativity | `Algebra.Law.Associativity` | `.check(of:over:)` |
+| Identity | `Algebra.Law.Identity` | `.left(of:over:)`, `.right(of:over:)` |
+| Inverse | `Algebra.Law.Inverse` | `.left(of:over:)`, `.right(of:over:)` |
+| Commutativity | `Algebra.Law.Commutativity` | `.check(of:over:)` |
+| Distributivity | `Algebra.Law.Distributivity` | `.left(of:over:)`, `.right(of:over:)` |
+| Annihilation | `Algebra.Law.Annihilation` | `.zero(of:over:)` |
+| Reciprocal | `Algebra.Law.Reciprocal` | `.check(of:over:)` |
+| Compatibility | `Algebra.Law.Compatibility` | `.scalar(of:over:)` |
+| Action | `Algebra.Law.Action` | `.identity(of:over:)` |
 
-Particularly valuable for `Parity` (Z₂ field, currently the only canonical instance) and future `Z.Modulo<p>` instances.
+Exhaustive verification tests confirm all Parity Z₂ laws, all Z₂ group transport witnesses (Bound, Boundary, Endpoint, Gradient), and Z.Modulo<5>/Z.Modulo<7> ring and field laws.
 
-Goal: turn documented invariants into mechanically audited ones.
-
-**Reason deferred**: Non-breaking enhancement. No correctness issue exists — the current witnesses are correct by inspection, but exhaustive verification over finite carriers would increase confidence.
-
-**Dependencies**: Requires `Finite_Primitives` (already exists). Benefits from `Algebra.Z.Modulo<n>` (item 1) for additional test carriers.
+**Implementation**: `Algebra Law Primitives` module. Verification tests in `Algebra.Law.Verification Tests.swift`.
 
 ---
 
 ### 5. Module / VectorSpace Witnesses
 
-**Status**: Deferred.
+**Status**: Implemented.
 
-Higher algebraic structures:
+`Algebra.Module<Scalar, Vector>` stores `scalars: Ring<Scalar>`, `vectors: Group<Vector>.Abelian`, `scaling: @Sendable (Scalar, Vector) -> Vector`.
 
-- `Algebra.Module<R, M>` — ring action on additive group
-- `Algebra.VectorSpace<F, V>` — field action (Module where scalar ring is a field)
+`Algebra.VectorSpace<Scalar, Vector>` stores `scalars: Field<Scalar>`, `vectors: Group<Vector>.Abelian`, `scaling: @Sendable (Scalar, Vector) -> Vector`. Provides `.module` projection (forgets field→ring).
 
-These compose Ring/Field with Group to express linear structure.
-
-**Reason deferred**: Higher algebra. Depends on stable Field design (now done) and possibly Semiring groundwork (item 3). Out of scope for the primitives correctness round.
-
-**Dependencies**: Requires stable `Algebra.Field` (done). Benefits from `Algebra.Semiring` (item 3).
+**Implementation**: `Algebra Module Primitives` module with `Algebra.Module.swift`, `Algebra.Module+Convenience.swift`, `Algebra.VectorSpace.swift`, `Algebra.VectorSpace+Convenience.swift`, `Algebra.VectorSpace+Module.swift`, `exports.swift`.
 
 ---
 
 ### 6. Canonical Instances Beyond Parity
 
-**Status**: Deferred.
+**Status**: Implemented (Bool semiring and monoids).
 
-Currently `Parity` is the only carrier with a canonical field witness (`Algebra.Field<Parity>.z2`). Additional instances to consider:
+| Carrier | Instance | File |
+|---------|----------|------|
+| `Bool` | `Algebra.Semiring<Bool>.boolean` (OR/AND) | `Algebra.Semiring+Bool.swift` |
+| `Bool` | `Algebra.Monoid<Bool>.conjunction` (AND, `true`) | `Algebra.Monoid+Bool.swift` |
+| `Bool` | `Algebra.Monoid<Bool>.disjunction` (OR, `false`) | `Algebra.Monoid+Bool.swift` |
 
-| Carrier | Structure | Notes |
-|---------|-----------|-------|
-| `Bool` | Monoid(s) | `&&` and `||` monoids; semiring once item 3 exists |
-| `FixedWidthInteger` types | Modular ring | Wraparound arithmetic provides ring structure |
-| `Z.Modulo<n>` | Ring (always), Field (when n prime) | Depends on item 1 |
+FixedWidthInteger modular ring witnesses deferred further — requires careful overflow handling beyond the scope of this work.
 
-**Reason deferred**: Depends on `Algebra.Z.Modulo<n>` (item 1) and Semiring (item 3) for most interesting cases.
+All instances verified via law harnesses.
 
-**Dependencies**: Items 1 and 3.
+**Implementation**: `Algebra.Semiring+Bool.swift`, `Algebra.Monoid+Bool.swift`. Tests in `Algebra.Bool Tests.swift`.
 
 ---
 
@@ -152,7 +125,7 @@ Currently `Parity` is the only carrier with a canonical field witness (`Algebra.
 
 **Status**: Deferred, moved out of this package.
 
-`CaseSet` was deleted from algebra-primitives during this round (213 lines of implementation, 252 lines of tests removed in commit `ce7793f`). It had unclear semantics (ordered list vs true set) and compound naming issues.
+`CaseSet` was deleted from algebra-primitives during the correctness round (213 lines of implementation, 252 lines of tests removed in commit `ce7793f`). It had unclear semantics (ordered list vs true set) and compound naming issues.
 
 Reintroduction requires:
 
@@ -166,69 +139,44 @@ Reintroduction requires:
 
 ## Comparison
 
-| Item | Status | Reason Deferred | Blocked By | Enables |
-|------|--------|-----------------|------------|---------|
-| 1. `Algebra.Z.Modulo<n>` | Design locked | Large addition | — | 2, 4, 6 |
-| 2. Z₂ witness consolidation | Deferred | Ergonomic cleanup only | 1 | — |
-| 3. Semiring | Deferred | New ladder node | — | 5, 6 |
-| 4. Law test harnesses | Deferred | Non-breaking enhancement | — (benefits from 1) | — |
-| 5. Module / VectorSpace | Deferred | Higher algebra | 3 (benefits from) | — |
-| 6. Canonical instances | Deferred | Depends on other items | 1, 3 | — |
-| 7. CaseSet reintroduction | Deferred | Wrong package | optic-primitives | — |
-
-### Dependency Order
-
-```
-                ┌──────────────┐
-                │ 1. Z.Modulo  │
-                └──┬───┬───┬───┘
-                   │   │   │
-          ┌────────┘   │   └────────┐
-          ▼            ▼            ▼
-   ┌──────────┐  ┌──────────┐  ┌──────────┐
-   │ 2. Z₂    │  │ 4. Law   │  │ 6. Canon │◄── also needs 3
-   │ consol.  │  │ harness  │  │ instancs │
-   └──────────┘  └──────────┘  └──────────┘
-
-   ┌──────────┐       ┌──────────┐
-   │ 3. Semi  │──────►│ 5. Mod/  │
-   │ ring     │       │ VecSpc   │
-   └──────────┘       └──────────┘
-
-   ┌──────────┐
-   │ 7. Case  │  (independent; depends on optic-primitives)
-   │ Set      │
-   └──────────┘
-```
+| Item | Status | Summary |
+|------|--------|---------|
+| 1. `Algebra.Z.Modulo<n>` | Implemented | Modular carrier with ring/field witnesses |
+| 2. Z₂ witness consolidation | Implemented | Parity isomorphism transport |
+| 3. Semiring | Implemented | New module below Ring |
+| 4. Law test harnesses | Implemented | Total pure-function verification |
+| 5. Module / VectorSpace | Implemented | New module above Field |
+| 6. Canonical instances | Implemented | Bool semiring/monoids |
+| 7. CaseSet reintroduction | Deferred | Blocked on optic-primitives |
 
 ## Constraints
 
-1. **No Foundation** — all items must remain Foundation-free ([PRIM-FOUND-001])
+1. **No Foundation** — all items remain Foundation-free ([PRIM-FOUND-001])
 2. **Downward dependencies only** — no lateral or upward tier dependencies
-3. **Nest.Name pattern** — all new types must follow [API-NAME-001]
+3. **Nest.Name pattern** — all new types follow [API-NAME-001]
 4. **One type per file** — [API-IMPL-005]
-5. **Typed throws** — any throwing operations must use typed throws ([API-ERR-001])
+5. **Typed throws** — all throwing operations use typed throws ([API-ERR-001])
 
 ## Outcome
 
-**Status**: DEFERRED
+**Status**: DECISION
 
-All correctness, naming, and totality issues are resolved in the current implementation. The items listed above are additive, non-breaking, and can be introduced incrementally without revisiting the Field design.
+Items 1–6 are implemented and verified. The algebra witness hierarchy now includes:
 
-Recommended implementation order:
+```
+Magma → Monoid → Semiring ─┐
+              └─> Group ───┼─> Ring → Field ──┬─> Law
+                           └────────/         └─> Module
+```
 
-1. `Algebra.Z.Modulo<n>` (unlocks the most downstream work)
-2. Law test harnesses (can begin without Z.Modulo but gains value from it)
-3. Semiring (independent track, unlocks Module/VectorSpace)
-4. Z₂ witness consolidation (after Z.Modulo exists)
-5. Canonical instances (after Z.Modulo and Semiring)
-6. Module / VectorSpace (after Semiring stabilizes)
-7. CaseSet reintroduction (independent, blocked on optic-primitives)
+All 290 tests pass across all modules. Exhaustive law verification confirms correctness of all witnesses over finite carriers. Item 7 (CaseSet) remains deferred pending optic-primitives work.
 
 ## References
 
-- `Algebra.Field+Parity.swift` — current Z₂ field witness (the pattern that item 2 would generalize)
-- `Algebra.Group+Bound.swift`, `+Boundary.swift`, `+Endpoint.swift`, `+Gradient.swift` — the five Z₂ group witnesses exhibiting the duplication pattern
-- `Algebra.Field.swift` — the converged Field design with typed throws
-- `Algebra.Field.Unit.swift` — the Unit type for the multiplicative group of units
+- `Algebra.Field+Parity.swift` — canonical Z₂ field witness
+- `Algebra.Group+Z2.swift` — Z₂ transport function
+- `Algebra.Z.Modulo.swift` — modular integer carrier
+- `Algebra.Law.swift` — law harness namespace
+- `Algebra.Module.swift`, `Algebra.VectorSpace.swift` — higher algebra witnesses
+- `Algebra.Semiring+Bool.swift` — canonical Bool semiring
 - `phase-rotation-placement.md` — related research on Phase/Z₄ placement
