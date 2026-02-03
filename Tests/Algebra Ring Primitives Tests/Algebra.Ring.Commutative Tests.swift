@@ -62,17 +62,15 @@ extension AlgebraRingCommutativeTests.Unit {
     }
 
     @Test
-    func `additiveGroup returns additive abelian group`() {
+    func `additive accessible via ring`() {
         let commutative = Self.intCommutativeRing
-        let additive = commutative.additiveGroup
-        #expect(additive.identity == 0)
+        #expect(commutative.ring.additive.identity == 0)
     }
 
     @Test
     func `multiplicativeMonoid returns commutative monoid`() {
         let commutative = Self.intCommutativeRing
-        let multiplicative = commutative.multiplicativeMonoid
-        #expect(multiplicative.identity == 1)
+        #expect(commutative.multiplicativeMonoid.identity == 1)
     }
 }
 

@@ -75,20 +75,6 @@ extension AlgebraFieldTests.Unit {
     }
 
     @Test
-    func `additiveGroup projection returns additive structure`() {
-        let field = Self.boolField
-        let additive = field.additiveGroup
-        #expect(additive.identity == false)
-    }
-
-    @Test
-    func `multiplicativeGroup projection returns multiplicative structure`() {
-        let field = Self.boolField
-        let multiplicative = field.multiplicativeGroup
-        #expect(multiplicative.identity == true)
-    }
-
-    @Test
     func `ring projection returns commutative ring`() {
         let field = Self.boolField
         let ring = field.ring

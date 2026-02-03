@@ -62,19 +62,17 @@ extension AlgebraRingTests.Unit {
     }
 
     @Test
-    func `additiveGroup projection returns additive abelian group`() {
+    func `additive stored property returns abelian group`() {
         let ring = Self.intRing
-        let additive = ring.additiveGroup
-        #expect(additive.identity == 0)
-        #expect(additive.combining(3, 4) == 7)
+        #expect(ring.additive.identity == 0)
+        #expect(ring.additive.combining(3, 4) == 7)
     }
 
     @Test
-    func `multiplicativeMonoid projection returns multiplicative monoid`() {
+    func `multiplicative stored property returns monoid`() {
         let ring = Self.intRing
-        let multiplicative = ring.multiplicativeMonoid
-        #expect(multiplicative.identity == 1)
-        #expect(multiplicative.combining(3, 4) == 12)
+        #expect(ring.multiplicative.identity == 1)
+        #expect(ring.multiplicative.combining(3, 4) == 12)
     }
 }
 
