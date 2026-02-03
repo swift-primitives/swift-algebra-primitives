@@ -18,7 +18,7 @@ extension ParityLawVerificationTests.Unit {
     @Test
     func `additive associativity`() {
         let result = Algebra.Law.Associativity.check(
-            of: z2.ring.ring.additive.group.semigroup,
+            of: Algebra.Field<Parity>.z2.additive.group.semigroup,
             over: allParity
         )
         #expect(result == nil)
@@ -26,16 +26,16 @@ extension ParityLawVerificationTests.Unit {
 
     @Test
     func `additive identity`() {
-        let left = Algebra.Law.Identity.left(of: z2.ring.ring.additive.monoid, over: allParity)
-        let right = Algebra.Law.Identity.right(of: z2.ring.ring.additive.monoid, over: allParity)
+        let left = Algebra.Law.Identity.left(of: z2.additive.monoid, over: allParity)
+        let right = Algebra.Law.Identity.right(of: z2.additive.monoid, over: allParity)
         #expect(left == nil)
         #expect(right == nil)
     }
 
     @Test
     func `additive inverse`() {
-        let left = Algebra.Law.Inverse.left(of: z2.ring.ring.additive.group, over: allParity)
-        let right = Algebra.Law.Inverse.right(of: z2.ring.ring.additive.group, over: allParity)
+        let left = Algebra.Law.Inverse.left(of: z2.additive.group, over: allParity)
+        let right = Algebra.Law.Inverse.right(of: z2.additive.group, over: allParity)
         #expect(left == nil)
         #expect(right == nil)
     }
@@ -43,7 +43,7 @@ extension ParityLawVerificationTests.Unit {
     @Test
     func `additive commutativity`() {
         let result = Algebra.Law.Commutativity.check(
-            of: z2.ring.ring.additive.combining,
+            of: z2.additive.combining,
             over: allParity
         )
         #expect(result == nil)
@@ -52,7 +52,7 @@ extension ParityLawVerificationTests.Unit {
     @Test
     func `multiplicative associativity`() {
         let result = Algebra.Law.Associativity.check(
-            of: z2.ring.ring.multiplicative.semigroup,
+            of: z2.multiplicative.monoid.semigroup,
             over: allParity
         )
         #expect(result == nil)
@@ -60,8 +60,8 @@ extension ParityLawVerificationTests.Unit {
 
     @Test
     func `multiplicative identity`() {
-        let left = Algebra.Law.Identity.left(of: z2.ring.ring.multiplicative, over: allParity)
-        let right = Algebra.Law.Identity.right(of: z2.ring.ring.multiplicative, over: allParity)
+        let left = Algebra.Law.Identity.left(of: z2.multiplicative.monoid, over: allParity)
+        let right = Algebra.Law.Identity.right(of: z2.multiplicative.monoid, over: allParity)
         #expect(left == nil)
         #expect(right == nil)
     }
