@@ -2,22 +2,19 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Gradient - Static Functions` {
-    @Test(arguments: Gradient.allCases)
-    func `opposite is involution`(gradient: Gradient) {
-        #expect(Gradient.opposite(of: Gradient.opposite(of: gradient)) == gradient)
-    }
+// [TEST-003] Non-generic type uses type extension pattern.
 
-    @Test
-    func `opposite swaps values`() {
-        #expect(Gradient.opposite(of: .ascending) == .descending)
-        #expect(Gradient.opposite(of: .descending) == .ascending)
+extension Gradient {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
     }
 }
 
-@Suite
-struct `Gradient - Properties` {
+// MARK: - Unit
+
+extension Gradient.Test.Unit {
     @Test
     func `cases exist`() {
         #expect(Gradient.allCases.count == 2)
@@ -25,14 +22,24 @@ struct `Gradient - Properties` {
         #expect(Gradient.allCases.contains(.descending))
     }
 
-    @Test(arguments: Gradient.allCases)
-    func `opposite property equals static function`(gradient: Gradient) {
-        #expect(gradient.opposite == Gradient.opposite(of: gradient))
+    @Test
+    func `opposite swaps values`() {
+        #expect(Gradient.opposite(of: .ascending) == .descending)
+        #expect(Gradient.opposite(of: .descending) == .ascending)
     }
 
-    @Test(arguments: Gradient.allCases)
-    func `negation operator works`(gradient: Gradient) {
-        #expect(!gradient == gradient.opposite)
+    @Test
+    func `opposite property equals static function`() {
+        for gradient in Gradient.allCases {
+            #expect(gradient.opposite == Gradient.opposite(of: gradient))
+        }
+    }
+
+    @Test
+    func `negation operator equals opposite`() {
+        for gradient in Gradient.allCases {
+            #expect(!gradient == gradient.opposite)
+        }
     }
 
     @Test
@@ -48,5 +55,16 @@ struct `Gradient - Properties` {
         let paired: Gradient.Value<Double> = .init(.ascending, 0.5)
         #expect(paired.first == .ascending)
         #expect(paired.second == 0.5)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Gradient.Test.EdgeCase {
+    @Test
+    func `opposite is involution`() {
+        for gradient in Gradient.allCases {
+            #expect(Gradient.opposite(of: Gradient.opposite(of: gradient)) == gradient)
+        }
     }
 }

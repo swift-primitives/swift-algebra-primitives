@@ -2,22 +2,19 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Endpoint - Static Functions` {
-    @Test(arguments: Endpoint.allCases)
-    func `opposite is involution`(endpoint: Endpoint) {
-        #expect(Endpoint.opposite(of: Endpoint.opposite(of: endpoint)) == endpoint)
-    }
+// [TEST-003] Non-generic type uses type extension pattern.
 
-    @Test
-    func `opposite swaps values`() {
-        #expect(Endpoint.opposite(of: .start) == .end)
-        #expect(Endpoint.opposite(of: .end) == .start)
+extension Endpoint {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
     }
 }
 
-@Suite
-struct `Endpoint - Properties` {
+// MARK: - Unit
+
+extension Endpoint.Test.Unit {
     @Test
     func `cases exist`() {
         #expect(Endpoint.allCases.count == 2)
@@ -25,14 +22,24 @@ struct `Endpoint - Properties` {
         #expect(Endpoint.allCases.contains(.end))
     }
 
-    @Test(arguments: Endpoint.allCases)
-    func `opposite property equals static function`(endpoint: Endpoint) {
-        #expect(endpoint.opposite == Endpoint.opposite(of: endpoint))
+    @Test
+    func `opposite swaps values`() {
+        #expect(Endpoint.opposite(of: .start) == .end)
+        #expect(Endpoint.opposite(of: .end) == .start)
     }
 
-    @Test(arguments: Endpoint.allCases)
-    func `negation operator works`(endpoint: Endpoint) {
-        #expect(!endpoint == endpoint.opposite)
+    @Test
+    func `opposite property equals static function`() {
+        for endpoint in Endpoint.allCases {
+            #expect(endpoint.opposite == Endpoint.opposite(of: endpoint))
+        }
+    }
+
+    @Test
+    func `negation operator equals opposite`() {
+        for endpoint in Endpoint.allCases {
+            #expect(!endpoint == endpoint.opposite)
+        }
     }
 
     @Test
@@ -48,5 +55,16 @@ struct `Endpoint - Properties` {
         let paired: Endpoint.Value<String> = .init(.start, "begin")
         #expect(paired.first == .start)
         #expect(paired.second == "begin")
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Endpoint.Test.EdgeCase {
+    @Test
+    func `opposite is involution`() {
+        for endpoint in Endpoint.allCases {
+            #expect(Endpoint.opposite(of: Endpoint.opposite(of: endpoint)) == endpoint)
+        }
     }
 }

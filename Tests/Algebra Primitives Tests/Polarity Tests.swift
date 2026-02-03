@@ -2,25 +2,19 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Polarity - Static Functions` {
-    @Test(arguments: Polarity.allCases)
-    func `opposite is involution for positive and negative`(polarity: Polarity) {
-        if polarity != .neutral {
-            #expect(Polarity.opposite(of: Polarity.opposite(of: polarity)) == polarity)
-        }
-    }
+// [TEST-003] Non-generic type uses type extension pattern.
 
-    @Test
-    func `opposite swaps values`() {
-        #expect(Polarity.opposite(of: .positive) == .negative)
-        #expect(Polarity.opposite(of: .negative) == .positive)
-        #expect(Polarity.opposite(of: .neutral) == .neutral)
+extension Polarity {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
     }
 }
 
-@Suite
-struct `Polarity - Properties` {
+// MARK: - Unit
+
+extension Polarity.Test.Unit {
     @Test
     func `cases exist`() {
         #expect(Polarity.allCases.count == 3)
@@ -29,14 +23,25 @@ struct `Polarity - Properties` {
         #expect(Polarity.allCases.contains(.neutral))
     }
 
-    @Test(arguments: Polarity.allCases)
-    func `opposite property equals static function`(polarity: Polarity) {
-        #expect(polarity.opposite == Polarity.opposite(of: polarity))
+    @Test
+    func `opposite swaps values`() {
+        #expect(Polarity.opposite(of: .positive) == .negative)
+        #expect(Polarity.opposite(of: .negative) == .positive)
+        #expect(Polarity.opposite(of: .neutral) == .neutral)
     }
 
-    @Test(arguments: Polarity.allCases)
-    func `negation operator works`(polarity: Polarity) {
-        #expect(!polarity == polarity.opposite)
+    @Test
+    func `opposite property equals static function`() {
+        for polarity in Polarity.allCases {
+            #expect(polarity.opposite == Polarity.opposite(of: polarity))
+        }
+    }
+
+    @Test
+    func `negation operator equals opposite`() {
+        for polarity in Polarity.allCases {
+            #expect(!polarity == polarity.opposite)
+        }
     }
 
     @Test(arguments: [
@@ -80,5 +85,21 @@ struct `Polarity - Properties` {
         let paired: Polarity.Value<Int> = .init(.positive, 1)
         #expect(paired.first == .positive)
         #expect(paired.second == 1)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Polarity.Test.EdgeCase {
+    @Test
+    func `opposite is involution for charged values`() {
+        for polarity in Polarity.allCases where polarity != .neutral {
+            #expect(Polarity.opposite(of: Polarity.opposite(of: polarity)) == polarity)
+        }
+    }
+
+    @Test
+    func `neutral is fixed point of opposite`() {
+        #expect(Polarity.opposite(of: .neutral) == .neutral)
     }
 }

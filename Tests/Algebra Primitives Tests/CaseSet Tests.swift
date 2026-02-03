@@ -1,8 +1,8 @@
-// CaseSet Tests.swift
-
 import Testing
 
 @testable import Algebra_Primitives
+
+// [TEST-004] Generic type uses parallel namespace pattern.
 
 // MARK: - Test Helpers
 
@@ -35,10 +35,17 @@ extension Event {
     }
 }
 
-// MARK: - CaseSet Initialization Tests
+// MARK: - Suite
 
-@Suite
-struct `CaseSet - Initialization` {
+@Suite("CaseSet")
+struct CaseSetTests {
+    @Suite struct Unit {}
+    @Suite struct EdgeCase {}
+}
+
+// MARK: - Unit
+
+extension CaseSetTests.Unit {
     @Test
     func `init creates empty set`() {
         let set = CaseSet<Event>()
@@ -58,34 +65,13 @@ struct `CaseSet - Initialization` {
         let set: CaseSet<Event> = [.login(userId: 1), .logout(userId: 2)]
         #expect(set.count == 2)
     }
-}
 
-// MARK: - CaseSet Basic Operations Tests
-
-@Suite
-struct `CaseSet - Basic Operations` {
     @Test
     func `insert adds element`() {
         var set = CaseSet<Event>()
         set.insert(.login(userId: 1))
         #expect(set.count == 1)
         #expect(set.contains(.login(userId: 1)))
-    }
-
-    @Test
-    func `insert allows duplicates`() {
-        var set = CaseSet<Event>()
-        set.insert(.login(userId: 1))
-        set.insert(.login(userId: 1))
-        #expect(set.count == 2)
-    }
-
-    @Test
-    func `insert allows same case with different values`() {
-        var set = CaseSet<Event>()
-        set.insert(.login(userId: 1))
-        set.insert(.login(userId: 2))
-        #expect(set.count == 2)
     }
 
     @Test
@@ -122,12 +108,7 @@ struct `CaseSet - Basic Operations` {
         set.removeAll()
         #expect(set.isEmpty)
     }
-}
 
-// MARK: - CaseSet Prism-Based Query Tests
-
-@Suite
-struct `CaseSet - Prism Queries` {
     @Test
     func `contains matching returns true when case exists`() {
         let set: CaseSet<Event> = [.login(userId: 1), .logout(userId: 2)]
@@ -149,13 +130,6 @@ struct `CaseSet - Prism Queries` {
         ]
         let loginIds = set.values(for: Event.login)
         #expect(loginIds == [1, 2])
-    }
-
-    @Test
-    func `values for prism returns empty set when no matches`() {
-        let set: CaseSet<Event> = [.logout(userId: 1)]
-        let loginIds = set.values(for: Event.login)
-        #expect(loginIds.isEmpty)
     }
 
     @Test
@@ -195,12 +169,7 @@ struct `CaseSet - Prism Queries` {
         #expect(set.count(matching: Event.logout) == 1)
         #expect(set.count(matching: Event.purchase) == 0)
     }
-}
 
-// MARK: - CaseSet Collection Conformance Tests
-
-@Suite
-struct `CaseSet - Collection` {
     @Test
     func `iteration visits all elements`() {
         let events: [Event] = [.login(userId: 1), .logout(userId: 2)]
@@ -225,12 +194,7 @@ struct `CaseSet - Collection` {
         #expect(set.startIndex == 0)
         #expect(set.endIndex == 2)
     }
-}
 
-// MARK: - CaseSet Equatable and Hashable Tests
-
-@Suite
-struct `CaseSet - Equatable and Hashable` {
     @Test
     func `equal sets are equal`() {
         let set1: CaseSet<Event> = [.login(userId: 1)]
@@ -246,16 +210,43 @@ struct `CaseSet - Equatable and Hashable` {
     }
 
     @Test
-    func `order matters for equality`() {
-        let set1: CaseSet<Event> = [.login(userId: 1), .logout(userId: 2)]
-        let set2: CaseSet<Event> = [.logout(userId: 2), .login(userId: 1)]
-        #expect(set1 != set2)
-    }
-
-    @Test
     func `equal sets have same hash`() {
         let set1: CaseSet<Event> = [.login(userId: 1)]
         let set2: CaseSet<Event> = [.login(userId: 1)]
         #expect(set1.hashValue == set2.hashValue)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension CaseSetTests.EdgeCase {
+    @Test
+    func `insert allows duplicates`() {
+        var set = CaseSet<Event>()
+        set.insert(.login(userId: 1))
+        set.insert(.login(userId: 1))
+        #expect(set.count == 2)
+    }
+
+    @Test
+    func `insert allows same case with different values`() {
+        var set = CaseSet<Event>()
+        set.insert(.login(userId: 1))
+        set.insert(.login(userId: 2))
+        #expect(set.count == 2)
+    }
+
+    @Test
+    func `values for prism returns empty when no matches`() {
+        let set: CaseSet<Event> = [.logout(userId: 1)]
+        let loginIds = set.values(for: Event.login)
+        #expect(loginIds.isEmpty)
+    }
+
+    @Test
+    func `order matters for equality`() {
+        let set1: CaseSet<Event> = [.login(userId: 1), .logout(userId: 2)]
+        let set2: CaseSet<Event> = [.logout(userId: 2), .login(userId: 1)]
+        #expect(set1 != set2)
     }
 }

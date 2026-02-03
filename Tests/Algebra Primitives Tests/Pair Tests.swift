@@ -1,13 +1,42 @@
-// Pair Tests.swift
-
 import Testing
 
 @testable import Algebra_Primitives
 
-// MARK: - Pair - Static Functions
+// [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite
-struct `Pair - Static Functions` {
+@Suite("Pair")
+struct PairTests {
+    @Suite struct Unit {}
+    @Suite struct EdgeCase {}
+}
+
+// MARK: - Unit
+
+extension PairTests.Unit {
+    @Test
+    func `init with two parameters`() {
+        let pair = Pair(10, "value")
+        #expect(pair.first == 10)
+        #expect(pair.second == "value")
+    }
+
+    @Test
+    func `init from tuple`() {
+        let tuple = (10, "value")
+        let pair = Pair(tuple)
+        #expect(pair.first == 10)
+        #expect(pair.second == "value")
+    }
+
+    @Test
+    func `tuple property roundtrip`() {
+        let original = Pair(42, "test")
+        let tuple = original.tuple
+        let reconstructed = Pair(tuple)
+        #expect(reconstructed.first == original.first)
+        #expect(reconstructed.second == original.second)
+    }
+
     @Test
     func `map transforms second component`() {
         let pair = Pair("a", 10)
@@ -41,46 +70,7 @@ struct `Pair - Static Functions` {
     }
 
     @Test
-    func `swapped is involution for Int pairs`() {
-        let pair = Pair(1, 2)
-        let swapped = Pair.swapped(pair)
-        let doubleSwapped = Pair.swapped(swapped)
-        #expect(doubleSwapped.first == pair.first)
-        #expect(doubleSwapped.second == pair.second)
-    }
-
-    @Test
-    func `swapped is involution for Sign-Double pairs`() {
-        let pair = Pair(Sign.positive, 10.0)
-        let swapped = Pair.swapped(pair)
-        let doubleSwapped = Pair.swapped(swapped)
-        #expect(doubleSwapped.first == pair.first)
-        #expect(doubleSwapped.second == pair.second)
-    }
-
-    @Test
-    func `swapped is involution for String pairs`() {
-        let pair = Pair("key", "value")
-        let swapped = Pair.swapped(pair)
-        let doubleSwapped = Pair.swapped(swapped)
-        #expect(doubleSwapped.first == pair.first)
-        #expect(doubleSwapped.second == pair.second)
-    }
-}
-
-// MARK: - Pair - Properties
-
-@Suite
-struct `Pair - Properties` {
-    @Test
-    func `first and second accessors`() {
-        let pair = Pair(10, "value")
-        #expect(pair.first == 10)
-        #expect(pair.second == "value")
-    }
-
-    @Test
-    func `map property delegates to static function`() {
+    func `instance map delegates to static function`() {
         let pair = Pair("a", 10)
         let result1 = pair.map { $0 * 2 }
         let result2 = Pair<String, Int>.map(pair) { $0 * 2 }
@@ -98,7 +88,7 @@ struct `Pair - Properties` {
     }
 
     @Test
-    func `mapFirst property delegates to static function`() {
+    func `instance mapFirst delegates to static function`() {
         let pair = Pair(10, "b")
         let result1 = pair.mapFirst { $0 * 2 }
         let result2 = Pair<Int, String>.mapFirst(pair) { $0 * 2 }
@@ -107,7 +97,7 @@ struct `Pair - Properties` {
     }
 
     @Test
-    func `bimap property delegates to static function`() {
+    func `instance bimap delegates to static function`() {
         let pair = Pair(10, 20)
         let result1 = pair.bimap(first: { $0 * 2 }, second: { $0 * 3 })
         let result2 = Pair<Int, Int>.bimap(pair, first: { $0 * 2 }, second: { $0 * 3 })
@@ -123,41 +113,7 @@ struct `Pair - Properties` {
         #expect(result1.first == result2.first)
         #expect(result1.second == result2.second)
     }
-}
 
-// MARK: - Pair - Initializers
-
-@Suite
-struct `Pair - Initializers` {
-    @Test
-    func `init with two parameters`() {
-        let pair = Pair(10, "value")
-        #expect(pair.first == 10)
-        #expect(pair.second == "value")
-    }
-
-    @Test
-    func `init from tuple`() {
-        let tuple = (10, "value")
-        let pair = Pair(tuple)
-        #expect(pair.first == 10)
-        #expect(pair.second == "value")
-    }
-
-    @Test
-    func `tuple property roundtrip`() {
-        let original = Pair(42, "test")
-        let tuple = original.tuple
-        let reconstructed = Pair(tuple)
-        #expect(reconstructed.first == original.first)
-        #expect(reconstructed.second == original.second)
-    }
-}
-
-// MARK: - Pair - Protocol Conformances
-
-@Suite
-struct `Pair - Protocol Conformances` {
     @Test
     func `Equatable when components are Equatable`() {
         let pair1 = Pair(10, "value")
@@ -176,12 +132,7 @@ struct `Pair - Protocol Conformances` {
         ]
         #expect(set.count == 2)
     }
-}
 
-// MARK: - Pair - Type-Specific Tests
-
-@Suite
-struct `Pair - Type-Specific Tests` {
     @Test
     func `allFirsts when First is CaseIterable`() {
         let allSigns = Pair<Sign, Int>.allFirsts
@@ -196,5 +147,26 @@ struct `Pair - Type-Specific Tests` {
         let signedValue: Sign.Value<Double> = Pair(.positive, 10.0)
         #expect(signedValue.first == .positive)
         #expect(signedValue.second == 10.0)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension PairTests.EdgeCase {
+    @Test
+    func `swapped is involution for homogeneous pairs`() {
+        let pair = Pair(1, 2)
+        let doubleSwapped = Pair.swapped(Pair.swapped(pair))
+        #expect(doubleSwapped.first == pair.first)
+        #expect(doubleSwapped.second == pair.second)
+    }
+
+    @Test
+    func `swapped is involution for heterogeneous pairs`() {
+        let pair = Pair(Sign.positive, 10.0)
+        let swapped = Pair.swapped(pair)
+        let doubleSwapped = Pair.swapped(swapped)
+        #expect(doubleSwapped.first == pair.first)
+        #expect(doubleSwapped.second == pair.second)
     }
 }

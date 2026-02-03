@@ -2,22 +2,19 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Boundary - Static Functions` {
-    @Test(arguments: Boundary.allCases)
-    func `opposite is involution`(boundary: Boundary) {
-        #expect(Boundary.opposite(of: Boundary.opposite(of: boundary)) == boundary)
-    }
+// [TEST-003] Non-generic type uses type extension pattern.
 
-    @Test
-    func `opposite swaps values`() {
-        #expect(Boundary.opposite(of: .open) == .closed)
-        #expect(Boundary.opposite(of: .closed) == .open)
+extension Boundary {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
     }
 }
 
-@Suite
-struct `Boundary - Properties` {
+// MARK: - Unit
+
+extension Boundary.Test.Unit {
     @Test
     func `cases exist`() {
         #expect(Boundary.allCases.count == 2)
@@ -25,19 +22,31 @@ struct `Boundary - Properties` {
         #expect(Boundary.allCases.contains(.closed))
     }
 
-    @Test(arguments: Boundary.allCases)
-    func `opposite property equals static function`(boundary: Boundary) {
-        #expect(boundary.opposite == Boundary.opposite(of: boundary))
+    @Test
+    func `opposite swaps values`() {
+        #expect(Boundary.opposite(of: .open) == .closed)
+        #expect(Boundary.opposite(of: .closed) == .open)
     }
 
-    @Test(arguments: Boundary.allCases)
-    func `negation operator works`(boundary: Boundary) {
-        #expect(!boundary == boundary.opposite)
+    @Test
+    func `opposite property equals static function`() {
+        for boundary in Boundary.allCases {
+            #expect(boundary.opposite == Boundary.opposite(of: boundary))
+        }
     }
 
-    @Test(arguments: Boundary.allCases)
-    func `toggled is alias for opposite`(boundary: Boundary) {
-        #expect(boundary.toggled == boundary.opposite)
+    @Test
+    func `negation operator equals opposite`() {
+        for boundary in Boundary.allCases {
+            #expect(!boundary == boundary.opposite)
+        }
+    }
+
+    @Test
+    func `toggled is alias for opposite`() {
+        for boundary in Boundary.allCases {
+            #expect(boundary.toggled == boundary.opposite)
+        }
     }
 
     @Test(arguments: [
@@ -61,5 +70,16 @@ struct `Boundary - Properties` {
         let paired: Boundary.Value<Double> = .init(.closed, 1.0)
         #expect(paired.first == .closed)
         #expect(paired.second == 1.0)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Boundary.Test.EdgeCase {
+    @Test
+    func `opposite is involution`() {
+        for boundary in Boundary.allCases {
+            #expect(Boundary.opposite(of: Boundary.opposite(of: boundary)) == boundary)
+        }
     }
 }

@@ -2,13 +2,25 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Monotonicity - Static Functions` {
-    @Test(arguments: Monotonicity.allCases)
-    func `reversed is involution for increasing and decreasing`(monotonicity: Monotonicity) {
-        if monotonicity != .constant {
-            #expect(Monotonicity.reversed(Monotonicity.reversed(monotonicity)) == monotonicity)
-        }
+// [TEST-003] Non-generic type uses type extension pattern.
+
+extension Monotonicity {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
+    }
+}
+
+// MARK: - Unit
+
+extension Monotonicity.Test.Unit {
+    @Test
+    func `cases exist`() {
+        #expect(Monotonicity.allCases.count == 3)
+        #expect(Monotonicity.allCases.contains(.increasing))
+        #expect(Monotonicity.allCases.contains(.decreasing))
+        #expect(Monotonicity.allCases.contains(.constant))
     }
 
     @Test
@@ -18,35 +30,18 @@ struct `Monotonicity - Static Functions` {
         #expect(Monotonicity.reversed(.constant) == .constant)
     }
 
-    @Test(arguments: [
-        (Monotonicity.increasing, Monotonicity.increasing, Monotonicity.increasing),
-        (Monotonicity.increasing, Monotonicity.decreasing, Monotonicity.decreasing),
-        (Monotonicity.decreasing, Monotonicity.decreasing, Monotonicity.increasing),
-        (Monotonicity.constant, Monotonicity.increasing, Monotonicity.constant),
-    ])
-    func `composing is correct`(lhs: Monotonicity, rhs: Monotonicity, expected: Monotonicity) {
-        #expect(Monotonicity.composing(lhs, rhs) == expected)
-    }
-}
-
-@Suite
-struct `Monotonicity - Properties` {
     @Test
-    func `cases exist`() {
-        #expect(Monotonicity.allCases.count == 3)
-        #expect(Monotonicity.allCases.contains(.increasing))
-        #expect(Monotonicity.allCases.contains(.decreasing))
-        #expect(Monotonicity.allCases.contains(.constant))
+    func `reversed property equals static function`() {
+        for m in Monotonicity.allCases {
+            #expect(m.reversed == Monotonicity.reversed(m))
+        }
     }
 
-    @Test(arguments: Monotonicity.allCases)
-    func `reversed property equals static function`(monotonicity: Monotonicity) {
-        #expect(monotonicity.reversed == Monotonicity.reversed(monotonicity))
-    }
-
-    @Test(arguments: Monotonicity.allCases)
-    func `negation operator works`(monotonicity: Monotonicity) {
-        #expect(!monotonicity == monotonicity.reversed)
+    @Test
+    func `negation operator equals reversed`() {
+        for m in Monotonicity.allCases {
+            #expect(!m == m.reversed)
+        }
     }
 
     @Test(arguments: [
@@ -94,10 +89,22 @@ struct `Monotonicity - Properties` {
         #expect(monotonicity.isNonIncreasing == expected)
     }
 
-    @Test(arguments: Monotonicity.allCases)
-    func `composing property equals static function`(monotonicity: Monotonicity) {
-        let other = Monotonicity.increasing
-        #expect(monotonicity.composing(other) == Monotonicity.composing(monotonicity, other))
+    @Test(arguments: [
+        (Monotonicity.increasing, Monotonicity.increasing, Monotonicity.increasing),
+        (Monotonicity.increasing, Monotonicity.decreasing, Monotonicity.decreasing),
+        (Monotonicity.decreasing, Monotonicity.decreasing, Monotonicity.increasing),
+        (Monotonicity.constant, Monotonicity.increasing, Monotonicity.constant),
+    ])
+    func `composing is correct`(lhs: Monotonicity, rhs: Monotonicity, expected: Monotonicity) {
+        #expect(Monotonicity.composing(lhs, rhs) == expected)
+    }
+
+    @Test
+    func `composing property equals static function`() {
+        for m in Monotonicity.allCases {
+            let other = Monotonicity.increasing
+            #expect(m.composing(other) == Monotonicity.composing(m, other))
+        }
     }
 
     @Test
@@ -105,5 +112,21 @@ struct `Monotonicity - Properties` {
         let paired: Monotonicity.Value<String> = .init(.increasing, "growth")
         #expect(paired.first == .increasing)
         #expect(paired.second == "growth")
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Monotonicity.Test.EdgeCase {
+    @Test
+    func `reversed is involution for increasing and decreasing`() {
+        for m in Monotonicity.allCases where m != .constant {
+            #expect(Monotonicity.reversed(Monotonicity.reversed(m)) == m)
+        }
+    }
+
+    @Test
+    func `constant is fixed point of reversed`() {
+        #expect(Monotonicity.reversed(.constant) == .constant)
     }
 }

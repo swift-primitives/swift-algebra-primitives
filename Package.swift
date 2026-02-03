@@ -93,6 +93,36 @@ let package = Package(
             ]
         ),
         .testTarget(
+            name: "Algebra Magma Primitives Tests",
+            dependencies: [
+                "Algebra Magma Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Monoid Primitives Tests",
+            dependencies: [
+                "Algebra Monoid Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Group Primitives Tests",
+            dependencies: [
+                "Algebra Group Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Ring Primitives Tests",
+            dependencies: [
+                "Algebra Ring Primitives",
+            ]
+        ),
+        .testTarget(
+            name: "Algebra Field Primitives Tests",
+            dependencies: [
+                "Algebra Field Primitives",
+            ]
+        ),
+        .testTarget(
             name: "Algebra Primitives Tests",
             dependencies: [
                 "Algebra Primitives",

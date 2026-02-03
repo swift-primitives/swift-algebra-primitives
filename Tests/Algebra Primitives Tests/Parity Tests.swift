@@ -2,17 +2,44 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Parity - Static Functions` {
-    @Test(arguments: Parity.allCases)
-    func `opposite is involution`(parity: Parity) {
-        #expect(Parity.opposite(of: Parity.opposite(of: parity)) == parity)
+// [TEST-003] Non-generic type uses type extension pattern.
+
+extension Parity {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
+    }
+}
+
+// MARK: - Unit
+
+extension Parity.Test.Unit {
+    @Test
+    func `cases exist`() {
+        #expect(Parity.allCases.count == 2)
+        #expect(Parity.allCases.contains(.even))
+        #expect(Parity.allCases.contains(.odd))
     }
 
     @Test
     func `opposite swaps cases`() {
         #expect(Parity.opposite(of: .even) == .odd)
         #expect(Parity.opposite(of: .odd) == .even)
+    }
+
+    @Test
+    func `opposite property equals static function`() {
+        for parity in Parity.allCases {
+            #expect(parity.opposite == Parity.opposite(of: parity))
+        }
+    }
+
+    @Test
+    func `negation operator equals opposite`() {
+        for parity in Parity.allCases {
+            #expect(!parity == parity.opposite)
+        }
     }
 
     @Test(arguments: [
@@ -34,26 +61,6 @@ struct `Parity - Static Functions` {
     func `multiplying is correct`(lhs: Parity, rhs: Parity, expected: Parity) {
         #expect(Parity.multiplying(lhs, rhs) == expected)
     }
-}
-
-@Suite
-struct `Parity - Properties` {
-    @Test
-    func `cases exist`() {
-        #expect(Parity.allCases.count == 2)
-        #expect(Parity.allCases.contains(.even))
-        #expect(Parity.allCases.contains(.odd))
-    }
-
-    @Test(arguments: Parity.allCases)
-    func `opposite property equals static function`(parity: Parity) {
-        #expect(parity.opposite == Parity.opposite(of: parity))
-    }
-
-    @Test(arguments: Parity.allCases)
-    func `negation operator works`(parity: Parity) {
-        #expect(!parity == parity.opposite)
-    }
 
     @Test(arguments: [
         (0, Parity.even),
@@ -73,5 +80,16 @@ struct `Parity - Properties` {
         let paired: Parity.Value<Int> = .init(.even, 42)
         #expect(paired.first == .even)
         #expect(paired.second == 42)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Parity.Test.EdgeCase {
+    @Test
+    func `opposite is involution`() {
+        for parity in Parity.allCases {
+            #expect(Parity.opposite(of: Parity.opposite(of: parity)) == parity)
+        }
     }
 }

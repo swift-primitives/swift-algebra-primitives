@@ -2,11 +2,25 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Ternary - Static Functions` {
-    @Test(arguments: Ternary.allCases)
-    func `negated is involution`(ternary: Ternary) {
-        #expect(Ternary.negated(Ternary.negated(ternary)) == ternary)
+// [TEST-003] Non-generic type uses type extension pattern.
+
+extension Ternary {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
+    }
+}
+
+// MARK: - Unit
+
+extension Ternary.Test.Unit {
+    @Test
+    func `cases exist`() {
+        #expect(Ternary.allCases.count == 3)
+        #expect(Ternary.allCases.contains(.negative))
+        #expect(Ternary.allCases.contains(.zero))
+        #expect(Ternary.allCases.contains(.positive))
     }
 
     @Test
@@ -14,6 +28,20 @@ struct `Ternary - Static Functions` {
         #expect(Ternary.negated(.negative) == .positive)
         #expect(Ternary.negated(.positive) == .negative)
         #expect(Ternary.negated(.zero) == .zero)
+    }
+
+    @Test
+    func `negated property equals static function`() {
+        for ternary in Ternary.allCases {
+            #expect(ternary.negated == Ternary.negated(ternary))
+        }
+    }
+
+    @Test
+    func `negation operator equals negated`() {
+        for ternary in Ternary.allCases {
+            #expect(-ternary == ternary.negated)
+        }
     }
 
     @Test(arguments: [
@@ -25,26 +53,13 @@ struct `Ternary - Static Functions` {
     func `multiplying is correct`(lhs: Ternary, rhs: Ternary, expected: Ternary) {
         #expect(Ternary.multiplying(lhs, rhs) == expected)
     }
-}
 
-@Suite
-struct `Ternary - Properties` {
     @Test
-    func `cases exist`() {
-        #expect(Ternary.allCases.count == 3)
-        #expect(Ternary.allCases.contains(.negative))
-        #expect(Ternary.allCases.contains(.zero))
-        #expect(Ternary.allCases.contains(.positive))
-    }
-
-    @Test(arguments: Ternary.allCases)
-    func `negated property equals static function`(ternary: Ternary) {
-        #expect(ternary.negated == Ternary.negated(ternary))
-    }
-
-    @Test(arguments: Ternary.allCases)
-    func `negation operator works`(ternary: Ternary) {
-        #expect(-ternary == ternary.negated)
+    func `multiplying property equals static function`() {
+        for ternary in Ternary.allCases {
+            let other = Ternary.positive
+            #expect(ternary.multiplying(other) == Ternary.multiplying(ternary, other))
+        }
     }
 
     @Test(arguments: [
@@ -65,16 +80,26 @@ struct `Ternary - Properties` {
         #expect(Ternary(sign) == expected)
     }
 
-    @Test(arguments: Ternary.allCases)
-    func `multiplying property equals static function`(ternary: Ternary) {
-        let other = Ternary.positive
-        #expect(ternary.multiplying(other) == Ternary.multiplying(ternary, other))
-    }
-
     @Test
     func `Value typealias works`() {
         let paired: Ternary.Value<Double> = .init(.positive, 1.0)
         #expect(paired.first == .positive)
         #expect(paired.second == 1.0)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Ternary.Test.EdgeCase {
+    @Test
+    func `negated is involution`() {
+        for ternary in Ternary.allCases {
+            #expect(Ternary.negated(Ternary.negated(ternary)) == ternary)
+        }
+    }
+
+    @Test
+    func `zero is fixed point of negation`() {
+        #expect(Ternary.negated(.zero) == .zero)
     }
 }

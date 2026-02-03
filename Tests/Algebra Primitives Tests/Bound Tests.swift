@@ -2,22 +2,19 @@ import Testing
 
 @testable import Algebra_Primitives
 
-@Suite
-struct `Bound - Static Functions` {
-    @Test(arguments: Bound.allCases)
-    func `opposite is involution`(bound: Bound) {
-        #expect(Bound.opposite(of: Bound.opposite(of: bound)) == bound)
-    }
+// [TEST-003] Non-generic type uses type extension pattern.
 
-    @Test
-    func `opposite swaps values`() {
-        #expect(Bound.opposite(of: .lower) == .upper)
-        #expect(Bound.opposite(of: .upper) == .lower)
+extension Bound {
+    @Suite
+    struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
     }
 }
 
-@Suite
-struct `Bound - Properties` {
+// MARK: - Unit
+
+extension Bound.Test.Unit {
     @Test
     func `cases exist`() {
         #expect(Bound.allCases.count == 2)
@@ -25,14 +22,24 @@ struct `Bound - Properties` {
         #expect(Bound.allCases.contains(.upper))
     }
 
-    @Test(arguments: Bound.allCases)
-    func `opposite property equals static function`(bound: Bound) {
-        #expect(bound.opposite == Bound.opposite(of: bound))
+    @Test
+    func `opposite swaps values`() {
+        #expect(Bound.opposite(of: .lower) == .upper)
+        #expect(Bound.opposite(of: .upper) == .lower)
     }
 
-    @Test(arguments: Bound.allCases)
-    func `negation operator works`(bound: Bound) {
-        #expect(!bound == bound.opposite)
+    @Test
+    func `opposite property equals static function`() {
+        for bound in Bound.allCases {
+            #expect(bound.opposite == Bound.opposite(of: bound))
+        }
+    }
+
+    @Test
+    func `negation operator equals opposite`() {
+        for bound in Bound.allCases {
+            #expect(!bound == bound.opposite)
+        }
     }
 
     @Test
@@ -48,5 +55,16 @@ struct `Bound - Properties` {
         let paired: Bound.Value<Int> = .init(.lower, 0)
         #expect(paired.first == .lower)
         #expect(paired.second == 0)
+    }
+}
+
+// MARK: - EdgeCase
+
+extension Bound.Test.EdgeCase {
+    @Test
+    func `opposite is involution`() {
+        for bound in Bound.allCases {
+            #expect(Bound.opposite(of: Bound.opposite(of: bound)) == bound)
+        }
     }
 }
