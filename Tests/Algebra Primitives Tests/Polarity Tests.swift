@@ -1,4 +1,3 @@
-import Test_Primitives
 import Testing
 
 @testable import Algebra_Primitives

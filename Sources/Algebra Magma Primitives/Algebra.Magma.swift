@@ -16,7 +16,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Magma<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Magma<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// The binary operation.
         public var combining: @Sendable (Element, Element) -> Element
 

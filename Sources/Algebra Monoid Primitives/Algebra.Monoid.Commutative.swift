@@ -9,7 +9,7 @@ public import Witness_Primitives
 /// Commutativity is a documented invariant, not enforced at compile time.
 extension Algebra.Monoid {
     @frozen
-    public struct Commutative: Sendable, Witness.Protocol where Element: Sendable {
+    public struct Commutative: Sendable, Witness.`Protocol` where Element: Sendable {
         /// The underlying monoid.
         public var monoid: Algebra.Monoid<Element>
 

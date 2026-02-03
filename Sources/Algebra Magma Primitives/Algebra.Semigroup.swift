@@ -19,7 +19,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Semigroup<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Semigroup<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// The associative binary operation.
         public var combining: @Sendable (Element, Element) -> Element
 

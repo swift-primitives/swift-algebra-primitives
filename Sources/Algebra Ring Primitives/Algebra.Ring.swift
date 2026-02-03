@@ -25,7 +25,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Ring<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Ring<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// Additive structure: must be an abelian group.
         public var additive: Algebra.Group<Element>.Abelian
 

@@ -23,7 +23,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Field<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Field<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// Additive structure: abelian group with identity (zero).
         public var additive: Algebra.Group<Element>.Abelian
 

@@ -9,7 +9,7 @@ public import Witness_Primitives
 /// Commutativity of multiplication is a documented invariant.
 extension Algebra.Ring {
     @frozen
-    public struct Commutative: Sendable, Witness.Protocol where Element: Sendable {
+    public struct Commutative: Sendable, Witness.`Protocol` where Element: Sendable {
         /// The underlying ring.
         public var ring: Algebra.Ring<Element>
 

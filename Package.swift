@@ -13,6 +13,30 @@ let package = Package(
     ],
     products: [
         .library(
+            name: "Algebra Primitives Core",
+            targets: ["Algebra Primitives Core"]
+        ),
+        .library(
+            name: "Algebra Magma Primitives",
+            targets: ["Algebra Magma Primitives"]
+        ),
+        .library(
+            name: "Algebra Monoid Primitives",
+            targets: ["Algebra Monoid Primitives"]
+        ),
+        .library(
+            name: "Algebra Group Primitives",
+            targets: ["Algebra Group Primitives"]
+        ),
+        .library(
+            name: "Algebra Ring Primitives",
+            targets: ["Algebra Ring Primitives"]
+        ),
+        .library(
+            name: "Algebra Field Primitives",
+            targets: ["Algebra Field Primitives"]
+        ),
+        .library(
             name: "Algebra Primitives",
             targets: ["Algebra Primitives"]
         )
@@ -20,17 +44,60 @@ let package = Package(
     dependencies: [
         .package(path: "../swift-comparison-primitives"),
         .package(path: "../swift-finite-primitives"),
-        .package(path: "../swift-optic-primitives")
+        .package(path: "../swift-optic-primitives"),
+        .package(path: "../swift-witness-primitives"),
     ],
     targets: [
         .target(
+            name: "Algebra Primitives Core",
+            dependencies: []
+        ),
+        .target(
+            name: "Algebra Magma Primitives",
+            dependencies: [
+                "Algebra Primitives Core",
+                .product(name: "Witness Primitives", package: "swift-witness-primitives"),
+            ]
+        ),
+        .target(
+            name: "Algebra Monoid Primitives",
+            dependencies: [
+                "Algebra Magma Primitives",
+            ]
+        ),
+        .target(
+            name: "Algebra Group Primitives",
+            dependencies: [
+                "Algebra Monoid Primitives",
+            ]
+        ),
+        .target(
+            name: "Algebra Ring Primitives",
+            dependencies: [
+                "Algebra Group Primitives",
+            ]
+        ),
+        .target(
+            name: "Algebra Field Primitives",
+            dependencies: [
+                "Algebra Ring Primitives",
+            ]
+        ),
+        .target(
             name: "Algebra Primitives",
             dependencies: [
+                "Algebra Field Primitives",
                 .product(name: "Comparison Primitives", package: "swift-comparison-primitives"),
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
-                .product(name: "Optic Primitives", package: "swift-optic-primitives")
+                .product(name: "Optic Primitives", package: "swift-optic-primitives"),
             ]
-        )
+        ),
+        .testTarget(
+            name: "Algebra Primitives Tests",
+            dependencies: [
+                "Algebra Primitives",
+            ]
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

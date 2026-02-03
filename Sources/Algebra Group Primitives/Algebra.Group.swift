@@ -20,7 +20,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Group<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Group<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// The identity element.
         public var identity: Element
 

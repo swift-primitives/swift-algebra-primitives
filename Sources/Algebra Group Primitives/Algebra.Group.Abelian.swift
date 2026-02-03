@@ -13,7 +13,7 @@ public import Witness_Primitives
 /// commutativity of addition is required by definition.
 extension Algebra.Group {
     @frozen
-    public struct Abelian: Sendable, Witness.Protocol where Element: Sendable {
+    public struct Abelian: Sendable, Witness.`Protocol` where Element: Sendable {
         /// The underlying group.
         public var group: Algebra.Group<Element>
 

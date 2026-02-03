@@ -16,7 +16,7 @@ public import Witness_Primitives
 /// ```
 extension Algebra {
     @frozen
-    public struct Monoid<Element: Sendable>: Sendable, Witness.Protocol {
+    public struct Monoid<Element: Sendable>: Sendable, Witness.`Protocol` {
         /// The identity element: combining(identity, a) = combining(a, identity) = a.
         public var identity: Element
 
