@@ -52,6 +52,39 @@ extension AlgebraLawTests {
     static var brokenGroup: Algebra.Group<Int> {
         .init(identity: 0, combining: { $0 &+ $1 }, inverting: { $0 }) // identity is not inverse
     }
+
+    /// A broken ring where multiplication = addition (distributivity fails).
+    static var brokenDistributivityRing: Algebra.Ring<Int> {
+        .init(
+            additive: .init(group: .init(
+                identity: 0, combining: { $0 &+ $1 }, inverting: { 0 &- $0 }
+            )),
+            multiplicative: .init(identity: 1, combining: { $0 &+ $1 })
+        )
+    }
+
+    /// A broken ring where 0 · a = a (projection, not annihilation).
+    static var brokenAnnihilationRing: Algebra.Ring<Int> {
+        .init(
+            additive: .init(group: .init(
+                identity: 0, combining: { $0 &+ $1 }, inverting: { 0 &- $0 }
+            )),
+            multiplicative: .init(identity: 1, combining: { _, rhs in rhs })
+        )
+    }
+
+    /// A broken Bool field where reciprocal always returns false.
+    static var brokenReciprocalField: Algebra.Field<Bool> {
+        .init(
+            additive: .init(group: .init(
+                identity: false, combining: { $0 != $1 }, inverting: { $0 }
+            )),
+            multiplicative: .init(monoid: .init(
+                identity: true, combining: { $0 && $1 }
+            )),
+            reciprocal: { _ in false }
+        )
+    }
 }
 
 // MARK: - Unit: Good Witnesses Return Nil
@@ -174,6 +207,33 @@ extension AlgebraLawTests.EdgeCase {
         let result = Algebra.Law.Commutativity.check(
             of: { (a: Int, b: Int) in a - b },
             over: [1, 2]
+        )
+        #expect(result != nil)
+    }
+
+    @Test
+    func `distributivity fails for broken ring`() {
+        let result = Algebra.Law.Distributivity.left(
+            of: AlgebraLawTests.brokenDistributivityRing,
+            over: [1, 2, 3]
+        )
+        #expect(result != nil)
+    }
+
+    @Test
+    func `annihilation fails for broken ring`() {
+        let result = Algebra.Law.Annihilation.zero(
+            of: AlgebraLawTests.brokenAnnihilationRing,
+            over: [1, 2, 3]
+        )
+        #expect(result != nil)
+    }
+
+    @Test
+    func `reciprocal fails for broken field`() {
+        let result = Algebra.Law.Reciprocal.check(
+            of: AlgebraLawTests.brokenReciprocalField,
+            over: [true, false]
         )
         #expect(result != nil)
     }

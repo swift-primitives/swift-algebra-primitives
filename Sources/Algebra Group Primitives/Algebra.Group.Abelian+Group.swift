@@ -42,4 +42,10 @@ extension Algebra.Group.Abelian {
     /// Projects to a commutative monoid.
     @inlinable
     public var commutative: Algebra.Monoid<Element>.Commutative { .init(self) }
+
+    /// Applies the commutative binary operation.
+    @inlinable
+    public func callAsFunction(_ lhs: Element, _ rhs: Element) -> Element {
+        combining(lhs, rhs)
+    }
 }

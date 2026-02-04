@@ -28,4 +28,10 @@ extension Algebra.Monoid.Commutative {
     /// The commutative binary operation.
     @inlinable
     public var combining: @Sendable (Element, Element) -> Element { monoid.combining }
+
+    /// Applies the commutative binary operation.
+    @inlinable
+    public func callAsFunction(_ lhs: Element, _ rhs: Element) -> Element {
+        combining(lhs, rhs)
+    }
 }

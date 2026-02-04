@@ -33,9 +33,13 @@ extension Algebra.Z {
         /// Creates a residue class element via modular reduction.
         ///
         /// Reduces any integer to the canonical representative in [0, n).
-        /// Handles negative values correctly.
+        /// Handles negative values correctly. Returns residue 0 when n ≤ 0.
         @inlinable
         public init(wrapping value: Int) {
+            guard n > 0 else {
+                self.residue = 0
+                return
+            }
             let r = value % n
             self.residue = r < 0 ? r + n : r
         }

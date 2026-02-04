@@ -12,7 +12,8 @@ extension Algebra.Z.Modulo {
     /// Additive inverse.
     @inlinable
     public var negated: Self {
-        residue == 0 ? self : .init(__unchecked: n - residue)
+        guard n > 0, residue != 0 else { return self }
+        return .init(__unchecked: n - residue)
     }
 }
 

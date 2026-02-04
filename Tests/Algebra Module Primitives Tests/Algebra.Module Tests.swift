@@ -123,4 +123,22 @@ extension AlgebraModuleTests.Unit {
         )
         #expect(result == nil)
     }
+
+    @Test
+    func `module scalar distributes over vector addition`() {
+        let m = AlgebraModuleTests.parityModule
+        let result = Algebra.Law.Distributivity.scalar(
+            of: m, over: AlgebraModuleTests.allParity, AlgebraModuleTests.allParity
+        )
+        #expect(result == nil)
+    }
+
+    @Test
+    func `module scaling distributes over scalar addition`() {
+        let m = AlgebraModuleTests.parityModule
+        let result = Algebra.Law.Distributivity.addition(
+            of: m, over: AlgebraModuleTests.allParity, AlgebraModuleTests.allParity
+        )
+        #expect(result == nil)
+    }
 }

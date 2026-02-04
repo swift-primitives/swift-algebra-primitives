@@ -26,7 +26,7 @@ extension Algebra.Law.Reciprocal {
                     let result = try field.reciprocal(a)
                     return .init(law: "reciprocal", elements: [a], lhs: result, rhs: field.zero)
                 } catch {
-                    // Any error from reciprocal(zero) is acceptable.
+                    // reciprocal(zero) correctly threw .nonInvertible (the only possible error).
                     continue
                 }
             } else {

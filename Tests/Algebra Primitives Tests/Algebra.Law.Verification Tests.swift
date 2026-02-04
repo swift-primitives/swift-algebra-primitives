@@ -67,6 +67,14 @@ extension ParityLawVerificationTests.Unit {
     }
 
     @Test
+    func `multiplicative commutativity`() {
+        let result = Algebra.Law.Commutativity.check(
+            of: z2.multiplicative.combining, over: allParity
+        )
+        #expect(result == nil)
+    }
+
+    @Test
     func `distributivity`() {
         let left = Algebra.Law.Distributivity.left(of: z2.ring.ring, over: allParity)
         let right = Algebra.Law.Distributivity.right(of: z2.ring.ring, over: allParity)
