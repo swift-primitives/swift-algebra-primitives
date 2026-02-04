@@ -1,6 +1,7 @@
 import Testing
 
 @testable import Algebra_Primitives
+import Algebra_Primitives_Test_Support
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
@@ -13,52 +14,60 @@ struct AlgebraZModuloTests {
 // MARK: - Unit
 
 extension AlgebraZModuloTests.Unit {
+    typealias Z5 = Algebra.Z.Modulo<5>
+    typealias Z7 = Algebra.Z.Modulo<7>
+
     @Test
     func `checked init accepts valid residues`() throws {
-        let a = try Algebra.Z.Modulo<5>(0)
-        #expect(a.residue == 0)
-        let b = try Algebra.Z.Modulo<5>(4)
-        #expect(b.residue == 4)
+        let zero: Int = 0
+        let four: Int = 4
+        let a = try Z5(zero)
+        #expect(a.intValue == 0)
+        let b = try Z5(four)
+        #expect(b.intValue == 4)
     }
 
     @Test
     func `checked init rejects out of bounds`() {
+        let five: Int = 5
+        let negOne: Int = -1
         #expect(throws: Algebra.Z.Modulo<3>.Error.bounds(5)) {
-            try Algebra.Z.Modulo<3>(5)
+            try Algebra.Z.Modulo<3>(five)
         }
         #expect(throws: Algebra.Z.Modulo<3>.Error.bounds(-1)) {
-            try Algebra.Z.Modulo<3>(-1)
+            try Algebra.Z.Modulo<3>(negOne)
         }
     }
 
     @Test
     func `checked init rejects non-positive modulus`() {
+        let zero: Int = 0
         #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
-            try Algebra.Z.Modulo<0>(0)
+            try Algebra.Z.Modulo<0>(zero)
         }
     }
 
     @Test
-    func `wrapping init reduces positive values`() {
-        let a = Algebra.Z.Modulo<5>(wrapping: 7)
-        #expect(a.residue == 2)
-        let b = Algebra.Z.Modulo<5>(wrapping: 5)
-        #expect(b.residue == 0)
+    func `wrapping init reduces positive values`() throws {
+        let a = try Z5(wrapping: 7)
+        #expect(a.intValue == 2)
+        let b = try Z5(wrapping: 5)
+        #expect(b.intValue == 0)
     }
 
     @Test
-    func `wrapping init reduces negative values`() {
-        let a = Algebra.Z.Modulo<5>(wrapping: -1)
-        #expect(a.residue == 4)
-        let b = Algebra.Z.Modulo<5>(wrapping: -7)
-        #expect(b.residue == 3)
+    func `wrapping init reduces negative values`() throws {
+        let a = try Z5(wrapping: -1)
+        #expect(a.intValue == 4)
+        let b = try Z5(wrapping: -7)
+        #expect(b.intValue == 3)
     }
 
     @Test
     func `zero and one constants`() {
-        #expect(Algebra.Z.Modulo<5>.zero.residue == 0)
-        #expect(Algebra.Z.Modulo<5>.one.residue == 1)
-        #expect(Algebra.Z.Modulo<1>.one.residue == 0)
+        #expect(Z5.zero.intValue == 0)
+        #expect(Z5.one.intValue == 1)
+        #expect(Algebra.Z.Modulo<1>.one.intValue == 0)
     }
 
     @Test(arguments: [
@@ -67,10 +76,10 @@ extension AlgebraZModuloTests.Unit {
         (3, 4, 2),
         (0, 0, 0),
     ])
-    func `addition mod 5`(a: Int, b: Int, expected: Int) {
-        let lhs = Algebra.Z.Modulo<5>(wrapping: a)
-        let rhs = Algebra.Z.Modulo<5>(wrapping: b)
-        #expect((lhs + rhs).residue == expected)
+    func `addition mod 5`(a: Int, b: Int, expected: Int) throws {
+        let lhs = try Z5(a)
+        let rhs = try Z5(b)
+        #expect((lhs + rhs).intValue == expected)
     }
 
     @Test(arguments: [
@@ -78,25 +87,25 @@ extension AlgebraZModuloTests.Unit {
         (0, 1, 4),
         (3, 3, 0),
     ])
-    func `subtraction mod 5`(a: Int, b: Int, expected: Int) {
-        let lhs = Algebra.Z.Modulo<5>(wrapping: a)
-        let rhs = Algebra.Z.Modulo<5>(wrapping: b)
-        #expect((lhs - rhs).residue == expected)
+    func `subtraction mod 5`(a: Int, b: Int, expected: Int) throws {
+        let lhs = try Z5(a)
+        let rhs = try Z5(b)
+        #expect((lhs - rhs).intValue == expected)
     }
 
     @Test
     func `multiplication mod 5`() throws {
-        let a = Algebra.Z.Modulo<5>(wrapping: 3)
-        let b = Algebra.Z.Modulo<5>(wrapping: 4)
+        let a: Z5 = 3
+        let b: Z5 = 4
         let c = try a * b
-        #expect(c.residue == 2) // 12 mod 5 = 2
+        #expect(c.intValue == 2) // 12 mod 5 = 2
     }
 
     @Test
     func `negation`() {
-        let a = Algebra.Z.Modulo<5>(wrapping: 3)
-        #expect((-a).residue == 2)
-        #expect((-Algebra.Z.Modulo<5>.zero).residue == 0)
+        let a: Z5 = 3
+        #expect((-a).intValue == 2)
+        #expect((-Z5.zero).intValue == 0)
     }
 }
 
@@ -105,22 +114,22 @@ extension AlgebraZModuloTests.Unit {
 extension AlgebraZModuloTests.Unit {
     @Test
     func `count equals modulus`() {
-        #expect(Algebra.Z.Modulo<5>.count == Cardinal(5))
+        #expect(Z5.count == Cardinal(5))
         #expect(Algebra.Z.Modulo<2>.count == Cardinal(2))
     }
 
     @Test
     func `ordinal matches residue`() {
-        let a = Algebra.Z.Modulo<5>(wrapping: 3)
+        let a: Z5 = 3
         #expect(a.ordinal == Ordinal(3))
     }
 
     @Test
     func `allCases enumerates all residues`() {
-        let cases = Array(Algebra.Z.Modulo<5>.allCases)
+        let cases = Array(Z5.allCases)
         #expect(cases.count == 5)
         for i in 0..<5 {
-            #expect(cases[i].residue == i)
+            #expect(cases[i].intValue == i)
         }
     }
 }
@@ -132,19 +141,19 @@ extension AlgebraZModuloTests.Unit {
     func `ring witness exists for small moduli`() {
         #expect(Algebra.Z.Modulo<2>.ring != nil)
         #expect(Algebra.Z.Modulo<3>.ring != nil)
-        #expect(Algebra.Z.Modulo<5>.ring != nil)
-        #expect(Algebra.Z.Modulo<7>.ring != nil)
+        #expect(Z5.ring != nil)
+        #expect(Z7.ring != nil)
     }
 
     @Test
     func `ring distributivity`() {
-        guard let ring = Algebra.Z.Modulo<5>.ring else {
+        guard let ring = Z5.ring else {
             Issue.record("Ring should exist for n=5")
             return
         }
-        for a in Algebra.Z.Modulo<5>.allCases {
-            for b in Algebra.Z.Modulo<5>.allCases {
-                for c in Algebra.Z.Modulo<5>.allCases {
+        for a in Z5.allCases {
+            for b in Z5.allCases {
+                for c in Z5.allCases {
                     // a * (b + c) == a*b + a*c
                     let lhs = ring.multiplying(a, ring.adding(b, c))
                     let rhs = ring.adding(ring.multiplying(a, b), ring.multiplying(a, c))
@@ -156,11 +165,11 @@ extension AlgebraZModuloTests.Unit {
 
     @Test
     func `ring zero annihilation`() {
-        guard let ring = Algebra.Z.Modulo<7>.ring else {
+        guard let ring = Z7.ring else {
             Issue.record("Ring should exist for n=7")
             return
         }
-        for a in Algebra.Z.Modulo<7>.allCases {
+        for a in Z7.allCases {
             #expect(ring.multiplying(ring.zero, a) == ring.zero)
             #expect(ring.multiplying(a, ring.zero) == ring.zero)
         }
@@ -174,8 +183,8 @@ extension AlgebraZModuloTests.Unit {
     func `field exists for primes`() {
         #expect(Algebra.Z.Modulo<2>.field() != nil)
         #expect(Algebra.Z.Modulo<3>.field() != nil)
-        #expect(Algebra.Z.Modulo<5>.field() != nil)
-        #expect(Algebra.Z.Modulo<7>.field() != nil)
+        #expect(Z5.field() != nil)
+        #expect(Z7.field() != nil)
     }
 
     @Test
@@ -193,11 +202,11 @@ extension AlgebraZModuloTests.Unit {
 
     @Test
     func `reciprocal exhaustive Z5`() throws {
-        guard let field = Algebra.Z.Modulo<5>.field() else {
+        guard let field = Z5.field() else {
             Issue.record("Field should exist for n=5")
             return
         }
-        for a in Algebra.Z.Modulo<5>.allCases where a.residue != 0 {
+        for a in Z5.allCases where a.intValue != 0 {
             let inv = try field.reciprocal(a)
             #expect(field.multiplying(a, inv) == field.one)
         }
@@ -205,11 +214,11 @@ extension AlgebraZModuloTests.Unit {
 
     @Test
     func `reciprocal exhaustive Z7`() throws {
-        guard let field = Algebra.Z.Modulo<7>.field() else {
+        guard let field = Z7.field() else {
             Issue.record("Field should exist for n=7")
             return
         }
-        for a in Algebra.Z.Modulo<7>.allCases where a.residue != 0 {
+        for a in Z7.allCases where a.intValue != 0 {
             let inv = try field.reciprocal(a)
             #expect(field.multiplying(a, inv) == field.one)
         }
@@ -217,11 +226,11 @@ extension AlgebraZModuloTests.Unit {
 
     @Test
     func `reciprocal of zero throws nonInvertible`() {
-        guard let field = Algebra.Z.Modulo<5>.field() else {
+        guard let field = Z5.field() else {
             Issue.record("Field should exist for n=5")
             return
         }
-        #expect(throws: Algebra.Field<Algebra.Z.Modulo<5>>.Error.nonInvertible) {
+        #expect(throws: Algebra.Field<Z5>.Error.nonInvertible) {
             try field.reciprocal(.zero)
         }
     }
@@ -231,29 +240,24 @@ extension AlgebraZModuloTests.Unit {
 
 extension AlgebraZModuloTests.EdgeCase {
     @Test
-    func `wrapping init with zero modulus does not trap`() {
-        let a = Algebra.Z.Modulo<0>(wrapping: 42)
-        #expect(a.residue == 0)
+    func `wrapping init with zero modulus throws`() {
+        #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
+            try Algebra.Z.Modulo<0>(wrapping: 42)
+        }
     }
 
     @Test
-    func `negation with zero modulus does not trap`() {
-        let a = Algebra.Z.Modulo<0>(wrapping: 0)
-        #expect((-a).residue == 0)
+    func `checked init with zero modulus throws`() {
+        let zero: Int = 0
+        #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
+            try Algebra.Z.Modulo<0>(zero)
+        }
     }
 }
 
 // MARK: - Overflow
 
 extension AlgebraZModuloTests.EdgeCase {
-    // n=100_000: (n-1)^2 = 9_999_800_001, fits in Int → ring exists.
-    // Residues up to 99_999: 99_999 * 99_999 = 9_999_800_001, no overflow.
-    // But we can force overflow with a modulus where (n-1)^2 overflows.
-    // Since very large value generics can crash the compiler's mangler,
-    // we test overflow by verifying the ring returns nil for n where
-    // (n-1)*(n-1) would overflow, using the ring property itself.
-    // The ring property already guards: (n-1).multipliedReportingOverflow(by: n-1).
-
     @Test
     func `ring returns nil for zero modulus`() {
         #expect(Algebra.Z.Modulo<0>.ring == nil)
@@ -263,14 +267,16 @@ extension AlgebraZModuloTests.EdgeCase {
 // MARK: - EdgeCase
 
 extension AlgebraZModuloTests.EdgeCase {
+    typealias Z5 = Algebra.Z.Modulo<5>
+
     @Test
     func `Z2 is smallest field`() throws {
         guard let field = Algebra.Z.Modulo<2>.field() else {
             Issue.record("Field should exist for n=2")
             return
         }
-        #expect(field.zero.residue == 0)
-        #expect(field.one.residue == 1)
+        #expect(field.zero.intValue == 0)
+        #expect(field.one.intValue == 1)
         let inv = try field.reciprocal(field.one)
         #expect(inv == field.one)
     }
@@ -286,12 +292,15 @@ extension AlgebraZModuloTests.EdgeCase {
 
     @Test
     func `compound assignment operators`() throws {
-        var a = Algebra.Z.Modulo<5>(wrapping: 3)
-        a += .init(wrapping: 4)
-        #expect(a.residue == 2) // 3 + 4 = 7 mod 5 = 2
-        a -= .init(wrapping: 1)
-        #expect(a.residue == 1)
-        try (a *= .init(wrapping: 3))
-        #expect(a.residue == 3)
+        var a: Z5 = 3
+        let four: Z5 = 4
+        a += four
+        #expect(a.intValue == 2) // 3 + 4 = 7 mod 5 = 2
+        let one: Z5 = 1
+        a -= one
+        #expect(a.intValue == 1)
+        let three: Z5 = 3
+        try (a *= three)
+        #expect(a.intValue == 3)
     }
 }

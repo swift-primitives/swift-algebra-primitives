@@ -51,7 +51,11 @@ let package = Package(
         .library(
             name: "Algebra Primitives",
             targets: ["Algebra Primitives"]
-        )
+        ),
+        .library(
+            name: "Algebra Primitives Test Support",
+            targets: ["Algebra Primitives Test Support"]
+        ),
     ],
     dependencies: [
         .package(path: "../swift-comparison-primitives"),
@@ -126,6 +130,14 @@ let package = Package(
                 .product(name: "Optic Primitives", package: "swift-optic-primitives"),
             ]
         ),
+        .target(
+            name: "Algebra Primitives Test Support",
+            dependencies: [
+                "Algebra Primitives",
+                .product(name: "Finite Primitives Test Support", package: "swift-finite-primitives"),
+            ],
+            path: "Tests/Support"
+        ),
         .testTarget(
             name: "Algebra Magma Primitives Tests",
             dependencies: [
@@ -178,6 +190,7 @@ let package = Package(
             name: "Algebra Primitives Tests",
             dependencies: [
                 "Algebra Primitives",
+                "Algebra Primitives Test Support",
             ]
         ),
     ],

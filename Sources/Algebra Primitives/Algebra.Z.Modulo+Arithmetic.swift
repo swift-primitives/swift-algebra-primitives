@@ -1,29 +1,35 @@
 // Algebra.Z.Modulo+Arithmetic.swift
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
     /// Additive identity.
     @inlinable
-    public static var zero: Self { .init(__unchecked: 0) }
+    internal static var zero: Self { Self(__unchecked: (), Ordinal(0)) }
 
     /// Multiplicative identity.
     @inlinable
-    public static var one: Self { .init(__unchecked: n > 1 ? 1 : 0) }
+    internal static var one: Self {
+        Self(__unchecked: (), Ordinal(UInt(Tag.capacity > 1 ? 1 : 0)))
+    }
 
     /// Additive inverse.
     @inlinable
     public var negated: Self {
-        guard n > 0, residue != 0 else { return self }
-        return .init(__unchecked: n - residue)
+        let a = rawValue.rawValue
+        guard a != 0 else { return self }
+        return Self(__unchecked: (), Ordinal(UInt(Tag.capacity) - a))
     }
 }
 
 // MARK: - Addition
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
     @inlinable
     public static func + (lhs: Self, rhs: Self) -> Self {
-        let sum = lhs.residue + rhs.residue
-        return .init(__unchecked: sum >= n ? sum - n : sum)
+        let a = lhs.rawValue.rawValue
+        let b = rhs.rawValue.rawValue
+        let m = UInt(Tag.capacity)
+        let sum = a + b
+        return Self(__unchecked: (), Ordinal(sum >= m ? sum - m : sum))
     }
 
     @inlinable
@@ -34,11 +40,13 @@ extension Algebra.Z.Modulo {
 
 // MARK: - Subtraction
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
     @inlinable
     public static func - (lhs: Self, rhs: Self) -> Self {
-        let diff = lhs.residue - rhs.residue
-        return .init(__unchecked: diff < 0 ? diff + n : diff)
+        let a = lhs.rawValue.rawValue
+        let b = rhs.rawValue.rawValue
+        let result = a >= b ? a - b : UInt(Tag.capacity) - b + a
+        return Self(__unchecked: (), Ordinal(result))
     }
 
     @inlinable
@@ -49,7 +57,7 @@ extension Algebra.Z.Modulo {
 
 // MARK: - Negation
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
     @inlinable
     public static prefix func - (value: Self) -> Self {
         value.negated
@@ -58,12 +66,14 @@ extension Algebra.Z.Modulo {
 
 // MARK: - Multiplication
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
     @inlinable
     public static func * (lhs: Self, rhs: Self) throws(Error) -> Self {
-        let (product, overflow) = lhs.residue.multipliedReportingOverflow(by: rhs.residue)
+        let a = lhs.rawValue.rawValue
+        let b = rhs.rawValue.rawValue
+        let (product, overflow) = a.multipliedReportingOverflow(by: b)
         guard !overflow else { throw .arithmetic }
-        return .init(__unchecked: product % n)
+        return Self(__unchecked: (), Ordinal(product % UInt(Tag.capacity)))
     }
 
     @inlinable

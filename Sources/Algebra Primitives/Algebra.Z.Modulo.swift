@@ -3,62 +3,51 @@
 /// Integer residue class Z/nZ.
 ///
 /// Represents elements of the quotient ring of integers modulo n.
-/// The residue is an integer in the range [0, n). The modulus n
-/// must be positive.
+/// The raw value is an ordinal in the range [0, n). The modulus n
+/// must be positive; all public construction throws for n ≤ 0.
+///
+/// `Modulo<n>` is a `Tagged<Residue<n>, Ordinal>`, gaining
+/// `Finite.Enumerable`, `Hashable`, `Comparable`, and `Sendable`
+/// for free.
 ///
 /// ## Example
 ///
 /// ```swift
-/// let a = Algebra.Z.Modulo<5>(wrapping: 7)   // residue 2
-/// let b = Algebra.Z.Modulo<5>(wrapping: -1)  // residue 4
-/// let c = a + b                               // residue 1
+/// let a = try Algebra.Z.Modulo<5>(wrapping: 7)   // ordinal 2
+/// let b = try Algebra.Z.Modulo<5>(wrapping: -1)  // ordinal 4
+/// let c = a + b                                    // ordinal 1
 /// ```
 extension Algebra.Z {
-    @frozen
-    public struct Modulo<let n: Int>: Hashable, Comparable, Sendable {
-        /// The residue in [0, n).
-        public let residue: Int
-
-        /// Creates a residue class element with bounds checking.
-        ///
-        /// - Throws: `Error.modulus` if n ≤ 0.
-        /// - Throws: `Error.bounds` if residue is not in [0, n).
-        @inlinable
-        public init(_ residue: Int) throws(Error) {
-            guard n > 0 else { throw .modulus }
-            guard residue >= 0, residue < n else { throw .bounds(residue) }
-            self.residue = residue
-        }
-
-        /// Creates a residue class element via modular reduction.
-        ///
-        /// Reduces any integer to the canonical representative in [0, n).
-        /// Handles negative values correctly. Returns residue 0 when n ≤ 0.
-        @inlinable
-        public init(wrapping value: Int) {
-            guard n > 0 else {
-                self.residue = 0
-                return
-            }
-            let r = value % n
-            self.residue = r < 0 ? r + n : r
-        }
-
-        /// Creates a residue class element without validation.
-        ///
-        /// The caller must guarantee that `residue` is in [0, n).
-        @inlinable
-        public init(__unchecked residue: Int) {
-            self.residue = residue
-        }
-    }
+    public typealias Modulo<let n: Int> = Tagged<Residue<n>, Ordinal>
 }
 
-// MARK: - Comparable
+// MARK: - Construction
 
-extension Algebra.Z.Modulo {
+extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+    /// Creates a residue class element with bounds checking.
+    ///
+    /// - Throws: `Error.modulus` if n ≤ 0.
+    /// - Throws: `Error.bounds` if residue is not in [0, n).
     @inlinable
-    public static func < (lhs: Self, rhs: Self) -> Bool {
-        lhs.residue < rhs.residue
+    public init(_ residue: Int) throws(Error) {
+        let n = Tag.capacity
+        guard n > 0 else { throw .modulus }
+        guard residue >= 0, residue < n else { throw .bounds(residue) }
+        self.init(__unchecked: (), Ordinal(UInt(residue)))
+    }
+
+    /// Creates a residue class element via modular reduction.
+    ///
+    /// Reduces any integer to the canonical representative in [0, n).
+    /// Handles negative values correctly.
+    ///
+    /// - Throws: `Error.modulus` if n ≤ 0.
+    @inlinable
+    public init(wrapping value: Int) throws(Error) {
+        let n = Tag.capacity
+        guard n > 0 else { throw .modulus }
+        let r = value % n
+        let normalized = r < 0 ? r + n : r
+        self.init(__unchecked: (), Ordinal(UInt(normalized)))
     }
 }
