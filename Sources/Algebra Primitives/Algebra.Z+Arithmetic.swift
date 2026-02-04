@@ -1,6 +1,6 @@
-// Algebra.Z.Modulo+Arithmetic.swift
+// Algebra.Z+Arithmetic.swift
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     /// Additive identity.
     @inlinable
     internal static var zero: Self { Self(__unchecked: (), Ordinal(0)) }
@@ -22,7 +22,7 @@ extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
 
 // MARK: - Addition
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     @inlinable
     public static func + (lhs: Self, rhs: Self) -> Self {
         let a = lhs.rawValue.rawValue
@@ -40,7 +40,7 @@ extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
 
 // MARK: - Subtraction
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     @inlinable
     public static func - (lhs: Self, rhs: Self) -> Self {
         let a = lhs.rawValue.rawValue
@@ -57,7 +57,7 @@ extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
 
 // MARK: - Negation
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     @inlinable
     public static prefix func - (value: Self) -> Self {
         value.negated
@@ -66,7 +66,7 @@ extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
 
 // MARK: - Multiplication
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     @inlinable
     public static func * (lhs: Self, rhs: Self) throws(Error) -> Self {
         let a = lhs.rawValue.rawValue

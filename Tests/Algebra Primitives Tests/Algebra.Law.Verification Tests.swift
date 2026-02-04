@@ -148,21 +148,21 @@ extension Z2GroupLawVerificationTests.Unit {
     }
 }
 
-// MARK: - Z.Modulo Law Verification
+// MARK: - Z Law Verification
 
-@Suite("Z.Modulo Law Verification")
-struct ZModuloLawVerificationTests {
+@Suite("Z Law Verification")
+struct ZLawVerificationTests {
     @Suite struct Unit {}
 }
 
-extension ZModuloLawVerificationTests.Unit {
+extension ZLawVerificationTests.Unit {
     @Test
     func `Z5 ring laws`() {
-        guard let ring = Algebra.Z.Modulo<5>.ring else {
+        guard let ring = Algebra.Z<5>.ring else {
             Issue.record("Ring should exist for n=5")
             return
         }
-        let all = Array(Algebra.Z.Modulo<5>.allCases)
+        let all = Array(Algebra.Z<5>.allCases)
         #expect(Algebra.Law.Distributivity.left(of: ring.ring, over: all) == nil)
         #expect(Algebra.Law.Distributivity.right(of: ring.ring, over: all) == nil)
         #expect(Algebra.Law.Annihilation.zero(of: ring.ring, over: all) == nil)
@@ -170,11 +170,11 @@ extension ZModuloLawVerificationTests.Unit {
 
     @Test
     func `Z7 ring laws`() {
-        guard let ring = Algebra.Z.Modulo<7>.ring else {
+        guard let ring = Algebra.Z<7>.ring else {
             Issue.record("Ring should exist for n=7")
             return
         }
-        let all = Array(Algebra.Z.Modulo<7>.allCases)
+        let all = Array(Algebra.Z<7>.allCases)
         #expect(Algebra.Law.Distributivity.left(of: ring.ring, over: all) == nil)
         #expect(Algebra.Law.Distributivity.right(of: ring.ring, over: all) == nil)
         #expect(Algebra.Law.Annihilation.zero(of: ring.ring, over: all) == nil)
@@ -182,21 +182,21 @@ extension ZModuloLawVerificationTests.Unit {
 
     @Test
     func `Z5 field laws`() {
-        guard let field = Algebra.Z.Modulo<5>.field() else {
+        guard let field = Algebra.Z<5>.field() else {
             Issue.record("Field should exist for n=5")
             return
         }
-        let all = Array(Algebra.Z.Modulo<5>.allCases)
+        let all = Array(Algebra.Z<5>.allCases)
         #expect(Algebra.Law.Reciprocal.check(of: field, over: all) == nil)
     }
 
     @Test
     func `Z7 field laws`() {
-        guard let field = Algebra.Z.Modulo<7>.field() else {
+        guard let field = Algebra.Z<7>.field() else {
             Issue.record("Field should exist for n=7")
             return
         }
-        let all = Array(Algebra.Z.Modulo<7>.allCases)
+        let all = Array(Algebra.Z<7>.allCases)
         #expect(Algebra.Law.Reciprocal.check(of: field, over: all) == nil)
     }
 }

@@ -1,10 +1,10 @@
-// Algebra.Z.Modulo+Field.swift
+// Algebra.Z+Field.swift
 
 /// Field witness for Z/pZ when p is prime.
 ///
 /// Returns nil when n is not prime or when `(n-1)*(n-1)` overflows `UInt`.
 /// Reciprocal throws `Algebra.Field<Self>.Error.nonInvertible` for zero.
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     @inlinable
     public static func field() -> Algebra.Field<Self>? {
         let n = Tag.capacity

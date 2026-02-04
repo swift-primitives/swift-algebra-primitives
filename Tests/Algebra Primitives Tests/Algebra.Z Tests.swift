@@ -5,17 +5,17 @@ import Algebra_Primitives_Test_Support
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Z.Modulo")
-struct AlgebraZModuloTests {
+@Suite("Algebra.Z")
+struct AlgebraZTests {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraZModuloTests.Unit {
-    typealias Z5 = Algebra.Z.Modulo<5>
-    typealias Z7 = Algebra.Z.Modulo<7>
+extension AlgebraZTests.Unit {
+    typealias Z5 = Algebra.Z<5>
+    typealias Z7 = Algebra.Z<7>
 
     @Test
     func `checked init accepts valid residues`() throws {
@@ -31,19 +31,19 @@ extension AlgebraZModuloTests.Unit {
     func `checked init rejects out of bounds`() {
         let five: Int = 5
         let negOne: Int = -1
-        #expect(throws: Algebra.Z.Modulo<3>.Error.bounds(5)) {
-            try Algebra.Z.Modulo<3>(five)
+        #expect(throws: Algebra.Z<3>.Error.bounds(5)) {
+            try Algebra.Z<3>(five)
         }
-        #expect(throws: Algebra.Z.Modulo<3>.Error.bounds(-1)) {
-            try Algebra.Z.Modulo<3>(negOne)
+        #expect(throws: Algebra.Z<3>.Error.bounds(-1)) {
+            try Algebra.Z<3>(negOne)
         }
     }
 
     @Test
     func `checked init rejects non-positive modulus`() {
         let zero: Int = 0
-        #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
-            try Algebra.Z.Modulo<0>(zero)
+        #expect(throws: Algebra.Z<0>.Error.modulus) {
+            try Algebra.Z<0>(zero)
         }
     }
 
@@ -67,7 +67,7 @@ extension AlgebraZModuloTests.Unit {
     func `zero and one constants`() {
         #expect(Z5.zero.intValue == 0)
         #expect(Z5.one.intValue == 1)
-        #expect(Algebra.Z.Modulo<1>.one.intValue == 0)
+        #expect(Algebra.Z<1>.one.intValue == 0)
     }
 
     @Test(arguments: [
@@ -111,11 +111,11 @@ extension AlgebraZModuloTests.Unit {
 
 // MARK: - Finite.Enumerable
 
-extension AlgebraZModuloTests.Unit {
+extension AlgebraZTests.Unit {
     @Test
     func `count equals modulus`() {
         #expect(Z5.count == Cardinal(5))
-        #expect(Algebra.Z.Modulo<2>.count == Cardinal(2))
+        #expect(Algebra.Z<2>.count == Cardinal(2))
     }
 
     @Test
@@ -136,11 +136,11 @@ extension AlgebraZModuloTests.Unit {
 
 // MARK: - Ring
 
-extension AlgebraZModuloTests.Unit {
+extension AlgebraZTests.Unit {
     @Test
     func `ring witness exists for small moduli`() {
-        #expect(Algebra.Z.Modulo<2>.ring != nil)
-        #expect(Algebra.Z.Modulo<3>.ring != nil)
+        #expect(Algebra.Z<2>.ring != nil)
+        #expect(Algebra.Z<3>.ring != nil)
         #expect(Z5.ring != nil)
         #expect(Z7.ring != nil)
     }
@@ -178,26 +178,26 @@ extension AlgebraZModuloTests.Unit {
 
 // MARK: - Field
 
-extension AlgebraZModuloTests.Unit {
+extension AlgebraZTests.Unit {
     @Test
     func `field exists for primes`() {
-        #expect(Algebra.Z.Modulo<2>.field() != nil)
-        #expect(Algebra.Z.Modulo<3>.field() != nil)
+        #expect(Algebra.Z<2>.field() != nil)
+        #expect(Algebra.Z<3>.field() != nil)
         #expect(Z5.field() != nil)
         #expect(Z7.field() != nil)
     }
 
     @Test
     func `field does not exist for composites`() {
-        #expect(Algebra.Z.Modulo<4>.field() == nil)
-        #expect(Algebra.Z.Modulo<6>.field() == nil)
-        #expect(Algebra.Z.Modulo<8>.field() == nil)
-        #expect(Algebra.Z.Modulo<9>.field() == nil)
+        #expect(Algebra.Z<4>.field() == nil)
+        #expect(Algebra.Z<6>.field() == nil)
+        #expect(Algebra.Z<8>.field() == nil)
+        #expect(Algebra.Z<9>.field() == nil)
     }
 
     @Test
     func `field does not exist for 1`() {
-        #expect(Algebra.Z.Modulo<1>.field() == nil)
+        #expect(Algebra.Z<1>.field() == nil)
     }
 
     @Test
@@ -238,40 +238,40 @@ extension AlgebraZModuloTests.Unit {
 
 // MARK: - Zero Modulus
 
-extension AlgebraZModuloTests.EdgeCase {
+extension AlgebraZTests.EdgeCase {
     @Test
     func `wrapping init with zero modulus throws`() {
-        #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
-            try Algebra.Z.Modulo<0>(wrapping: 42)
+        #expect(throws: Algebra.Z<0>.Error.modulus) {
+            try Algebra.Z<0>(wrapping: 42)
         }
     }
 
     @Test
     func `checked init with zero modulus throws`() {
         let zero: Int = 0
-        #expect(throws: Algebra.Z.Modulo<0>.Error.modulus) {
-            try Algebra.Z.Modulo<0>(zero)
+        #expect(throws: Algebra.Z<0>.Error.modulus) {
+            try Algebra.Z<0>(zero)
         }
     }
 }
 
 // MARK: - Overflow
 
-extension AlgebraZModuloTests.EdgeCase {
+extension AlgebraZTests.EdgeCase {
     @Test
     func `ring returns nil for zero modulus`() {
-        #expect(Algebra.Z.Modulo<0>.ring == nil)
+        #expect(Algebra.Z<0>.ring == nil)
     }
 }
 
 // MARK: - EdgeCase
 
-extension AlgebraZModuloTests.EdgeCase {
-    typealias Z5 = Algebra.Z.Modulo<5>
+extension AlgebraZTests.EdgeCase {
+    typealias Z5 = Algebra.Z<5>
 
     @Test
     func `Z2 is smallest field`() throws {
-        guard let field = Algebra.Z.Modulo<2>.field() else {
+        guard let field = Algebra.Z<2>.field() else {
             Issue.record("Field should exist for n=2")
             return
         }
@@ -283,7 +283,7 @@ extension AlgebraZModuloTests.EdgeCase {
 
     @Test
     func `Z1 has trivial ring`() {
-        guard let ring = Algebra.Z.Modulo<1>.ring else {
+        guard let ring = Algebra.Z<1>.ring else {
             Issue.record("Ring should exist for n=1")
             return
         }

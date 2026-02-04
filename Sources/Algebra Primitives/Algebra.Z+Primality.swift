@@ -1,6 +1,6 @@
-// Algebra.Z.Modulo+Primality.swift
+// Algebra.Z+Primality.swift
 
-extension Tagged where Tag: Algebra.Z.Residual, RawValue == Ordinal {
+extension Tagged where Tag: Algebra.Residual, RawValue == Ordinal {
     /// Tests whether a positive integer is prime via trial division.
     ///
     /// Uses `i <= n / i` loop condition to avoid overflow in `i * i`.
