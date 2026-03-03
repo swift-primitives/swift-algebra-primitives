@@ -46,29 +46,29 @@ extension Pair: Hashable where First: Hashable, Second: Hashable {}
 extension Pair {
     /// Transforms the second component of a pair while preserving the first.
     @inlinable
-    public static func map<NewSecond>(
+    public static func map<NewSecond, E: Swift.Error>(
         _ pair: Pair,
-        transform: (Second) throws -> NewSecond
-    ) rethrows -> Pair<First, NewSecond> {
+        transform: (Second) throws(E) -> NewSecond
+    ) throws(E) -> Pair<First, NewSecond> {
         Pair<First, NewSecond>(pair.first, try transform(pair.second))
     }
 
     /// Transforms the first component of a pair while preserving the second.
     @inlinable
-    public static func mapFirst<NewFirst>(
+    public static func mapFirst<NewFirst, E: Swift.Error>(
         _ pair: Pair,
-        transform: (First) throws -> NewFirst
-    ) rethrows -> Pair<NewFirst, Second> {
+        transform: (First) throws(E) -> NewFirst
+    ) throws(E) -> Pair<NewFirst, Second> {
         Pair<NewFirst, Second>(try transform(pair.first), pair.second)
     }
 
     /// Transforms both components of a pair.
     @inlinable
-    public static func bimap<NewFirst, NewSecond>(
+    public static func bimap<NewFirst, NewSecond, E: Swift.Error>(
         _ pair: Pair,
-        first firstTransform: (First) throws -> NewFirst,
-        second secondTransform: (Second) throws -> NewSecond
-    ) rethrows -> Pair<NewFirst, NewSecond> {
+        first firstTransform: (First) throws(E) -> NewFirst,
+        second secondTransform: (Second) throws(E) -> NewSecond
+    ) throws(E) -> Pair<NewFirst, NewSecond> {
         Pair<NewFirst, NewSecond>(
             try firstTransform(pair.first),
             try secondTransform(pair.second)
@@ -87,34 +87,34 @@ extension Pair {
 extension Pair {
     /// Transforms the second component while preserving the first.
     @inlinable
-    public func map<NewSecond>(
-        _ transform: (Second) throws -> NewSecond
-    ) rethrows -> Pair<First, NewSecond> {
+    public func map<NewSecond, E: Swift.Error>(
+        _ transform: (Second) throws(E) -> NewSecond
+    ) throws(E) -> Pair<First, NewSecond> {
         try Self.map(self, transform: transform)
     }
 
     /// Transforms the second component while preserving the first.
     @inlinable
-    public func mapSecond<NewSecond>(
-        _ transform: (Second) throws -> NewSecond
-    ) rethrows -> Pair<First, NewSecond> {
+    public func mapSecond<NewSecond, E: Swift.Error>(
+        _ transform: (Second) throws(E) -> NewSecond
+    ) throws(E) -> Pair<First, NewSecond> {
         try map(transform)
     }
 
     /// Transforms the first component while preserving the second.
     @inlinable
-    public func mapFirst<NewFirst>(
-        _ transform: (First) throws -> NewFirst
-    ) rethrows -> Pair<NewFirst, Second> {
+    public func mapFirst<NewFirst, E: Swift.Error>(
+        _ transform: (First) throws(E) -> NewFirst
+    ) throws(E) -> Pair<NewFirst, Second> {
         try Self.mapFirst(self, transform: transform)
     }
 
     /// Transforms both components.
     @inlinable
-    public func bimap<NewFirst, NewSecond>(
-        first firstTransform: (First) throws -> NewFirst,
-        second secondTransform: (Second) throws -> NewSecond
-    ) rethrows -> Pair<NewFirst, NewSecond> {
+    public func bimap<NewFirst, NewSecond, E: Swift.Error>(
+        first firstTransform: (First) throws(E) -> NewFirst,
+        second secondTransform: (Second) throws(E) -> NewSecond
+    ) throws(E) -> Pair<NewFirst, NewSecond> {
         try Self.bimap(self, first: firstTransform, second: secondTransform)
     }
 }
