@@ -20,6 +20,7 @@
 /// let certain: Either<Never, Int> = .right(10)
 /// print(certain.value)  // 10
 /// ```
+@frozen
 public enum Either<Left, Right> {
     /// The left alternative.
     case left(Left)
