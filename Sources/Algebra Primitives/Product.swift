@@ -67,5 +67,7 @@ extension Product: Hashable where repeat each Element: Hashable {
     }
 }
 
+extension Product: Swift.Error where repeat each Element: Swift.Error {}
+
 // Note: Codable conformance for parameter packs requires more complex handling
 // and may not be directly expressible in current Swift.
