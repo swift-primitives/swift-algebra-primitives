@@ -20,6 +20,10 @@ let package = Package(
             name: "Algebra Primitives",
             targets: ["Algebra Primitives"]
         ),
+        .library(
+            name: "Algebra Primitives Test Support",
+            targets: ["Algebra Primitives Test Support"]
+        ),
     ],
     dependencies: [],
     targets: [
@@ -32,6 +36,15 @@ let package = Package(
             dependencies: [
                 "Algebra Primitives Core",
             ]
+        ),
+
+        // MARK: - Test Support
+        .target(
+            name: "Algebra Primitives Test Support",
+            dependencies: [
+                "Algebra Primitives",
+            ],
+            path: "Tests/Support"
         ),
     ],
     swiftLanguageModes: [.v6]
