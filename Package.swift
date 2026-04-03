@@ -46,6 +46,15 @@ let package = Package(
             ],
             path: "Tests/Support"
         ),
+
+        // MARK: - Tests
+        .testTarget(
+            name: "Algebra Primitives Tests",
+            dependencies: [
+                "Algebra Primitives",
+                "Algebra Primitives Test Support",
+            ]
+        ),
     ],
     swiftLanguageModes: [.v6]
 )

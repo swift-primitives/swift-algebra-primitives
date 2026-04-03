@@ -3,7 +3,9 @@
 
 /// A pair of two values (binary cartesian product).
 ///
-/// `Pair` represents the product `First × Second`, pairing two values together. Use it for classifier-value pairs (orientation + magnitude), coordinate pairs, or any typed two-tuple.
+/// `Pair` represents the product `First × Second`, pairing two values together.
+/// Use it for classifier-value pairs (orientation + magnitude), coordinate pairs,
+/// or any typed two-tuple.
 ///
 /// ## Example
 ///
@@ -17,7 +19,8 @@
 /// // Classifier-value pattern
 /// let velocity: Pair<Vertical, Double> = Pair(.upward, 9.8)
 /// ```
-public struct Pair<First, Second> {
+@frozen
+public struct Pair<First: ~Copyable, Second: ~Copyable>: ~Copyable {
     /// First component.
     public var first: First
 
@@ -26,7 +29,7 @@ public struct Pair<First, Second> {
 
     /// Creates a pair from two values.
     @inlinable
-    public init(_ first: First, _ second: Second) {
+    public init(_ first: consuming First, _ second: consuming Second) {
         self.first = first
         self.second = second
     }
@@ -34,40 +37,47 @@ public struct Pair<First, Second> {
 
 // MARK: - Conditional Conformances
 
-extension Pair: Sendable where First: Sendable, Second: Sendable {}
-extension Pair: Equatable where First: Equatable, Second: Equatable {}
-extension Pair: Hashable where First: Hashable, Second: Hashable {}
+extension Pair: Copyable where First: Copyable, Second: Copyable {}
+#if compiler(>=6.4)
+    extension Pair: Sendable where First: Sendable & ~Copyable, Second: Sendable & ~Copyable {}
+    extension Pair: Equatable where First: Equatable & ~Copyable, Second: Equatable & ~Copyable {}
+    extension Pair: Hashable where First: Hashable & ~Copyable, Second: Hashable & ~Copyable {}
+#else
+    extension Pair: Sendable where First: Sendable, Second: Sendable {}
+    extension Pair: Equatable where First: Equatable, Second: Equatable {}
+    extension Pair: Hashable where First: Hashable, Second: Hashable {}
+#endif
 #if !hasFeature(Embedded)
     extension Pair: Codable where First: Codable, Second: Codable {}
 #endif
 
 // MARK: - Functor (Static Implementation)
 
-extension Pair {
+extension Pair where First: ~Copyable, Second: ~Copyable {
     /// Transforms the second component of a pair while preserving the first.
     @inlinable
-    public static func map<NewSecond, E: Swift.Error>(
-        _ pair: Pair,
-        transform: (Second) throws(E) -> NewSecond
+    public static func map<NewSecond: ~Copyable, E: Swift.Error>(
+        _ pair: consuming Pair,
+        transform: (consuming Second) throws(E) -> NewSecond
     ) throws(E) -> Pair<First, NewSecond> {
         Pair<First, NewSecond>(pair.first, try transform(pair.second))
     }
 
     /// Transforms the first component of a pair while preserving the second.
     @inlinable
-    public static func mapFirst<NewFirst, E: Swift.Error>(
-        _ pair: Pair,
-        transform: (First) throws(E) -> NewFirst
+    public static func mapFirst<NewFirst: ~Copyable, E: Swift.Error>(
+        _ pair: consuming Pair,
+        transform: (consuming First) throws(E) -> NewFirst
     ) throws(E) -> Pair<NewFirst, Second> {
         Pair<NewFirst, Second>(try transform(pair.first), pair.second)
     }
 
     /// Transforms both components of a pair.
     @inlinable
-    public static func bimap<NewFirst, NewSecond, E: Swift.Error>(
-        _ pair: Pair,
-        first firstTransform: (First) throws(E) -> NewFirst,
-        second secondTransform: (Second) throws(E) -> NewSecond
+    public static func bimap<NewFirst: ~Copyable, NewSecond: ~Copyable, E: Swift.Error>(
+        _ pair: consuming Pair,
+        first firstTransform: (consuming First) throws(E) -> NewFirst,
+        second secondTransform: (consuming Second) throws(E) -> NewSecond
     ) throws(E) -> Pair<NewFirst, NewSecond> {
         Pair<NewFirst, NewSecond>(
             try firstTransform(pair.first),
@@ -77,14 +87,14 @@ extension Pair {
 
     /// Returns a pair with components swapped.
     @inlinable
-    public static func swapped(_ pair: Pair) -> Pair<Second, First> {
+    public static func swapped(_ pair: consuming Pair) -> Pair<Second, First> {
         Pair<Second, First>(pair.second, pair.first)
     }
 }
 
 // MARK: - Functor (Instance Convenience)
 
-extension Pair {
+extension Pair where First: Copyable, Second: Copyable {
     /// Transforms the second component while preserving the first.
     @inlinable
     public func map<NewSecond, E: Swift.Error>(
@@ -121,17 +131,17 @@ extension Pair {
 
 // MARK: - Swap (Instance Convenience)
 
-extension Pair {
+extension Pair where First: ~Copyable, Second: ~Copyable {
     /// Returns the pair with components swapped.
     @inlinable
-    public var swapped: Pair<Second, First> {
+    public consuming func swapped() -> Pair<Second, First> {
         Self.swapped(self)
     }
 }
 
 // MARK: - Tuple Conversion
 
-extension Pair {
+extension Pair where First: Copyable, Second: Copyable {
     /// Creates a pair from a tuple.
     @inlinable
     public init(_ tuple: (First, Second)) {
@@ -148,7 +158,7 @@ extension Pair {
 
 // MARK: - Enumerable First Components
 
-extension Pair where First: CaseIterable {
+extension Pair where First: CaseIterable, Second: ~Copyable {
     /// All possible first components.
     @inlinable
     public static var allFirsts: First.AllCases {
