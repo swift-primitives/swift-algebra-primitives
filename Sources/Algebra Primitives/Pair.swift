@@ -38,12 +38,11 @@ public struct Pair<First: ~Copyable, Second: ~Copyable>: ~Copyable {
 // MARK: - Conditional Conformances
 
 extension Pair: Copyable where First: Copyable, Second: Copyable {}
+extension Pair: Sendable where First: Sendable & ~Copyable, Second: Sendable & ~Copyable {}
 #if compiler(>=6.4)
-    extension Pair: Sendable where First: Sendable & ~Copyable, Second: Sendable & ~Copyable {}
     extension Pair: Equatable where First: Equatable & ~Copyable, Second: Equatable & ~Copyable {}
     extension Pair: Hashable where First: Hashable & ~Copyable, Second: Hashable & ~Copyable {}
 #else
-    extension Pair: Sendable where First: Sendable, Second: Sendable {}
     extension Pair: Equatable where First: Equatable, Second: Equatable {}
     extension Pair: Hashable where First: Hashable, Second: Hashable {}
 #endif

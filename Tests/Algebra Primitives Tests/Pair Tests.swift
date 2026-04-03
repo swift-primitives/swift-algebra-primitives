@@ -198,9 +198,16 @@ extension `Pair Tests`.Unit {
     }
 }
 
-// MARK: - Unit: Sendable (Copyable)
+// MARK: - Unit: Sendable
 
 extension `Pair Tests`.Unit {
+
+    @Test
+    func `noncopyable sendable pair satisfies Sendable`() {
+        func assertSendable<T: Sendable & ~Copyable>(_: borrowing T) {}
+        let pair = Pair(MoveOnly(value: 42), MoveOnly(value: 99))
+        assertSendable(pair)
+    }
 
     @Test
     func `copyable sendable pair satisfies Sendable`() async {
