@@ -66,7 +66,7 @@ No proposal for variadic enums has been published or pitched as of this writing.
 
 ```swift
 // From swift-parser-primitives -- COMPILES
-public struct Errors<each E: Swift.Error & Sendable>: Swift.Error, Sendable {
+public struct Errors<each E: Swift.Error>: Swift.Error, Sendable {
     public let failures: (repeat each E)
 
     public init(_ failures: repeat each E) {
@@ -232,7 +232,7 @@ Three `Either`-shaped types exist:
 
     ```swift
     extension Parser.Error {
-        public typealias Either<Left: Swift.Error & Sendable, Right: Swift.Error & Sendable>
+        public typealias Either<Left: Swift.Error, Right: Swift.Error>
             = Algebra_Primitives.Either<Left, Right>
     }
     ```
