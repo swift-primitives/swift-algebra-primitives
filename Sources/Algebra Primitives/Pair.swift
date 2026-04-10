@@ -84,6 +84,25 @@ extension Pair where First: ~Copyable, Second: ~Copyable {
         )
     }
 
+    /// Applies a function to both components, consuming the pair.
+    ///
+    /// The complement to ``bimap(_:first:second:)``: where `bimap` transforms
+    /// components independently, `apply` folds them into a single result.
+    ///
+    /// ```swift
+    /// let pair = Pair(readDescriptor, writeDescriptor)
+    /// let result = pair.apply { read, write in
+    ///     close(write)
+    ///     return read
+    /// }
+    /// ```
+    @inlinable
+    public consuming func apply<R: ~Copyable, E: Swift.Error>(
+        _ body: (consuming First, consuming Second) throws(E) -> R
+    ) throws(E) -> R {
+        try body(self.first, self.second)
+    }
+
     /// Returns a pair with components swapped.
     @inlinable
     public static func swapped(_ pair: consuming Pair) -> Pair<Second, First> {
