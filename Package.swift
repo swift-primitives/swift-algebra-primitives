@@ -12,6 +12,11 @@ let package = Package(
         .visionOS(.v26)
     ],
     products: [
+        // MARK: - Namespace
+        .library(
+            name: "Algebra Namespace",
+            targets: ["Algebra Namespace"]
+        ),
         .library(
             name: "Algebra Primitives Core",
             targets: ["Algebra Primitives Core"]
@@ -27,13 +32,22 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
+        // MARK: - Namespace
+        .target(
+            name: "Algebra Namespace",
+            dependencies: []
+        ),
+
         .target(
             name: "Algebra Primitives Core",
-            dependencies: []
+            dependencies: [
+                "Algebra Namespace",
+            ]
         ),
         .target(
             name: "Algebra Primitives",
             dependencies: [
+                "Algebra Namespace",
                 "Algebra Primitives Core",
             ]
         ),
