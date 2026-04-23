@@ -19,7 +19,7 @@
 //         V7: Invalid inputs (999) propagate through arithmetic → result 997, outside [0,5)
 // Date: 2026-02-04
 
-import Identity_Primitives
+import Tagged_Primitives
 import Ordinal_Primitives
 import Finite_Primitives
 

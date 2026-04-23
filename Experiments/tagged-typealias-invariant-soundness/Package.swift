@@ -6,7 +6,7 @@ let package = Package(
     name: "tagged-typealias-invariant-soundness",
     platforms: [.macOS(.v26)],
     dependencies: [
-        .package(path: "../../../swift-identity-primitives"),
+        .package(path: "../../../swift-tagged-primitives"),
         .package(path: "../../../swift-ordinal-primitives"),
         .package(path: "../../../swift-finite-primitives"),
     ],
@@ -14,7 +14,7 @@ let package = Package(
         .executableTarget(
             name: "tagged-typealias-invariant-soundness",
             dependencies: [
-                .product(name: "Identity Primitives", package: "swift-identity-primitives"),
+                .product(name: "Tagged Primitives", package: "swift-tagged-primitives"),
                 .product(name: "Ordinal Primitives", package: "swift-ordinal-primitives"),
                 .product(name: "Finite Primitives", package: "swift-finite-primitives"),
             ],
