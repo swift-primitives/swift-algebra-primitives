@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Magma")
-struct AlgebraMagmaTests {
+@Suite
+struct `Algebra.Magma Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraMagmaTests.Unit {
+extension `Algebra.Magma Tests`.Unit {
     @Test
     func `init stores combining operation`() {
         let magma = Algebra.Magma<Int>(combining: { $0 &+ $1 })
@@ -34,7 +34,7 @@ extension AlgebraMagmaTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraMagmaTests.EdgeCase {
+extension `Algebra.Magma Tests`.EdgeCase {
     @Test
     func `combining with non-associative operation`() {
         // Subtraction is a valid magma but not a semigroup

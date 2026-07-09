@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Semigroup")
-struct AlgebraSemigroupTests {
+@Suite
+struct `Algebra.Semigroup Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraSemigroupTests.Unit {
+extension `Algebra.Semigroup Tests`.Unit {
     @Test
     func `init stores combining operation`() {
         let semigroup = Algebra.Semigroup<Int>(combining: { $0 &+ $1 })
@@ -40,7 +40,7 @@ extension AlgebraSemigroupTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraSemigroupTests.EdgeCase {
+extension `Algebra.Semigroup Tests`.EdgeCase {
     @Test
     func `combining with string concatenation`() {
         let semigroup = Algebra.Semigroup<String>(combining: { $0 + $1 })

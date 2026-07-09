@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Field")
-struct AlgebraFieldTests {
+@Suite
+struct `Algebra.Field Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraFieldTests.Unit {
+extension `Algebra.Field Tests`.Unit {
     static var boolField: Algebra.Field<Bool> {
         .init(
             additive: .init(
@@ -155,10 +155,10 @@ extension AlgebraFieldTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraFieldTests.EdgeCase {
+extension `Algebra.Field Tests`.EdgeCase {
     @Test
     func `field distributivity holds`() {
-        let field = AlgebraFieldTests.Unit.boolField
+        let field = `Algebra.Field Tests`.Unit.boolField
         let a = true
         let b = true
         let c = false
@@ -170,7 +170,7 @@ extension AlgebraFieldTests.EdgeCase {
 
     @Test
     func `additive inverse produces zero`() {
-        let field = AlgebraFieldTests.Unit.boolField
+        let field = `Algebra.Field Tests`.Unit.boolField
         #expect(field.adding(true, field.negating(true)) == field.zero)
     }
 }

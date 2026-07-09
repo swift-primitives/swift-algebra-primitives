@@ -4,15 +4,15 @@ import Testing
 
 @testable import Algebra_Lattice_Primitives
 
-@Suite("Algebra.Lattice")
-struct LatticeTests {
+@Suite
+struct `Algebra.Lattice Tests` {
     @Suite struct Unit {}
     @Suite struct Laws {}
     @Suite struct Bounds {}
     @Suite struct PartialOrder {}
 }
 
-extension LatticeTests.Unit {
+extension `Algebra.Lattice Tests`.Unit {
 
     @Test
     func `join is max, meet is min for the min/max lattice`() {
@@ -36,22 +36,22 @@ extension LatticeTests.Unit {
     }
 }
 
-extension LatticeTests.Laws {
+extension `Algebra.Lattice Tests`.Laws {
 
     static let l = Algebra.Lattice<Int>.minMax(bottom: .min, top: .max)
 
     @Test
     func `join and meet are idempotent`() {
         for a in [0, 1, 42, -7, Int.max] {
-            #expect(LatticeTests.Laws.l.join(a, a) == a)
-            #expect(LatticeTests.Laws.l.meet(a, a) == a)
+            #expect(`Algebra.Lattice Tests`.Laws.l.join(a, a) == a)
+            #expect(`Algebra.Lattice Tests`.Laws.l.meet(a, a) == a)
         }
     }
 
     @Test
     func `join and meet are commutative`() {
-        #expect(LatticeTests.Laws.l.join(3, 7) == LatticeTests.Laws.l.join(7, 3))
-        #expect(LatticeTests.Laws.l.meet(3, 7) == LatticeTests.Laws.l.meet(7, 3))
+        #expect(`Algebra.Lattice Tests`.Laws.l.join(3, 7) == `Algebra.Lattice Tests`.Laws.l.join(7, 3))
+        #expect(`Algebra.Lattice Tests`.Laws.l.meet(3, 7) == `Algebra.Lattice Tests`.Laws.l.meet(7, 3))
     }
 
     @Test
@@ -66,7 +66,7 @@ extension LatticeTests.Laws {
     }
 }
 
-extension LatticeTests.Bounds {
+extension `Algebra.Lattice Tests`.Bounds {
 
     @Test
     func `bottom is the join identity`() {
@@ -85,7 +85,7 @@ extension LatticeTests.Bounds {
     }
 }
 
-extension LatticeTests.PartialOrder {
+extension `Algebra.Lattice Tests`.PartialOrder {
 
     @Test
     func `leq matches the numeric order for the min/max lattice`() {

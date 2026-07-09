@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Semiring")
-struct AlgebraSemiringTests {
+@Suite
+struct `Algebra.Semiring Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Test Fixture
 
-extension AlgebraSemiringTests {
+extension `Algebra.Semiring Tests` {
     /// Bool OR/AND semiring for testing.
     static var boolSemiring: Algebra.Semiring<Bool> {
         .init(
@@ -24,29 +24,29 @@ extension AlgebraSemiringTests {
 
 // MARK: - Unit
 
-extension AlgebraSemiringTests.Unit {
+extension `Algebra.Semiring Tests`.Unit {
     @Test
     func `init stores additive and multiplicative structures`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         #expect(sr.additive.identity == false)
         #expect(sr.multiplicative.identity == true)
     }
 
     @Test
     func `zero returns additive identity`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         #expect(sr.zero == false)
     }
 
     @Test
     func `one returns multiplicative identity`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         #expect(sr.one == true)
     }
 
     @Test
     func `adding delegates to additive monoid`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         #expect(sr.adding(false, false) == false)
         #expect(sr.adding(false, true) == true)
         #expect(sr.adding(true, false) == true)
@@ -55,7 +55,7 @@ extension AlgebraSemiringTests.Unit {
 
     @Test
     func `multiplying delegates to multiplicative monoid`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         #expect(sr.multiplying(true, true) == true)
         #expect(sr.multiplying(true, false) == false)
         #expect(sr.multiplying(false, true) == false)
@@ -65,10 +65,10 @@ extension AlgebraSemiringTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraSemiringTests.EdgeCase {
+extension `Algebra.Semiring Tests`.EdgeCase {
     @Test
     func `distributivity left holds`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         for a in [true, false] {
             for b in [true, false] {
                 for c in [true, false] {
@@ -83,7 +83,7 @@ extension AlgebraSemiringTests.EdgeCase {
 
     @Test
     func `distributivity right holds`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         for a in [true, false] {
             for b in [true, false] {
                 for c in [true, false] {
@@ -98,7 +98,7 @@ extension AlgebraSemiringTests.EdgeCase {
 
     @Test
     func `zero annihilates under multiplication`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         for a in [true, false] {
             #expect(sr.multiplying(sr.zero, a) == sr.zero)
             #expect(sr.multiplying(a, sr.zero) == sr.zero)
@@ -115,7 +115,7 @@ struct AlgebraSemiringCommutativeTests {
 
 extension AlgebraSemiringCommutativeTests.Unit {
     static var commutative: Algebra.Semiring<Bool>.Commutative {
-        .init(semiring: AlgebraSemiringTests.boolSemiring)
+        .init(semiring: `Algebra.Semiring Tests`.boolSemiring)
     }
 
     @Test
@@ -145,14 +145,14 @@ struct AlgebraSemiringMonoidTests {
 extension AlgebraSemiringMonoidTests.Unit {
     @Test
     func `commutative monoid from semiring preserves additive identity`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         let monoid = Algebra.Monoid<Bool>.Commutative(sr)
         #expect(monoid.identity == false)
     }
 
     @Test
     func `commutative monoid from semiring preserves additive combining`() {
-        let sr = AlgebraSemiringTests.boolSemiring
+        let sr = `Algebra.Semiring Tests`.boolSemiring
         let monoid = Algebra.Monoid<Bool>.Commutative(sr)
         #expect(monoid.combining(false, true) == true)
         #expect(monoid.combining(false, false) == false)

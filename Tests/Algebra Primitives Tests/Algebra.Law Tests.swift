@@ -2,17 +2,16 @@ import Testing
 
 @testable import Algebra_Law_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
-@Suite("Algebra.Law")
-struct AlgebraLawTests {
-    @Suite struct Unit {}
-    @Suite struct EdgeCase {}
+extension Algebra.Law {
+    @Suite struct Test {
+        @Suite struct Unit {}
+        @Suite struct EdgeCase {}
+    }
 }
 
 // MARK: - Test Fixtures
 
-extension AlgebraLawTests {
+extension Algebra.Law.Test {
     /// Integer additive semigroup.
     static var intSemigroup: Algebra.Semigroup<Int> {
         .init(combining: { $0 &+ $1 })
@@ -104,12 +103,12 @@ extension AlgebraLawTests {
 
 // MARK: - Unit: Good Witnesses Return Nil
 
-extension AlgebraLawTests.Unit {
+extension Algebra.Law.Test.Unit {
     @Test
     func `associativity passes for valid semigroup`() {
         let result = Algebra.Law.Associativity.check(
-            of: AlgebraLawTests.intSemigroup,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intSemigroup,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -117,8 +116,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `identity left passes for valid monoid`() {
         let result = Algebra.Law.Identity.left(
-            of: AlgebraLawTests.intMonoid,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intMonoid,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -126,8 +125,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `identity right passes for valid monoid`() {
         let result = Algebra.Law.Identity.right(
-            of: AlgebraLawTests.intMonoid,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intMonoid,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -135,8 +134,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `inverse left passes for valid group`() {
         let result = Algebra.Law.Inverse.left(
-            of: AlgebraLawTests.intGroup,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intGroup,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -144,8 +143,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `inverse right passes for valid group`() {
         let result = Algebra.Law.Inverse.right(
-            of: AlgebraLawTests.intGroup,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intGroup,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -154,7 +153,7 @@ extension AlgebraLawTests.Unit {
     func `commutativity passes for commutative operation`() {
         let result = Algebra.Law.Commutativity.check(
             of: { (a: Int, b: Int) in a &+ b },
-            over: AlgebraLawTests.testElements
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -162,8 +161,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `distributivity left passes for valid ring`() {
         let result = Algebra.Law.Distributivity.left(
-            of: AlgebraLawTests.intRing,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intRing,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -171,8 +170,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `distributivity right passes for valid ring`() {
         let result = Algebra.Law.Distributivity.right(
-            of: AlgebraLawTests.intRing,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intRing,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -180,8 +179,8 @@ extension AlgebraLawTests.Unit {
     @Test
     func `annihilation passes for valid ring`() {
         let result = Algebra.Law.Annihilation.zero(
-            of: AlgebraLawTests.intRing,
-            over: AlgebraLawTests.testElements
+            of: Algebra.Law.Test.intRing,
+            over: Algebra.Law.Test.testElements
         )
         #expect(result == nil)
     }
@@ -189,11 +188,11 @@ extension AlgebraLawTests.Unit {
 
 // MARK: - EdgeCase: Broken Witnesses Return Violation
 
-extension AlgebraLawTests.EdgeCase {
+extension Algebra.Law.Test.EdgeCase {
     @Test
     func `associativity fails for broken semigroup`() {
         let result = Algebra.Law.Associativity.check(
-            of: AlgebraLawTests.brokenSemigroup,
+            of: Algebra.Law.Test.brokenSemigroup,
             over: [1, 2, 3]
         )
         #expect(result != nil)
@@ -202,7 +201,7 @@ extension AlgebraLawTests.EdgeCase {
     @Test
     func `identity fails for broken monoid`() {
         let result = Algebra.Law.Identity.left(
-            of: AlgebraLawTests.brokenMonoid,
+            of: Algebra.Law.Test.brokenMonoid,
             over: [0, 2]
         )
         #expect(result != nil)
@@ -211,7 +210,7 @@ extension AlgebraLawTests.EdgeCase {
     @Test
     func `inverse fails for broken group`() {
         let result = Algebra.Law.Inverse.left(
-            of: AlgebraLawTests.brokenGroup,
+            of: Algebra.Law.Test.brokenGroup,
             over: [1, 2]
         )
         #expect(result != nil)
@@ -229,7 +228,7 @@ extension AlgebraLawTests.EdgeCase {
     @Test
     func `distributivity fails for broken ring`() {
         let result = Algebra.Law.Distributivity.left(
-            of: AlgebraLawTests.brokenDistributivityRing,
+            of: Algebra.Law.Test.brokenDistributivityRing,
             over: [1, 2, 3]
         )
         #expect(result != nil)
@@ -238,7 +237,7 @@ extension AlgebraLawTests.EdgeCase {
     @Test
     func `annihilation fails for broken ring`() {
         let result = Algebra.Law.Annihilation.zero(
-            of: AlgebraLawTests.brokenAnnihilationRing,
+            of: Algebra.Law.Test.brokenAnnihilationRing,
             over: [1, 2, 3]
         )
         #expect(result != nil)
@@ -247,7 +246,7 @@ extension AlgebraLawTests.EdgeCase {
     @Test
     func `reciprocal fails for broken field`() {
         let result = Algebra.Law.Reciprocal.check(
-            of: AlgebraLawTests.brokenReciprocalField,
+            of: Algebra.Law.Test.brokenReciprocalField,
             over: [true, false]
         )
         #expect(result != nil)

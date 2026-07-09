@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Monoid.Commutative")
-struct AlgebraMonoidCommutativeTests {
+@Suite
+struct `Algebra.Monoid.Commutative Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraMonoidCommutativeTests.Unit {
+extension `Algebra.Monoid.Commutative Tests`.Unit {
     @Test
     func `init wraps monoid`() {
         let monoid = Algebra.Monoid<Int>(identity: 0, combining: { $0 &+ $1 })
@@ -45,7 +45,7 @@ extension AlgebraMonoidCommutativeTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraMonoidCommutativeTests.EdgeCase {
+extension `Algebra.Monoid.Commutative Tests`.EdgeCase {
     @Test
     func `multiplicative commutative monoid`() {
         let monoid = Algebra.Monoid<Int>(identity: 1, combining: { $0 &* $1 })

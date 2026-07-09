@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Group.Abelian")
-struct AlgebraGroupAbelianTests {
+@Suite
+struct `Algebra.Group.Abelian Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraGroupAbelianTests.Unit {
+extension `Algebra.Group.Abelian Tests`.Unit {
     @Test
     func `init wraps group`() {
         let group = Algebra.Group<Int>(
@@ -99,7 +99,7 @@ extension AlgebraGroupAbelianTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraGroupAbelianTests.EdgeCase {
+extension `Algebra.Group.Abelian Tests`.EdgeCase {
     @Test
     func `abelian group with self-inverse elements`() {
         // Z₂ addition: every element is its own inverse

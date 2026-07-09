@@ -4,15 +4,15 @@ import Testing
 
 @testable import Algebra_Semilattice_Primitives
 
-@Suite("Algebra.Semilattice")
-struct SemilatticeTests {
+@Suite
+struct `Algebra.Semilattice Tests` {
     @Suite struct Unit {}
     @Suite struct Laws {}
     @Suite struct Stdlib {}
     @Suite struct PartialOrder {}
 }
 
-extension SemilatticeTests.Unit {
+extension `Algebra.Semilattice Tests`.Unit {
 
     @Test
     func `combining returns expected value`() {
@@ -41,7 +41,7 @@ extension SemilatticeTests.Unit {
     }
 }
 
-extension SemilatticeTests.Laws {
+extension `Algebra.Semilattice Tests`.Laws {
 
     static let maxL = Algebra.Semilattice<Int>(identity: .min, combining: max)
 
@@ -59,26 +59,26 @@ extension SemilatticeTests.Laws {
     func `commutativity holds`() {
         let a = 3
         let b = 7
-        #expect(SemilatticeTests.Laws.maxL.combining(a, b) == SemilatticeTests.Laws.maxL.combining(b, a))
+        #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(a, b) == `Algebra.Semilattice Tests`.Laws.maxL.combining(b, a))
     }
 
     @Test
     func `idempotency holds`() {
         for a in [0, 1, 42, -7, Int.max] {
-            #expect(SemilatticeTests.Laws.maxL.combining(a, a) == a)
+            #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(a, a) == a)
         }
     }
 
     @Test
     func `identity is bottom`() {
         for a in [0, 1, 42, -7, Int.max] {
-            #expect(SemilatticeTests.Laws.maxL.combining(SemilatticeTests.Laws.maxL.identity, a) == a)
-            #expect(SemilatticeTests.Laws.maxL.combining(a, SemilatticeTests.Laws.maxL.identity) == a)
+            #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(`Algebra.Semilattice Tests`.Laws.maxL.identity, a) == a)
+            #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(a, `Algebra.Semilattice Tests`.Laws.maxL.identity) == a)
         }
     }
 }
 
-extension SemilatticeTests.Stdlib {
+extension `Algebra.Semilattice Tests`.Stdlib {
 
     @Test
     func `maximum(bottom:) builds correct max-semilattice`() {
@@ -97,7 +97,7 @@ extension SemilatticeTests.Stdlib {
     }
 }
 
-extension SemilatticeTests.PartialOrder {
+extension `Algebra.Semilattice Tests`.PartialOrder {
 
     @Test
     func `leq matches Comparable order for max-semilattice`() {

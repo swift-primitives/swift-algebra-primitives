@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Group")
-struct AlgebraGroupTests {
+@Suite
+struct `Algebra.Group Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraGroupTests.Unit {
+extension `Algebra.Group Tests`.Unit {
     @Test
     func `init stores identity, combining, and inverting`() {
         let group = Algebra.Group<Int>(
@@ -84,7 +84,7 @@ extension AlgebraGroupTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraGroupTests.EdgeCase {
+extension `Algebra.Group Tests`.EdgeCase {
     @Test
     func `double inverse returns original`() {
         let group = Algebra.Group<Int>(

@@ -4,15 +4,15 @@ import Testing
 
 // [TEST-004] Generic type uses parallel namespace pattern.
 
-@Suite("Algebra.Ring")
-struct AlgebraRingTests {
+@Suite
+struct `Algebra.Ring Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
 // MARK: - Unit
 
-extension AlgebraRingTests.Unit {
+extension `Algebra.Ring Tests`.Unit {
     static var intRing: Algebra.Ring<Int> {
         .init(
             additive: .init(
@@ -80,17 +80,17 @@ extension AlgebraRingTests.Unit {
 
 // MARK: - EdgeCase
 
-extension AlgebraRingTests.EdgeCase {
+extension `Algebra.Ring Tests`.EdgeCase {
     @Test
     func `zero annihilates under multiplication`() {
-        let ring = AlgebraRingTests.Unit.intRing
+        let ring = `Algebra.Ring Tests`.Unit.intRing
         #expect(ring.multiplying(ring.zero, 42) == ring.zero)
         #expect(ring.multiplying(42, ring.zero) == ring.zero)
     }
 
     @Test
     func `distributivity left holds`() {
-        let ring = AlgebraRingTests.Unit.intRing
+        let ring = `Algebra.Ring Tests`.Unit.intRing
         let a = 2
         let b = 3
         let c = 4
@@ -102,7 +102,7 @@ extension AlgebraRingTests.EdgeCase {
 
     @Test
     func `distributivity right holds`() {
-        let ring = AlgebraRingTests.Unit.intRing
+        let ring = `Algebra.Ring Tests`.Unit.intRing
         let a = 2
         let b = 3
         let c = 4
