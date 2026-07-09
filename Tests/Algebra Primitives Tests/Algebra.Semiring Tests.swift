@@ -108,12 +108,12 @@ extension `Algebra.Semiring Tests`.EdgeCase {
 
 // MARK: - Commutative
 
-@Suite("Algebra.Semiring.Commutative")
-struct AlgebraSemiringCommutativeTests {
+@Suite
+struct `Algebra.Semiring.Commutative Tests` {
     @Suite struct Unit {}
 }
 
-extension AlgebraSemiringCommutativeTests.Unit {
+extension `Algebra.Semiring.Commutative Tests`.Unit {
     static var commutative: Algebra.Semiring<Bool>.Commutative {
         .init(semiring: `Algebra.Semiring Tests`.boolSemiring)
     }
