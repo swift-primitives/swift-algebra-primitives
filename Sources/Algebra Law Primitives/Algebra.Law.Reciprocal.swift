@@ -23,7 +23,7 @@ extension Algebra.Law.Reciprocal {
         for a in elements {
             if a == field.zero {
                 // Zero must throw .nonInvertible.
-                do {
+                do throws(Algebra.Field<Element>.Error) {
                     let result = try field.reciprocal(a)
                     return .init(law: "reciprocal", elements: [a], lhs: result, rhs: field.zero)
                 } catch {
@@ -32,7 +32,7 @@ extension Algebra.Law.Reciprocal {
                 }
             } else {
                 // Nonzero must produce inverse.
-                do {
+                do throws(Algebra.Field<Element>.Error) {
                     let inv = try field.reciprocal(a)
                     let product = field.multiplying(a, inv)
                     if product != field.one {
