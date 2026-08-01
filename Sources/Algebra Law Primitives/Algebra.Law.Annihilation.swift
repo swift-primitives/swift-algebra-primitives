@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Annihilation {
     /// Verifies zero annihilation: 0 · a = 0 and a · 0 = 0 for all a.
     @inlinable
-    public static func zero<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func zero<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {

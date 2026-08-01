@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Inverse {
     /// Verifies left inverse: a⁻¹ ∗ a = e for all a.
     @inlinable
-    public static func left<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of group: Algebra.Group<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {
@@ -26,7 +26,7 @@ extension Algebra.Law.Inverse {
 
     /// Verifies right inverse: a ∗ a⁻¹ = e for all a.
     @inlinable
-    public static func right<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of group: Algebra.Group<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {

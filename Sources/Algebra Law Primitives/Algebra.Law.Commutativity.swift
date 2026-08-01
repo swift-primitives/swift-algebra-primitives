@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Commutativity {
     /// Verifies commutativity of a binary operation over the given elements.
     @inlinable
-    public static func check<Element: Equatable, C: Collection<Element>>(
+    public static func check<Element: Equatable, C: Swift.Collection<Element>>(
         of combining: @Sendable (Element, Element) -> Element,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {

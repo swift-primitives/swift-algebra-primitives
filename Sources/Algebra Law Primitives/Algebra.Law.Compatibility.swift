@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Compatibility {
     /// Verifies scalar compatibility of a module over the given elements.
     @inlinable
-    public static func scalar<Scalar: Equatable & Sendable, Vector: Equatable & Sendable, CS: Collection<Scalar>, CV: Collection<Vector>>(
+    public static func scalar<Scalar: Equatable & Sendable, Vector: Equatable & Sendable, CS: Swift.Collection<Scalar>, CV: Swift.Collection<Vector>>(
         of module: Algebra.Module<Scalar, Vector>,
         over scalars: CS,
         _ vectors: CV

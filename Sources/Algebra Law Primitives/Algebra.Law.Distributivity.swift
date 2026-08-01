@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Distributivity {
     /// Verifies left distributivity: a · (b + c) = a·b + a·c.
     @inlinable
-    public static func left<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {
@@ -31,7 +31,7 @@ extension Algebra.Law.Distributivity {
 
     /// Verifies right distributivity: (a + b) · c = a·c + b·c.
     @inlinable
-    public static func right<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {
@@ -54,8 +54,8 @@ extension Algebra.Law.Distributivity {
     public static func scalar<
         Scalar: Sendable,
         Vector: Equatable & Sendable,
-        CS: Collection<Scalar>,
-        CV: Collection<Vector>
+        CS: Swift.Collection<Scalar>,
+        CV: Swift.Collection<Vector>
     >(
         of module: Algebra.Module<Scalar, Vector>,
         over scalars: CS,
@@ -80,8 +80,8 @@ extension Algebra.Law.Distributivity {
     public static func addition<
         Scalar: Equatable & Sendable,
         Vector: Equatable & Sendable,
-        CS: Collection<Scalar>,
-        CV: Collection<Vector>
+        CS: Swift.Collection<Scalar>,
+        CV: Swift.Collection<Vector>
     >(
         of module: Algebra.Module<Scalar, Vector>,
         over scalars: CS,

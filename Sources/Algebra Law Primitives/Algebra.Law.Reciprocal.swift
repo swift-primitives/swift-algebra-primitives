@@ -16,7 +16,7 @@ extension Algebra.Law.Reciprocal {
     /// For nonzero: verifies `a * reciprocal(a) == one`.
     /// No traps. All failure is structural.
     @inlinable
-    public static func check<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func check<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of field: Algebra.Field<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {

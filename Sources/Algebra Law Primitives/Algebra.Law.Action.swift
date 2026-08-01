@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Action {
     /// Verifies the identity action: 1 · m = m for all m.
     @inlinable
-    public static func identity<Scalar: Sendable, Vector: Equatable & Sendable, C: Collection<Vector>>(
+    public static func identity<Scalar: Sendable, Vector: Equatable & Sendable, C: Swift.Collection<Vector>>(
         of module: Algebra.Module<Scalar, Vector>,
         over vectors: C
     ) -> Algebra.Law.Violation<Vector>? {

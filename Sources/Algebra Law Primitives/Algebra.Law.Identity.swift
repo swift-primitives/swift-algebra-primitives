@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Identity {
     /// Verifies left identity: e ∗ a = a for all a.
     @inlinable
-    public static func left<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of monoid: Algebra.Monoid<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {
@@ -26,7 +26,7 @@ extension Algebra.Law.Identity {
 
     /// Verifies right identity: a ∗ e = a for all a.
     @inlinable
-    public static func right<Element: Equatable & Sendable, C: Collection<Element>>(
+    public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of monoid: Algebra.Monoid<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {

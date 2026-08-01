@@ -11,7 +11,7 @@ extension Algebra.Law {
 extension Algebra.Law.Associativity {
     /// Verifies associativity of a semigroup over the given elements.
     @inlinable
-    public static func check<Element: Equatable, C: Collection<Element>>(
+    public static func check<Element: Equatable, C: Swift.Collection<Element>>(
         of semigroup: Algebra.Semigroup<Element>,
         over elements: C
     ) -> Algebra.Law.Violation<Element>? {
