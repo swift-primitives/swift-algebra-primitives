@@ -11,7 +11,12 @@ extension Algebra.Law {
 extension Algebra.Law.Compatibility {
     /// Verifies scalar compatibility of a module over the given elements.
     @inlinable
-    public static func scalar<Scalar: Equatable & Sendable, Vector: Equatable & Sendable, CS: Swift.Collection<Scalar>, CV: Swift.Collection<Vector>>(
+    public static func scalar<
+        Scalar: Equatable & Sendable,
+        Vector: Equatable & Sendable,
+        CS: Swift.Collection<Scalar>,
+        CV: Swift.Collection<Vector>
+    >(
         of module: Algebra.Module<Scalar, Vector>,
         over scalars: CS,
         _ vectors: CV
@@ -22,7 +27,12 @@ extension Algebra.Law.Compatibility {
                     let lhs = module.scaling(module.scalars.multiplying(r, s), m)
                     let rhs = module.scaling(r, module.scaling(s, m))
                     if lhs != rhs {
-                        return .init(law: "compatibility", elements: [lhs, rhs], lhs: lhs, rhs: rhs)
+                        return .init(
+                            law: "compatibility",
+                            elements: [lhs, rhs],
+                            lhs: lhs,
+                            rhs: rhs
+                        )
                     }
                 }
             }

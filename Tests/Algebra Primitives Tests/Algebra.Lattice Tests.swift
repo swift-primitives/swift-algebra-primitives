@@ -50,8 +50,12 @@ extension `Algebra.Lattice Tests`.Laws {
 
     @Test
     func `join and meet are commutative`() {
-        #expect(`Algebra.Lattice Tests`.Laws.l.join(3, 7) == `Algebra.Lattice Tests`.Laws.l.join(7, 3))
-        #expect(`Algebra.Lattice Tests`.Laws.l.meet(3, 7) == `Algebra.Lattice Tests`.Laws.l.meet(7, 3))
+        #expect(
+            `Algebra.Lattice Tests`.Laws.l.join(3, 7) == `Algebra.Lattice Tests`.Laws.l.join(7, 3)
+        )
+        #expect(
+            `Algebra.Lattice Tests`.Laws.l.meet(3, 7) == `Algebra.Lattice Tests`.Laws.l.meet(7, 3)
+        )
     }
 
     @Test

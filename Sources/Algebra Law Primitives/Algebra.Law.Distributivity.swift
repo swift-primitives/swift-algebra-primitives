@@ -21,7 +21,12 @@ extension Algebra.Law.Distributivity {
                     let lhs = ring.multiplying(a, ring.adding(b, c))
                     let rhs = ring.adding(ring.multiplying(a, b), ring.multiplying(a, c))
                     if lhs != rhs {
-                        return .init(law: "distributivity-left", elements: [a, b, c], lhs: lhs, rhs: rhs)
+                        return .init(
+                            law: "distributivity-left",
+                            elements: [a, b, c],
+                            lhs: lhs,
+                            rhs: rhs
+                        )
                     }
                 }
             }
@@ -41,7 +46,12 @@ extension Algebra.Law.Distributivity {
                     let lhs = ring.multiplying(ring.adding(a, b), c)
                     let rhs = ring.adding(ring.multiplying(a, c), ring.multiplying(b, c))
                     if lhs != rhs {
-                        return .init(law: "distributivity-right", elements: [a, b, c], lhs: lhs, rhs: rhs)
+                        return .init(
+                            law: "distributivity-right",
+                            elements: [a, b, c],
+                            lhs: lhs,
+                            rhs: rhs
+                        )
                     }
                 }
             }
@@ -67,7 +77,12 @@ extension Algebra.Law.Distributivity {
                     let lhs = module.scaling(r, module.vectors.combining(v, w))
                     let rhs = module.vectors.combining(module.scaling(r, v), module.scaling(r, w))
                     if lhs != rhs {
-                        return .init(law: "distributivity-scalar", elements: [lhs, rhs], lhs: lhs, rhs: rhs)
+                        return .init(
+                            law: "distributivity-scalar",
+                            elements: [lhs, rhs],
+                            lhs: lhs,
+                            rhs: rhs
+                        )
                     }
                 }
             }
@@ -93,7 +108,12 @@ extension Algebra.Law.Distributivity {
                     let lhs = module.scaling(module.scalars.adding(r, s), v)
                     let rhs = module.vectors.combining(module.scaling(r, v), module.scaling(s, v))
                     if lhs != rhs {
-                        return .init(law: "distributivity-addition", elements: [lhs, rhs], lhs: lhs, rhs: rhs)
+                        return .init(
+                            law: "distributivity-addition",
+                            elements: [lhs, rhs],
+                            lhs: lhs,
+                            rhs: rhs
+                        )
                     }
                 }
             }

@@ -59,7 +59,10 @@ extension `Algebra.Semilattice Tests`.Laws {
     func `commutativity holds`() {
         let a = 3
         let b = 7
-        #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(a, b) == `Algebra.Semilattice Tests`.Laws.maxL.combining(b, a))
+        #expect(
+            `Algebra.Semilattice Tests`.Laws.maxL.combining(a, b)
+                == `Algebra.Semilattice Tests`.Laws.maxL.combining(b, a)
+        )
     }
 
     @Test
@@ -72,8 +75,18 @@ extension `Algebra.Semilattice Tests`.Laws {
     @Test
     func `identity is bottom`() {
         for a in [0, 1, 42, -7, Int.max] {
-            #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(`Algebra.Semilattice Tests`.Laws.maxL.identity, a) == a)
-            #expect(`Algebra.Semilattice Tests`.Laws.maxL.combining(a, `Algebra.Semilattice Tests`.Laws.maxL.identity) == a)
+            #expect(
+                `Algebra.Semilattice Tests`.Laws.maxL.combining(
+                    `Algebra.Semilattice Tests`.Laws.maxL.identity,
+                    a
+                ) == a
+            )
+            #expect(
+                `Algebra.Semilattice Tests`.Laws.maxL.combining(
+                    a,
+                    `Algebra.Semilattice Tests`.Laws.maxL.identity
+                ) == a
+            )
         }
     }
 }

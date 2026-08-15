@@ -39,7 +39,10 @@ extension Algebra.Field {
     ///
     /// - Throws: `Error.nonInvertible` if `rhs` has no multiplicative inverse.
     @inlinable
-    public func dividing(_ lhs: Element, _ rhs: Element) throws(Algebra.Field<Element>.Error) -> Element {
+    public func dividing(
+        _ lhs: Element,
+        _ rhs: Element
+    ) throws(Algebra.Field<Element>.Error) -> Element {
         multiplying(lhs, try reciprocal(rhs))
     }
 
