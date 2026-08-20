@@ -1,15 +1,15 @@
-// swift-tools-version: 6.3.3
+// swift-tools-version: 6.4
 
 import PackageDescription
 
 let package = Package(
     name: "swift-algebra-primitives",
     platforms: [
-        .macOS("27"),
-        .iOS("27"),
-        .tvOS("27"),
-        .watchOS("27"),
-        .visionOS("27")
+        .macOS(.v27),
+        .iOS(.v27),
+        .tvOS(.v27),
+        .watchOS(.v27),
+        .visionOS(.v27),
     ],
     products: [
         // MARK: - Namespace
@@ -90,25 +90,25 @@ let package = Package(
         .target(
             name: "Algebra Magma Primitives",
             dependencies: [
-                "Algebra Primitive",
+                "Algebra Primitive"
             ]
         ),
         .target(
             name: "Algebra Semigroup Primitives",
             dependencies: [
-                "Algebra Magma Primitives",
+                "Algebra Magma Primitives"
             ]
         ),
         .target(
             name: "Algebra Monoid Primitives",
             dependencies: [
-                "Algebra Semigroup Primitives",
+                "Algebra Semigroup Primitives"
             ]
         ),
         .target(
             name: "Algebra Semiring Primitives",
             dependencies: [
-                "Algebra Monoid Primitives",
+                "Algebra Monoid Primitives"
             ]
         ),
         .target(
@@ -121,13 +121,13 @@ let package = Package(
         .target(
             name: "Algebra Lattice Primitives",
             dependencies: [
-                "Algebra Semilattice Primitives",
+                "Algebra Semilattice Primitives"
             ]
         ),
         .target(
             name: "Algebra Group Primitives",
             dependencies: [
-                "Algebra Monoid Primitives",
+                "Algebra Monoid Primitives"
             ]
         ),
         .target(
@@ -140,13 +140,13 @@ let package = Package(
         .target(
             name: "Algebra Field Primitives",
             dependencies: [
-                "Algebra Ring Primitives",
+                "Algebra Ring Primitives"
             ]
         ),
         .target(
             name: "Algebra Module Primitives",
             dependencies: [
-                "Algebra Field Primitives",
+                "Algebra Field Primitives"
             ]
         ),
 
@@ -182,7 +182,7 @@ let package = Package(
         .target(
             name: "Algebra Primitives Test Support",
             dependencies: [
-                "Algebra Primitives",
+                "Algebra Primitives"
             ],
             path: "Tests/Support"
         ),
