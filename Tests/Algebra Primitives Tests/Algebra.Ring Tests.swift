@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Ring_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Ring Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Ring Tests`.Unit {
     static var intRing: Algebra.Ring<Int> {
@@ -78,8 +74,6 @@ extension `Algebra.Ring Tests`.Unit {
     }
 }
 
-// MARK: - EdgeCase
-
 extension `Algebra.Ring Tests`.EdgeCase {
     @Test
     func `zero annihilates under multiplication`() {
@@ -94,7 +88,7 @@ extension `Algebra.Ring Tests`.EdgeCase {
         let a = 2
         let b = 3
         let c = 4
-        // a * (b + c) == a*b + a*c
+
         let lhs = ring.multiplying(a, ring.adding(b, c))
         let rhs = ring.adding(ring.multiplying(a, b), ring.multiplying(a, c))
         #expect(lhs == rhs)
@@ -106,7 +100,7 @@ extension `Algebra.Ring Tests`.EdgeCase {
         let a = 2
         let b = 3
         let c = 4
-        // (a + b) * c == a*c + b*c
+
         let lhs = ring.multiplying(ring.adding(a, b), c)
         let rhs = ring.adding(ring.multiplying(a, c), ring.multiplying(b, c))
         #expect(lhs == rhs)

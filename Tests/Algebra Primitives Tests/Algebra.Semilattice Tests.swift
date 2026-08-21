@@ -1,5 +1,3 @@
-// Algebra.Semilattice Tests.swift
-
 import Testing
 
 @testable import Algebra_Semilattice_Primitives
@@ -117,13 +115,13 @@ extension `Algebra.Semilattice Tests`.PartialOrder {
         let l = Algebra.Semilattice<Int>.maximum(bottom: .min)
         #expect(l.leq(3, 7) == true)
         #expect(l.leq(7, 3) == false)
-        #expect(l.leq(5, 5) == true)  // reflexive
+        #expect(l.leq(5, 5) == true)
     }
 
     @Test
     func `leq matches dual order for min-semilattice`() {
         let l = Algebra.Semilattice<Int>.minimum(top: .max)
-        // For min semilattice, a ∨ b = min(a, b); a ≤ b ⟺ min(a, b) == b ⟺ b ≤ a numerically
+
         #expect(l.leq(7, 3) == true)
         #expect(l.leq(3, 7) == false)
         #expect(l.leq(5, 5) == true)

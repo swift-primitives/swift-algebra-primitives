@@ -1,15 +1,12 @@
-// Algebra.Law.Associativity.swift
-
 import Algebra_Field_Primitives
 
-/// Associativity law: (a ∗ b) ∗ c = a ∗ (b ∗ c).
 extension Algebra.Law {
-    /// Harness for the associativity law: (a ∗ b) ∗ c = a ∗ (b ∗ c).
+
     public enum Associativity {}
 }
 
 extension Algebra.Law.Associativity {
-    /// Verifies associativity of a semigroup over the given elements.
+
     @inlinable
     public static func check<Element: Equatable, C: Swift.Collection<Element>>(
         of semigroup: Algebra.Semigroup<Element>,

@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Ring_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Ring.Commutative Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Ring.Commutative Tests`.Unit {
     static var intCommutativeRing: Algebra.Ring<Int>.Commutative {
@@ -78,8 +74,6 @@ extension `Algebra.Ring.Commutative Tests`.Unit {
         #expect(monoid.identity == 1)
     }
 }
-
-// MARK: - EdgeCase
 
 extension `Algebra.Ring.Commutative Tests`.EdgeCase {
     @Test

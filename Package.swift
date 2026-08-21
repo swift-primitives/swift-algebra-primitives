@@ -12,13 +12,12 @@ let package = Package(
         .visionOS(.v27),
     ],
     products: [
-        // MARK: - Namespace
+
         .library(
             name: "Algebra Primitive",
             targets: ["Algebra Primitive"]
         ),
 
-        // MARK: - Sub-namespace targets (algebraic tower)
         .library(
             name: "Algebra Magma Primitives",
             targets: ["Algebra Magma Primitives"]
@@ -60,19 +59,16 @@ let package = Package(
             targets: ["Algebra Module Primitives"]
         ),
 
-        // MARK: - Laws (atop the tower)
         .library(
             name: "Algebra Law Primitives",
             targets: ["Algebra Law Primitives"]
         ),
 
-        // MARK: - Umbrella
         .library(
             name: "Algebra Primitives",
             targets: ["Algebra Primitives"]
         ),
 
-        // MARK: - Test Support
         .library(
             name: "Algebra Primitives Test Support",
             targets: ["Algebra Primitives Test Support"]
@@ -80,13 +76,12 @@ let package = Package(
     ],
     dependencies: [],
     targets: [
-        // MARK: - Namespace
+
         .target(
             name: "Algebra Primitive",
             dependencies: []
         ),
 
-        // MARK: - Sub-namespace targets (algebraic tower, per [MOD-031])
         .target(
             name: "Algebra Magma Primitives",
             dependencies: [
@@ -150,7 +145,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Laws (atop the tower; intra-package deps keep core zero-external-dep)
         .target(
             name: "Algebra Law Primitives",
             dependencies: [
@@ -159,7 +153,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Umbrella
         .target(
             name: "Algebra Primitives",
             dependencies: [
@@ -178,7 +171,6 @@ let package = Package(
             ]
         ),
 
-        // MARK: - Test Support
         .target(
             name: "Algebra Primitives Test Support",
             dependencies: [
@@ -187,7 +179,6 @@ let package = Package(
             path: "Tests/Support"
         ),
 
-        // MARK: - Tests
         .testTarget(
             name: "Algebra Primitives Tests",
             dependencies: [

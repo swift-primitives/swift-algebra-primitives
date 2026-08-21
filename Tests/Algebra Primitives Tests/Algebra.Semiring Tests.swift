@@ -2,18 +2,14 @@ import Testing
 
 @testable import Algebra_Semiring_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Semiring Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
 
-// MARK: - Test Fixture
-
 extension `Algebra.Semiring Tests` {
-    /// Bool OR/AND semiring for testing.
+
     static var boolSemiring: Algebra.Semiring<Bool> {
         .init(
             additive: .init(monoid: .init(identity: false, combining: { $0 || $1 })),
@@ -21,8 +17,6 @@ extension `Algebra.Semiring Tests` {
         )
     }
 }
-
-// MARK: - Unit
 
 extension `Algebra.Semiring Tests`.Unit {
     @Test
@@ -63,8 +57,6 @@ extension `Algebra.Semiring Tests`.Unit {
     }
 }
 
-// MARK: - EdgeCase
-
 extension `Algebra.Semiring Tests`.EdgeCase {
     @Test
     func `distributivity left holds`() {
@@ -72,7 +64,7 @@ extension `Algebra.Semiring Tests`.EdgeCase {
         for a in [true, false] {
             for b in [true, false] {
                 for c in [true, false] {
-                    // a * (b + c) == a*b + a*c
+
                     let lhs = sr.multiplying(a, sr.adding(b, c))
                     let rhs = sr.adding(sr.multiplying(a, b), sr.multiplying(a, c))
                     #expect(lhs == rhs)
@@ -87,7 +79,7 @@ extension `Algebra.Semiring Tests`.EdgeCase {
         for a in [true, false] {
             for b in [true, false] {
                 for c in [true, false] {
-                    // (a + b) * c == a*c + b*c
+
                     let lhs = sr.multiplying(sr.adding(a, b), c)
                     let rhs = sr.adding(sr.multiplying(a, c), sr.multiplying(b, c))
                     #expect(lhs == rhs)
@@ -105,8 +97,6 @@ extension `Algebra.Semiring Tests`.EdgeCase {
         }
     }
 }
-
-// MARK: - Commutative
 
 @Suite
 struct `Algebra.Semiring.Commutative Tests` {
@@ -134,8 +124,6 @@ extension `Algebra.Semiring.Commutative Tests`.Unit {
         #expect(csr.multiplying(true, false) == false)
     }
 }
-
-// MARK: - Monoid Erasure
 
 @Suite("Algebra.Semiring Monoid Erasure")
 struct AlgebraSemiringMonoidTests {

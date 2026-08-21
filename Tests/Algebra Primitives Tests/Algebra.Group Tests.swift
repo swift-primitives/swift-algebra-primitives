@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Group_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Group Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Group Tests`.Unit {
     @Test
@@ -81,8 +77,6 @@ extension `Algebra.Group Tests`.Unit {
         #expect(magma.combining(3, 4) == group.combining(3, 4))
     }
 }
-
-// MARK: - EdgeCase
 
 extension `Algebra.Group Tests`.EdgeCase {
     @Test

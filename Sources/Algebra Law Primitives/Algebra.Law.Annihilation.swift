@@ -1,15 +1,12 @@
-// Algebra.Law.Annihilation.swift
-
 import Algebra_Field_Primitives
 
-/// Annihilation law: 0 · a = 0 and a · 0 = 0.
 extension Algebra.Law {
-    /// Harness for the annihilation law: 0 · a = 0 and a · 0 = 0.
+
     public enum Annihilation {}
 }
 
 extension Algebra.Law.Annihilation {
-    /// Verifies zero annihilation: 0 · a = 0 and a · 0 = 0 for all a.
+
     @inlinable
     public static func zero<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,

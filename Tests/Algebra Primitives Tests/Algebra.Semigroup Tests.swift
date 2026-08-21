@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Semigroup_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Semigroup Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Semigroup Tests`.Unit {
     @Test
@@ -37,8 +33,6 @@ extension `Algebra.Semigroup Tests`.Unit {
         #expect(magma.combining(3, 4) == semigroup.combining(3, 4))
     }
 }
-
-// MARK: - EdgeCase
 
 extension `Algebra.Semigroup Tests`.EdgeCase {
     @Test

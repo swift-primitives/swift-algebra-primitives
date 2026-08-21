@@ -1,15 +1,12 @@
-// Algebra.Law.Action.swift
-
 import Algebra_Module_Primitives
 
-/// Identity action law: 1 · m = m.
 extension Algebra.Law {
-    /// Harness for the identity action law: 1 · m = m.
+
     public enum Action {}
 }
 
 extension Algebra.Law.Action {
-    /// Verifies the identity action: 1 · m = m for all m.
+
     @inlinable
     public static func identity<
         Scalar: Sendable,

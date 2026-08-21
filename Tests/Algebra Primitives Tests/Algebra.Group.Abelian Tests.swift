@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Group_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Group.Abelian Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Group.Abelian Tests`.Unit {
     @Test
@@ -97,16 +93,14 @@ extension `Algebra.Group.Abelian Tests`.Unit {
     }
 }
 
-// MARK: - EdgeCase
-
 extension `Algebra.Group.Abelian Tests`.EdgeCase {
     @Test
     func `abelian group with self-inverse elements`() {
-        // Z₂ addition: every element is its own inverse
+
         let group = Algebra.Group<Bool>(
             identity: false,
-            combining: { $0 != $1 },  // XOR
-            inverting: { $0 }  // self-inverse
+            combining: { $0 != $1 },
+            inverting: { $0 }
         )
         let abelian = Algebra.Group<Bool>.Abelian(group: group)
         #expect(abelian.combining(true, abelian.inverting(true)) == abelian.identity)

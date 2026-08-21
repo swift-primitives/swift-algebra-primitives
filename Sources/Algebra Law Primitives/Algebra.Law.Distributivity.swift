@@ -1,15 +1,12 @@
-// Algebra.Law.Distributivity.swift
-
 import Algebra_Module_Primitives
 
-/// Distributivity law: a · (b + c) = a·b + a·c (left), (a + b) · c = a·c + b·c (right).
 extension Algebra.Law {
-    /// Harness for the distributivity law: a · (b + c) = a·b + a·c (left), (a + b) · c = a·c + b·c (right).
+
     public enum Distributivity {}
 }
 
 extension Algebra.Law.Distributivity {
-    /// Verifies left distributivity: a · (b + c) = a·b + a·c.
+
     @inlinable
     public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,
@@ -34,7 +31,6 @@ extension Algebra.Law.Distributivity {
         return nil
     }
 
-    /// Verifies right distributivity: (a + b) · c = a·c + b·c.
     @inlinable
     public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of ring: Algebra.Ring<Element>,
@@ -59,7 +55,6 @@ extension Algebra.Law.Distributivity {
         return nil
     }
 
-    /// Verifies scalar distributivity over vector addition: r·(v+w) = r·v + r·w.
     @inlinable
     public static func scalar<
         Scalar: Sendable,
@@ -90,7 +85,6 @@ extension Algebra.Law.Distributivity {
         return nil
     }
 
-    /// Verifies scalar addition distributivity: (r+s)·v = r·v + s·v.
     @inlinable
     public static func addition<
         Scalar: Equatable & Sendable,

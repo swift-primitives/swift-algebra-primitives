@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Magma_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Magma Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Magma Tests`.Unit {
     @Test
@@ -32,15 +28,13 @@ extension `Algebra.Magma Tests`.Unit {
     }
 }
 
-// MARK: - EdgeCase
-
 extension `Algebra.Magma Tests`.EdgeCase {
     @Test
     func `combining with non-associative operation`() {
-        // Subtraction is a valid magma but not a semigroup
+
         let magma = Algebra.Magma<Int>(combining: { $0 &- $1 })
-        let leftAssoc = magma.combining(magma.combining(10, 3), 2)  // (10-3)-2 = 5
-        let rightAssoc = magma.combining(10, magma.combining(3, 2))  // 10-(3-2) = 9
+        let leftAssoc = magma.combining(magma.combining(10, 3), 2)
+        let rightAssoc = magma.combining(10, magma.combining(3, 2))
         #expect(leftAssoc != rightAssoc)
     }
 }

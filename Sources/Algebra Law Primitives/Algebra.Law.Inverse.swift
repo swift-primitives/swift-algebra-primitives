@@ -1,15 +1,12 @@
-// Algebra.Law.Inverse.swift
-
 import Algebra_Field_Primitives
 
-/// Inverse law: a⁻¹ ∗ a = e (left), a ∗ a⁻¹ = e (right).
 extension Algebra.Law {
-    /// Harness for the inverse law: a⁻¹ ∗ a = e (left), a ∗ a⁻¹ = e (right).
+
     public enum Inverse {}
 }
 
 extension Algebra.Law.Inverse {
-    /// Verifies left inverse: a⁻¹ ∗ a = e for all a.
+
     @inlinable
     public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of group: Algebra.Group<Element>,
@@ -24,7 +21,6 @@ extension Algebra.Law.Inverse {
         return nil
     }
 
-    /// Verifies right inverse: a ∗ a⁻¹ = e for all a.
     @inlinable
     public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of group: Algebra.Group<Element>,

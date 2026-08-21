@@ -9,25 +9,20 @@ extension Algebra.Law {
     }
 }
 
-// MARK: - Test Fixtures
-
 extension Algebra.Law.Test {
-    /// Integer additive semigroup.
+
     static var intSemigroup: Algebra.Semigroup<Int> {
         .init(combining: { $0 &+ $1 })
     }
 
-    /// Integer additive monoid.
     static var intMonoid: Algebra.Monoid<Int> {
         .init(identity: 0, combining: { $0 &+ $1 })
     }
 
-    /// Integer additive group.
     static var intGroup: Algebra.Group<Int> {
         .init(identity: 0, combining: { $0 &+ $1 }, inverting: { 0 &- $0 })
     }
 
-    /// Integer ring.
     static var intRing: Algebra.Ring<Int> {
         .init(
             additive: .init(group: intGroup),
@@ -37,22 +32,18 @@ extension Algebra.Law.Test {
 
     static var testElements: [Int] { [0, 1, -1, 2, 3] }
 
-    /// A broken semigroup (not associative).
     static var brokenSemigroup: Algebra.Semigroup<Int> {
-        .init(combining: { $0 - $1 })  // subtraction is not associative
+        .init(combining: { $0 - $1 })
     }
 
-    /// A broken monoid (wrong identity).
     static var brokenMonoid: Algebra.Monoid<Int> {
-        .init(identity: 1, combining: { $0 &+ $1 })  // 1 is not additive identity
+        .init(identity: 1, combining: { $0 &+ $1 })
     }
 
-    /// A broken group (wrong inverse).
     static var brokenGroup: Algebra.Group<Int> {
-        .init(identity: 0, combining: { $0 &+ $1 }, inverting: { $0 })  // identity is not inverse
+        .init(identity: 0, combining: { $0 &+ $1 }, inverting: { $0 })
     }
 
-    /// A broken ring where multiplication = addition (distributivity fails).
     static var brokenDistributivityRing: Algebra.Ring<Int> {
         .init(
             additive: .init(
@@ -66,7 +57,6 @@ extension Algebra.Law.Test {
         )
     }
 
-    /// A broken ring where 0 · a = a (projection, not annihilation).
     static var brokenAnnihilationRing: Algebra.Ring<Int> {
         .init(
             additive: .init(
@@ -80,7 +70,6 @@ extension Algebra.Law.Test {
         )
     }
 
-    /// A broken Bool field where reciprocal always returns false.
     static var brokenReciprocalField: Algebra.Field<Bool> {
         .init(
             additive: .init(
@@ -100,8 +89,6 @@ extension Algebra.Law.Test {
         )
     }
 }
-
-// MARK: - Unit: Good Witnesses Return Nil
 
 extension Algebra.Law.Test.Unit {
     @Test
@@ -185,8 +172,6 @@ extension Algebra.Law.Test.Unit {
         #expect(result == nil)
     }
 }
-
-// MARK: - EdgeCase: Broken Witnesses Return Violation
 
 extension Algebra.Law.Test.EdgeCase {
     @Test

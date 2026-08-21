@@ -1,15 +1,12 @@
-// Algebra.Law.Compatibility.swift
-
 import Algebra_Module_Primitives
 
-/// Scalar compatibility law: (r · s) · m = r · (s · m).
 extension Algebra.Law {
-    /// Harness for the scalar compatibility law: (r · s) · m = r · (s · m).
+
     public enum Compatibility {}
 }
 
 extension Algebra.Law.Compatibility {
-    /// Verifies scalar compatibility of a module over the given elements.
+
     @inlinable
     public static func scalar<
         Scalar: Equatable & Sendable,

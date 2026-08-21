@@ -1,9 +1,7 @@
-// Algebra.Group.Abelian+Group.swift
-
 import Algebra_Monoid_Primitives
 
 extension Algebra.Monoid {
-    /// Creates a monoid from an abelian group by forgetting inverse and commutativity.
+
     @inlinable
     public init(
         _ abelian: Algebra.Group<Element>.Abelian
@@ -13,7 +11,7 @@ extension Algebra.Monoid {
 }
 
 extension Algebra.Monoid.Commutative {
-    /// Creates a commutative monoid from an abelian group by forgetting inverses.
+
     @inlinable
     public init(
         _ abelian: Algebra.Group<Element>.Abelian
@@ -23,27 +21,22 @@ extension Algebra.Monoid.Commutative {
 }
 
 extension Algebra.Group.Abelian {
-    /// The identity element.
+
     @inlinable
     public var identity: Element { group.identity }
 
-    /// The commutative binary operation.
     @inlinable
     public var combining: (Element, Element) -> Element { group.combining }
 
-    /// The inverse operation.
     @inlinable
     public var inverting: (Element) -> Element { group.inverting }
 
-    /// Projects to a monoid by forgetting inverse and commutativity.
     @inlinable
     public var monoid: Algebra.Monoid<Element> { .init(self) }
 
-    /// Projects to a commutative monoid.
     @inlinable
     public var commutative: Algebra.Monoid<Element>.Commutative { .init(self) }
 
-    /// Applies the commutative binary operation.
     @inlinable
     public func callAsFunction(_ lhs: Element, _ rhs: Element) -> Element {
         combining(lhs, rhs)

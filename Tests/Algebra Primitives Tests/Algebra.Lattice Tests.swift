@@ -1,5 +1,3 @@
-// Algebra.Lattice Tests.swift
-
 import Testing
 
 @testable import Algebra_Lattice_Primitives
@@ -96,6 +94,6 @@ extension `Algebra.Lattice Tests`.PartialOrder {
         let l = Algebra.Lattice<Int>.minMax(bottom: .min, top: .max)
         #expect(l.leq(3, 7) == true)
         #expect(l.leq(7, 3) == false)
-        #expect(l.leq(5, 5) == true)  // reflexive
+        #expect(l.leq(5, 5) == true)
     }
 }

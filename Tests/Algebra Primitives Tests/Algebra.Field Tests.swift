@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Field_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Field Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Field Tests`.Unit {
     static var boolField: Algebra.Field<Bool> {
@@ -18,14 +14,14 @@ extension `Algebra.Field Tests`.Unit {
             additive: .init(
                 group: .init(
                     identity: false,
-                    combining: { $0 != $1 },  // XOR
-                    inverting: { $0 }  // self-inverse
+                    combining: { $0 != $1 },
+                    inverting: { $0 }
                 )
             ),
             multiplicative: .init(
                 monoid: .init(
                     identity: true,
-                    combining: { $0 && $1 }  // AND
+                    combining: { $0 && $1 }
                 )
             ),
             reciprocal: { element throws(Algebra.Field<Bool>.Error) in
@@ -57,28 +53,28 @@ extension `Algebra.Field Tests`.Unit {
     @Test
     func `adding delegates to additive group`() {
         let field = Self.boolField
-        #expect(field.adding(true, true) == false)  // XOR
+        #expect(field.adding(true, true) == false)
         #expect(field.adding(true, false) == true)
     }
 
     @Test
     func `negating delegates to additive inverse`() {
         let field = Self.boolField
-        #expect(field.negating(true) == true)  // self-inverse in Z₂
+        #expect(field.negating(true) == true)
         #expect(field.negating(false) == false)
     }
 
     @Test
     func `multiplying delegates to multiplicative monoid`() {
         let field = Self.boolField
-        #expect(field.multiplying(true, true) == true)  // AND
+        #expect(field.multiplying(true, true) == true)
         #expect(field.multiplying(true, false) == false)
     }
 
     @Test
     func `reciprocal succeeds for invertible element`() throws {
         let field = Self.boolField
-        #expect(try field.reciprocal(true) == true)  // self-inverse in Z₂
+        #expect(try field.reciprocal(true) == true)
     }
 
     @Test
@@ -106,7 +102,7 @@ extension `Algebra.Field Tests`.Unit {
     @Test
     func `subtracting computes additive difference`() {
         let field = Self.boolField
-        #expect(field.subtracting(true, true) == false)  // XOR
+        #expect(field.subtracting(true, true) == false)
         #expect(field.subtracting(true, false) == true)
     }
 
@@ -140,7 +136,7 @@ extension `Algebra.Field Tests`.Unit {
         let group = field.unit
         let u = try field.unit(true)
         let inv = group.inverting(u)
-        #expect(inv.element == true)  // true is self-inverse in Z₂
+        #expect(inv.element == true)
         #expect(inv.inverse == true)
     }
 
@@ -153,8 +149,6 @@ extension `Algebra.Field Tests`.Unit {
     }
 }
 
-// MARK: - EdgeCase
-
 extension `Algebra.Field Tests`.EdgeCase {
     @Test
     func `field distributivity holds`() {
@@ -162,7 +156,7 @@ extension `Algebra.Field Tests`.EdgeCase {
         let a = true
         let b = true
         let c = false
-        // a * (b + c) == a*b + a*c
+
         let lhs = field.multiplying(a, field.adding(b, c))
         let rhs = field.adding(field.multiplying(a, b), field.multiplying(a, c))
         #expect(lhs == rhs)

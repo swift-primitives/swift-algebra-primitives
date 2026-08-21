@@ -2,15 +2,11 @@ import Testing
 
 @testable import Algebra_Monoid_Primitives
 
-// [TEST-004] Generic type uses parallel namespace pattern.
-
 @Suite
 struct `Algebra.Monoid.Commutative Tests` {
     @Suite struct Unit {}
     @Suite struct EdgeCase {}
 }
-
-// MARK: - Unit
 
 extension `Algebra.Monoid.Commutative Tests`.Unit {
     @Test
@@ -42,8 +38,6 @@ extension `Algebra.Monoid.Commutative Tests`.Unit {
         #expect(commutative.combining(3, 4) == commutative.combining(4, 3))
     }
 }
-
-// MARK: - EdgeCase
 
 extension `Algebra.Monoid.Commutative Tests`.EdgeCase {
     @Test

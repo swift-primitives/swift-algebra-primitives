@@ -1,15 +1,12 @@
-// Algebra.Law.Identity.swift
-
 import Algebra_Field_Primitives
 
-/// Identity law: e ∗ a = a (left), a ∗ e = a (right).
 extension Algebra.Law {
-    /// Harness for the identity law: e ∗ a = a (left), a ∗ e = a (right).
+
     public enum Identity {}
 }
 
 extension Algebra.Law.Identity {
-    /// Verifies left identity: e ∗ a = a for all a.
+
     @inlinable
     public static func left<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of monoid: Algebra.Monoid<Element>,
@@ -24,7 +21,6 @@ extension Algebra.Law.Identity {
         return nil
     }
 
-    /// Verifies right identity: a ∗ e = a for all a.
     @inlinable
     public static func right<Element: Equatable & Sendable, C: Swift.Collection<Element>>(
         of monoid: Algebra.Monoid<Element>,
